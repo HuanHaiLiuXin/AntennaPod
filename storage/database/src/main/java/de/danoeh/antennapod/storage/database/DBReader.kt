@@ -76,7 +76,7 @@ class DBReader private constructor() {
          */
         @JvmStatic
         @Synchronized
-        fun getFeedListDownloadUrls(subscribedOnly: Boolean): List<String> {
+        fun getFeedListDownloadUrls(subscribedOnly: Boolean): ArrayList<String> {
             val adapter = PodDBAdapter.getInstance()
             adapter.open()
             try {
