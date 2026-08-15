@@ -17,7 +17,6 @@ dependencies {
     implementation project(':model')
     implementation project(':net:download:service-interface')
 
-    annotationProcessor libs.androidx.annotation
     implementation libs.androidx.core
     implementation libs.androidx.documentfile
     implementation libs.androidx.work.runtime
