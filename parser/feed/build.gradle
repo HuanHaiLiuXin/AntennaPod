@@ -10,8 +10,6 @@ android {
 dependencies {
     implementation project(':model')
 
-    annotationProcessor libs.androidx.annotation
-
     implementation libs.androidx.core
 
     implementation libs.commons.lang3
