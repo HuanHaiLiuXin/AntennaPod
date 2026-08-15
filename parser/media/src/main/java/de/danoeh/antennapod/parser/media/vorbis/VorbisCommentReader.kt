@@ -18,6 +18,7 @@ abstract class VorbisCommentReader {
         this.input = VorbisInputStream(input)
     }
 
+    @Throws(VorbisCommentReaderException::class)
     fun readInputStream() {
         try {
             findCommentHeader()

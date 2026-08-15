@@ -19,6 +19,7 @@ import java.nio.charset.MalformedInputException
 open class ID3Reader(private val inputStream: CountingInputStream) {
     private var tagHeader: TagHeader? = null
 
+    @Throws(IOException::class, ID3ReaderException::class)
     fun readInputStream() {
         tagHeader = readTagHeader()
         val tagContentStartPosition = getPosition()
