@@ -13,7 +13,6 @@ android {
 }
 
 dependencies {
-    annotationProcessor libs.androidx.annotation
     implementation libs.androidx.media
     implementation libs.commons.lang3
 
