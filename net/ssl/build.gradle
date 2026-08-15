@@ -9,7 +9,6 @@ android {
 }
 
 dependencies {
-    annotationProcessor libs.androidx.annotation
     implementation libs.androidx.appcompat
 
     implementation libs.okhttp
