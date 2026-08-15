@@ -590,36 +590,6 @@ class DBReader private constructor() {
             }
         }
 
-        class MonthlyStatisticsItem {
-            private var year = 0
-            private var month = 0
-            private var timePlayed = 0L
-
-            fun getYear(): Int {
-                return year
-            }
-
-            fun setYear(year: Int) {
-                this.year = year
-            }
-
-            fun getMonth(): Int {
-                return month
-            }
-
-            fun setMonth(month: Int) {
-                this.month = month
-            }
-
-            fun getTimePlayed(): Long {
-                return timePlayed
-            }
-
-            fun setTimePlayed(timePlayed: Long) {
-                this.timePlayed = timePlayed
-            }
-        }
-
         @JvmStatic
         @Synchronized
         fun getMonthlyTimeStatistics(): List<MonthlyStatisticsItem> {
@@ -643,13 +613,6 @@ class DBReader private constructor() {
                 adapter.close()
             }
             return months
-        }
-
-        class StatisticsResult {
-            @JvmField
-            val feedTime: MutableList<StatisticsItem> = ArrayList()
-            @JvmField
-            var oldestDate: Long = System.currentTimeMillis()
         }
 
         /**
@@ -905,5 +868,42 @@ class DBReader private constructor() {
                 adapter.close()
             }
         }
+    }
+
+    class MonthlyStatisticsItem {
+        private var year = 0
+        private var month = 0
+        private var timePlayed = 0L
+
+        fun getYear(): Int {
+            return year
+        }
+
+        fun setYear(year: Int) {
+            this.year = year
+        }
+
+        fun getMonth(): Int {
+            return month
+        }
+
+        fun setMonth(month: Int) {
+            this.month = month
+        }
+
+        fun getTimePlayed(): Long {
+            return timePlayed
+        }
+
+        fun setTimePlayed(timePlayed: Long) {
+            this.timePlayed = timePlayed
+        }
+    }
+
+    class StatisticsResult {
+        @JvmField
+        val feedTime: MutableList<StatisticsItem> = ArrayList()
+        @JvmField
+        var oldestDate: Long = System.currentTimeMillis()
     }
 }
