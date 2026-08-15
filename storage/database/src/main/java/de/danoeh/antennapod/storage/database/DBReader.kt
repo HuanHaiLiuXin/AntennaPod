@@ -476,7 +476,7 @@ class DBReader private constructor() {
          */
         @JvmStatic
         @Synchronized
-        fun getFeedItemByGuidOrEpisodeUrl(guid: String, episodeUrl: String): FeedItem? {
+        fun getFeedItemByGuidOrEpisodeUrl(guid: String?, episodeUrl: String): FeedItem? {
             val adapter = PodDBAdapter.getInstance()
             adapter.open()
             try {

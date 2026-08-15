@@ -1,55 +1,57 @@
-package de.danoeh.antennapod.playback.service.internal;
+package de.danoeh.antennapod.playback.service.internal
 
-import de.danoeh.antennapod.model.playback.TimerValue;
+import de.danoeh.antennapod.model.playback.TimerValue
 
-public interface SleepTimer {
-
-    long NOTIFICATION_THRESHOLD = 10000;
+interface SleepTimer {
 
     /**
      * @return Returns time left for this sleep timer, both display value and in milis
      */
-    TimerValue getTimeLeft();
+    fun getTimeLeft(): TimerValue
 
     /**
      * Starts the sleep timer.
      * @param initialWaitingTime The waiting time for the sleep timer, either episodes or duration
      */
-    void start(long initialWaitingTime);
+    fun start(initialWaitingTime: Long)
 
     /**
      * Cancels (stops) current sleep timer forever, cannot be restarted.
      */
-    void stop();
+    fun stop()
 
     /**
      * Update sleep timer with new waiting time
      * @param waitingTimeOrEpisodes Waiting time in millis or episode count
      */
-    void updateRemainingTime(long waitingTimeOrEpisodes);
+    fun updateRemainingTime(waitingTimeOrEpisodes: Long)
 
     /**
      * Resets sleep timer to original duration.
      */
-    void reset();
+    fun reset()
 
     /**
      * @return True if sleep timer is active, false otherwise
      */
-    boolean isActive();
+    fun isActive(): Boolean
 
     /**
      * @param episodeRemainingMillis Remaining milliseconds of current episode
      * @return Returns true if the sleep timer will terminate sometime during this episode, false otherwise
      */
-    boolean isEndingThisEpisode(long episodeRemainingMillis);
+    fun isEndingThisEpisode(episodeRemainingMillis: Long): Boolean
 
     /**
      * Called when sleep timer is asked if playback is allowed to proceed to next episode.
      * Should take into account the time left, episodes left, etc.
      * @return True if playback is allowed to continue to next episode, false otherwise
      */
-    boolean shouldContinueToNextEpisode();
+    fun shouldContinueToNextEpisode(): Boolean
 
-    void episodeFinishedPlayback();
+    fun episodeFinishedPlayback()
+
+    companion object {
+        const val NOTIFICATION_THRESHOLD = 10000L
+    }
 }

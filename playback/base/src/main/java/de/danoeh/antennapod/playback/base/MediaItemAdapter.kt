@@ -20,7 +20,6 @@ import de.danoeh.antennapod.net.common.HttpCredentialEncoder
 import de.danoeh.antennapod.system.utils.ThreadUtils
 
 import java.io.ByteArrayOutputStream
-import java.util.List
 import java.util.concurrent.TimeUnit
 
 class MediaItemAdapter {
