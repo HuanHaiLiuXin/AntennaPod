@@ -15,7 +15,6 @@ dependencies {
 
     implementation libs.androidx.media3.exoplayer
     implementation libs.androidx.media3.session
-    annotationProcessor libs.androidx.annotation
     implementation libs.glide
 
     testImplementation libs.junit

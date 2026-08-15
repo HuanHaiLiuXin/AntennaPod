@@ -1,18 +1,16 @@
-package de.danoeh.antennapod.playback.base;
+package de.danoeh.antennapod.playback.base
 
-import android.content.Context;
-import android.media.AudioManager;
-import android.net.wifi.WifiManager;
-import androidx.annotation.NonNull;
-import android.util.Log;
-import android.util.Pair;
-import android.view.SurfaceHolder;
+import android.content.Context
+import android.media.AudioManager
+import android.net.wifi.WifiManager
+import android.util.Log
+import android.util.Pair
+import android.view.SurfaceHolder
 
-import java.util.List;
+import java.util.List
 
-import androidx.annotation.Nullable;
-import de.danoeh.antennapod.model.playback.MediaType;
-import de.danoeh.antennapod.model.playback.Playable;
+import de.danoeh.antennapod.model.playback.MediaType
+import de.danoeh.antennapod.model.playback.Playable
 
 
 /*
@@ -24,26 +22,31 @@ import de.danoeh.antennapod.model.playback.Playable;
  * Abstract class that allows for different implementations of the PlaybackServiceMediaPlayer for local
  * and remote (cast devices) playback.
  */
-public abstract class PlaybackServiceMediaPlayer {
-    private static final String TAG = "PlaybackSvcMediaPlayer";
+abstract class PlaybackServiceMediaPlayer {
+    companion object {
+        private const val TAG = "PlaybackSvcMediaPlayer"
+    }
 
-    private volatile PlayerStatus oldPlayerStatus;
-    protected volatile PlayerStatus playerStatus;
+    @Volatile
+    private var oldPlayerStatus: PlayerStatus? = null
+    @Volatile
+    @JvmField
+    protected var playerStatus: PlayerStatus
 
     /**
      * A wifi-lock that is acquired if the media file is being streamed.
      */
-    private WifiManager.WifiLock wifiLock;
+    private var wifiLock: WifiManager.WifiLock? = null
 
-    protected final PSMPCallback callback;
-    protected final Context context;
+    protected val callback: PSMPCallback
+    protected val context: Context
 
-    protected PlaybackServiceMediaPlayer(@NonNull Context context,
-                               @NonNull PSMPCallback callback){
-        this.context = context;
-        this.callback = callback;
+    protected constructor(context: Context,
+                          callback: PSMPCallback) {
+        this.context = context
+        this.callback = callback
 
-        playerStatus = PlayerStatus.STOPPED;
+        playerStatus = PlayerStatus.STOPPED
     }
 
     /**
@@ -72,7 +75,7 @@ public abstract class PlaybackServiceMediaPlayer {
      *                           for playback immediately (see 'prepareImmediately' parameter for more details)
      * @param prepareImmediately Set to true if the method should also prepare the episode for playback.
      */
-    public abstract void playMediaObject(@NonNull Playable playable, boolean stream, boolean startWhenPrepared, boolean prepareImmediately);
+    abstract fun playMediaObject(playable: Playable, stream: Boolean, startWhenPrepared: Boolean, prepareImmediately: Boolean)
 
     /**
      * Resumes playback if the PSMP object is in PREPARED or PAUSED state. If the PSMP object is in an invalid state.
@@ -80,7 +83,7 @@ public abstract class PlaybackServiceMediaPlayer {
      * <p/>
      * This method is executed on an internal executor service.
      */
-    public abstract void resume();
+    abstract fun resume()
 
     /**
      * Saves the current position and pauses playback. Note that, if audiofocus
@@ -92,7 +95,7 @@ public abstract class PlaybackServiceMediaPlayer {
      * @param reinit       is true if service should reinit after pausing if the media
      *                     file is being streamed
      */
-    public abstract void pause(boolean abandonFocus, boolean reinit);
+    abstract fun pause(abandonFocus: Boolean, reinit: Boolean)
 
     /**
      * Prepared media player for playback if the service is in the INITALIZED
@@ -100,14 +103,14 @@ public abstract class PlaybackServiceMediaPlayer {
      * <p/>
      * This method is executed on an internal executor service.
      */
-    public abstract void prepare();
+    abstract fun prepare()
 
     /**
      * Resets the media player and moves it into INITIALIZED state.
      * <p/>
      * This method is executed on an internal executor service.
      */
-    public abstract void reinit();
+    abstract fun reinit()
 
     /**
      * Seeks to the specified position. If the PSMP object is in an invalid state, this method will do nothing.
@@ -115,28 +118,28 @@ public abstract class PlaybackServiceMediaPlayer {
      * <p/>
      * This method is executed on an internal executor service.
      */
-    public abstract void seekTo(int t);
+    abstract fun seekTo(t: Int)
 
     /**
      * Seek a specific position from the current position
      *
      * @param d offset from current position (positive or negative)
      */
-    public abstract void seekDelta(int d);
+    abstract fun seekDelta(d: Int)
 
     /**
      * Returns the duration of the current media object or INVALID_TIME if the duration could not be retrieved.
      */
-    public abstract int getDuration();
+    abstract fun getDuration(): Int
 
     /**
      * Returns the position of the current media object or INVALID_TIME if the position could not be retrieved.
      */
-    public abstract int getPosition();
+    abstract fun getPosition(): Int
 
-    public abstract boolean isStartWhenPrepared();
+    abstract fun isStartWhenPrepared(): Boolean
 
-    public abstract void setStartWhenPrepared(boolean startWhenPrepared);
+    abstract fun setStartWhenPrepared(startWhenPrepared: Boolean)
 
     /**
      * Sets the playback parameters.
@@ -144,33 +147,33 @@ public abstract class PlaybackServiceMediaPlayer {
      * - SkipSilence (ExoPlayer only)
      * This method is executed on an internal executor service.
      */
-    public abstract void  setPlaybackParams(final float speed, final boolean skipSilence);
+    abstract fun setPlaybackParams(speed: Float, skipSilence: Boolean)
 
     /**
      * Returns the current playback speed. If the playback speed could not be retrieved, 1 is returned.
      */
-    public abstract float getPlaybackSpeed();
+    abstract fun getPlaybackSpeed(): Float
 
-    public abstract boolean getSkipSilence();
+    abstract fun getSkipSilence(): Boolean
 
     /**
      * Sets the playback volume.
      * This method is executed on an internal executor service.
      */
-    public abstract void setVolume(float volumeLeft, float volumeRight);
+    abstract fun setVolume(volumeLeft: Float, volumeRight: Float)
 
-    public abstract MediaType getCurrentMediaType();
+    abstract fun getCurrentMediaType(): MediaType?
 
-    public abstract boolean isStreaming();
+    abstract fun isStreaming(): Boolean
 
     /**
      * Releases internally used resources. This method should only be called when the object is not used anymore.
      */
-    public abstract void shutdown();
+    abstract fun shutdown()
 
-    public abstract void setVideoSurface(SurfaceHolder surface);
+    abstract fun setVideoSurface(surface: SurfaceHolder)
 
-    public abstract void resetVideoSurface();
+    abstract fun resetVideoSurface()
 
     /**
      * Return width and height of the currently playing video as a pair.
@@ -179,15 +182,16 @@ public abstract class PlaybackServiceMediaPlayer {
      * return an invalid non-null value if the getVideoWidth() and getVideoHeight() methods of the media player return
      * invalid values.
      */
-    public abstract Pair<Integer, Integer> getVideoSize();
+    abstract fun getVideoSize(): Pair<Int, Int>?
 
     /**
      * Returns a PSMInfo object that contains information about the current state of the PSMP object.
      *
      * @return The PSMPInfo object.
      */
-    public final synchronized PSMPInfo getPSMPInfo() {
-        return new PSMPInfo(oldPlayerStatus, playerStatus, getPlayable());
+    @Synchronized
+    fun getPSMPInfo(): PSMPInfo {
+        return PSMPInfo(oldPlayerStatus, playerStatus, getPlayable())
     }
 
     /**
@@ -196,8 +200,9 @@ public abstract class PlaybackServiceMediaPlayer {
      * could result in nonsensical results (like a status of PLAYING, but a null playable)
      * @return the current player status
      */
-    public synchronized PlayerStatus getPlayerStatus() {
-        return playerStatus;
+    @Synchronized
+    fun getPlayerStatus(): PlayerStatus {
+        return playerStatus
     }
 
     /**
@@ -206,45 +211,45 @@ public abstract class PlaybackServiceMediaPlayer {
      * could result in nonsensical results (like a status of PLAYING, but a null playable)
      * @return the current media. May be null
      */
-    public abstract Playable getPlayable();
+    abstract fun getPlayable(): Playable?
 
-    protected abstract void setPlayable(Playable playable);
+    protected abstract fun setPlayable(playable: Playable?)
 
-    public abstract List<String> getAudioTracks();
+    abstract fun getAudioTracks(): List<String>
 
-    public abstract void setAudioTrack(int track);
+    abstract fun setAudioTrack(track: Int)
 
-    public abstract int getSelectedAudioTrack();
+    abstract fun getSelectedAudioTrack(): Int
 
-    public void skip() {
+    fun skip() {
         if (getPosition() < 1000) {
-            Log.d(TAG, "Ignoring skip, is in first second of playback");
-            return;
+            Log.d(TAG, "Ignoring skip, is in first second of playback")
+            return
         }
-        endPlayback(false, true, true, true);
+        endPlayback(false, true, true, true)
     }
 
     /**
      * Ends playback of current media (if any) and moves into INDETERMINATE state, unless
      * {@param toStoppedState} is set to true, in which case it moves into STOPPED state.
      *
-     * @see #endPlayback(boolean, boolean, boolean, boolean)
+     * @see .endPlayback
      */
-    public void stopPlayback(boolean toStoppedState) {
-        endPlayback(false, false, false, toStoppedState);
+    fun stopPlayback(toStoppedState: Boolean) {
+        endPlayback(false, false, false, toStoppedState)
     }
 
     /**
      * Internal method that handles end of playback.
      *
      * Currently, it has 5 use cases:
-     * <ul>
-     * <li>Media playback has completed: call with (true, false, true, true)</li>
-     * <li>User asks to skip to next episode: call with (false, true, true, true)</li>
-     * <li>Skipping to next episode due to playback error: call with (false, false, true, true)</li>
-     * <li>Stopping the media player: call with (false, false, false, true)</li>
-     * <li>We want to change the media player implementation: call with (false, false, false, false)</li>
-     * </ul>
+     *
+     *  * Media playback has completed: call with (true, false, true, true)
+     *  * User asks to skip to next episode: call with (false, true, true, true)
+     *  * Skipping to next episode due to playback error: call with (false, false, true, true)
+     *  * Stopping the media player: call with (false, false, false, true)
+     *  * We want to change the media player implementation: call with (false, false, false, false)
+     *
      *
      * @param hasEnded         If true, we assume the current media's playback has ended, for
      *                         purposes of post playback processing.
@@ -260,30 +265,32 @@ public abstract class PlaybackServiceMediaPlayer {
      *
      * @return a Future, just for the purpose of tracking its execution.
      */
-    protected abstract void endPlayback(boolean hasEnded, boolean wasSkipped,
-                                             boolean shouldContinue, boolean toStoppedState);
+    protected abstract fun endPlayback(hasEnded: Boolean, wasSkipped: Boolean,
+                                       shouldContinue: Boolean, toStoppedState: Boolean)
 
     /**
-     * @return {@code true} if the WifiLock feature should be used, {@code false} otherwise.
+     * @return `true` if the WifiLock feature should be used, `false` otherwise.
      */
-    protected abstract boolean shouldLockWifi();
+    protected abstract fun shouldLockWifi(): Boolean
 
-    public abstract boolean isCasting();
+    abstract fun isCasting(): Boolean
 
-    protected final synchronized void acquireWifiLockIfNecessary() {
+    @Synchronized
+    protected fun acquireWifiLockIfNecessary() {
         if (shouldLockWifi()) {
             if (wifiLock == null) {
-                wifiLock = ((WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE))
-                        .createWifiLock(WifiManager.WIFI_MODE_FULL, TAG);
-                wifiLock.setReferenceCounted(false);
+                wifiLock = (context.getApplicationContext().getSystemService(Context.WIFI_SERVICE) as WifiManager)
+                        .createWifiLock(WifiManager.WIFI_MODE_FULL, TAG)
+                wifiLock!!.setReferenceCounted(false)
             }
-            wifiLock.acquire();
+            wifiLock!!.acquire()
         }
     }
 
-    protected final synchronized void releaseWifiLockIfNecessary() {
-        if (wifiLock != null && wifiLock.isHeld()) {
-            wifiLock.release();
+    @Synchronized
+    protected fun releaseWifiLockIfNecessary() {
+        if (wifiLock != null && wifiLock!!.isHeld()) {
+            wifiLock!!.release()
         }
     }
 
@@ -294,100 +301,100 @@ public abstract class PlaybackServiceMediaPlayer {
      * This method will notify the callback about the change of the player status (even if the new status is the same
      * as the old one).
      * <p/>
-     * It will also call {@link PSMPCallback#onPlaybackPause(Playable, int)} or {@link PSMPCallback#onPlaybackStart(Playable, int)}
+     * It will also call [PSMPCallback.onPlaybackPause] or [PSMPCallback.onPlaybackStart]
      * depending on the status change.
      *
      * @param newStatus The new PlayerStatus. This must not be null.
      * @param newMedia  The new playable object of the PSMP object. This can be null.
      * @param position  The position to be set to the current Playable object in case playback started or paused.
-     *                  Will be ignored if given the value of {@link Playable#INVALID_TIME}.
+     *                  Will be ignored if given the value of [Playable.INVALID_TIME].
      */
-    protected final synchronized void setPlayerStatus(@NonNull PlayerStatus newStatus,
-                                                      Playable newMedia, int position) {
-        Log.d(TAG, this.getClass().getSimpleName() + ": Setting player status to " + newStatus);
+    @Synchronized
+    protected fun setPlayerStatus(newStatus: PlayerStatus,
+                                  newMedia: Playable?, position: Int) {
+        Log.d(TAG, this.javaClass.getSimpleName() + ": Setting player status to " + newStatus)
 
-        this.oldPlayerStatus = playerStatus;
-        this.playerStatus = newStatus;
-        setPlayable(newMedia);
+        this.oldPlayerStatus = playerStatus
+        this.playerStatus = newStatus
+        setPlayable(newMedia)
 
         if (newMedia != null && newStatus != PlayerStatus.INDETERMINATE) {
             if (oldPlayerStatus == PlayerStatus.PLAYING && newStatus != PlayerStatus.PLAYING) {
-                callback.onPlaybackPause(newMedia, position);
+                callback.onPlaybackPause(newMedia, position)
             } else if (oldPlayerStatus != PlayerStatus.PLAYING && newStatus == PlayerStatus.PLAYING) {
-                callback.onPlaybackStart(newMedia, position);
+                callback.onPlaybackStart(newMedia, position)
             }
         }
 
-        callback.statusChanged(new PSMPInfo(oldPlayerStatus, playerStatus, getPlayable()));
+        callback.statusChanged(PSMPInfo(oldPlayerStatus, playerStatus, getPlayable()))
     }
 
-    public boolean isAudioChannelInUse() {
-        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        return (audioManager.getMode() != AudioManager.MODE_NORMAL || audioManager.isMusicActive());
+    fun isAudioChannelInUse(): Boolean {
+        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        return (audioManager.mode != AudioManager.MODE_NORMAL || audioManager.isMusicActive())
     }
 
     /**
-     * @see #setPlayerStatus(PlayerStatus, Playable, int)
+     * @see .setPlayerStatus
      */
-    protected final void setPlayerStatus(@NonNull PlayerStatus newStatus, Playable newMedia) {
-        setPlayerStatus(newStatus, newMedia, Playable.INVALID_TIME);
+    protected fun setPlayerStatus(newStatus: PlayerStatus, newMedia: Playable?) {
+        setPlayerStatus(newStatus, newMedia, Playable.INVALID_TIME)
     }
 
-    public interface PSMPCallback {
-        void statusChanged(PSMPInfo newInfo);
+    interface PSMPCallback {
+        fun statusChanged(newInfo: PSMPInfo)
 
-        void shouldStop();
+        fun shouldStop()
 
-        void episodeFinishedPlayback();
+        fun episodeFinishedPlayback()
 
-        boolean shouldContinueToNextEpisode();
+        fun shouldContinueToNextEpisode(): Boolean
 
-        void onMediaChanged(boolean reloadUI);
+        fun onMediaChanged(reloadUI: Boolean)
 
-        void onPostPlayback(@NonNull Playable media, boolean ended, boolean skipped, boolean playingNext);
+        fun onPostPlayback(media: Playable, ended: Boolean, skipped: Boolean, playingNext: Boolean)
 
-        void onPlaybackStart(@NonNull Playable playable, int position);
+        fun onPlaybackStart(playable: Playable, position: Int)
 
-        void onPlaybackPause(Playable playable, int position);
+        fun onPlaybackPause(playable: Playable?, position: Int)
 
-        Playable getNextInQueue(Playable currentMedia);
+        fun getNextInQueue(currentMedia: Playable?): Playable?
 
-        @Nullable
-        Playable findMedia(@NonNull String url);
+        fun findMedia(url: String): Playable?
 
-        void onPlaybackEnded(MediaType mediaType, boolean stopPlaying);
+        fun onPlaybackEnded(mediaType: MediaType?, stopPlaying: Boolean)
 
-        void ensureMediaInfoLoaded(@NonNull Playable media);
+        fun ensureMediaInfoLoaded(media: Playable)
     }
 
     /**
      * Holds information about a PSMP object.
      */
-    public static class PSMPInfo {
-        private final PlayerStatus oldPlayerStatus;
-        private final PlayerStatus playerStatus;
-        private Playable playable;
+    class PSMPInfo {
+        private val oldPlayerStatus: PlayerStatus?
+        private val playerStatus: PlayerStatus
+        private var playable: Playable?
 
-        public PSMPInfo(PlayerStatus oldPlayerStatus, PlayerStatus playerStatus, Playable playable) {
-            this.oldPlayerStatus = oldPlayerStatus;
-            this.playerStatus = playerStatus;
-            this.playable = playable;
+        constructor(oldPlayerStatus: PlayerStatus?, playerStatus: PlayerStatus, playable: Playable?) {
+            this.oldPlayerStatus = oldPlayerStatus
+            this.playerStatus = playerStatus
+            this.playable = playable
         }
 
-        public PlayerStatus getOldPlayerStatus() {
-            return oldPlayerStatus;
+        fun getOldPlayerStatus(): PlayerStatus? {
+            return oldPlayerStatus
         }
 
-        public PlayerStatus getPlayerStatus() {
-            return playerStatus;
+        fun getPlayerStatus(): PlayerStatus {
+            return playerStatus
         }
 
-        public Playable getPlayable() {
-            return playable;
+        fun getPlayable(): Playable? {
+            return playable
         }
 
-        public void setPlayable(final Playable newPlayable) {
-            playable = newPlayable;
+        fun setPlayable(newPlayable: Playable?) {
+            playable = newPlayable
         }
     }
 }
