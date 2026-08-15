@@ -1,18 +1,22 @@
-package de.danoeh.antennapod.net.download.serviceinterface;
+package de.danoeh.antennapod.net.download.serviceinterface
 
-import android.content.Context;
+import android.content.Context
 
-import java.util.concurrent.Future;
+import java.util.concurrent.Future
 
-public abstract class AutoDownloadManager {
-    private static AutoDownloadManager instance;
+abstract class AutoDownloadManager {
+    companion object {
+        private var instance: AutoDownloadManager? = null
 
-    public static AutoDownloadManager getInstance() {
-        return instance;
-    }
+        @JvmStatic
+        fun getInstance(): AutoDownloadManager? {
+            return instance
+        }
 
-    public static void setInstance(AutoDownloadManager instance) {
-        AutoDownloadManager.instance = instance;
+        @JvmStatic
+        fun setInstance(instance: AutoDownloadManager?) {
+            AutoDownloadManager.instance = instance
+        }
     }
 
     /**
@@ -25,7 +29,7 @@ public abstract class AutoDownloadManager {
      * @param context  Used for accessing the DB.
      * @return A Future that can be used for waiting for the methods completion.
      */
-    public abstract Future<?> autodownloadUndownloadedItems(final Context context);
+    abstract fun autodownloadUndownloadedItems(context: Context): Future<*>?
 
     /**
      * Removed downloaded episodes outside of the queue if the episode cache is full. Episodes with a smaller
@@ -35,5 +39,5 @@ public abstract class AutoDownloadManager {
      *
      * @param context Used for accessing the DB.
      */
-    public abstract void performAutoCleanup(final Context context);
+    abstract fun performAutoCleanup(context: Context)
 }
