@@ -17,7 +17,6 @@ dependencies {
     implementation project(':net:ssl')
     implementation project(':storage:preferences')
 
-    annotationProcessor libs.androidx.annotation
     implementation libs.okhttp
     implementation libs.okhttp.urlconnection
 
