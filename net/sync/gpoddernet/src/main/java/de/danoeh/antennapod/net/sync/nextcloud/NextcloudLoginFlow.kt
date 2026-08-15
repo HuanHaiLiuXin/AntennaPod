@@ -33,6 +33,14 @@ class NextcloudLoginFlow(
     private var startDisposable: Disposable? = null
     private var pollDisposable: Disposable? = null
 
+    fun saveInstanceState(): ArrayList<String?> {
+        val state = ArrayList<String?>()
+        state.add(rawHostUrl)
+        state.add(token)
+        state.add(endpoint)
+        return state
+    }
+
     fun start() {
         if (token != null) {
             poll()
