@@ -7,8 +7,6 @@ import android.util.Log
 import android.util.Pair
 import android.view.SurfaceHolder
 
-import java.util.List
-
 import de.danoeh.antennapod.model.playback.MediaType
 import de.danoeh.antennapod.model.playback.Playable
 
