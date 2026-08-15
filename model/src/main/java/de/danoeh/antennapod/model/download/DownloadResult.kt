@@ -33,12 +33,12 @@ class DownloadResult : Serializable {
     private val completionDate: Date
 
     constructor(title: String, feedfileId: Long, feedfileType: Int, successful: Boolean,
-                reason: DownloadError, reasonDetailed: String?) : this(0, title, feedfileId,
+                reason: DownloadError?, reasonDetailed: String?) : this(0, title, feedfileId,
         feedfileType, successful, reason, Date(), reasonDetailed) {
     }
 
     constructor(id: Long, title: String, feedfileId: Long, feedfileType: Int, successful: Boolean,
-                reason: DownloadError, completionDate: Date, reasonDetailed: String?) {
+                reason: DownloadError?, completionDate: Date, reasonDetailed: String?) {
         this.id = id
         this.title = title
         this.feedfileId = feedfileId

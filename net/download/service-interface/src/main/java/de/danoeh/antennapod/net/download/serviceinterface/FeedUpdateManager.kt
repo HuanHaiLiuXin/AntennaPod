@@ -24,7 +24,7 @@ abstract class FeedUpdateManager {
 
     abstract fun runOnce(context: Context, feed: Feed)
 
-    abstract fun runOnce(context: Context, feed: Feed, nextPage: Boolean)
+    abstract fun runOnce(context: Context, feed: Feed?, nextPage: Boolean)
 
     abstract fun runOnceOrAsk(context: Context)
 

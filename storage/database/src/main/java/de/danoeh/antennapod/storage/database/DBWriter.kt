@@ -792,6 +792,21 @@ class DBWriter {
         }
 
         /**
+         * Saves the 'last played time history' of a FeedMedia object
+         *
+         * @param media The FeedMedia object.
+         */
+        @JvmStatic
+        fun setFeedMediaLastPlayedTimeHistory(media: FeedMedia): Future<*>? {
+            return runOnDbThread {
+                val adapter = PodDBAdapter.getInstance()
+                adapter.open()
+                adapter.setFeedMediaLastPlayedTimeHistory(media)
+                adapter.close()
+            }
+        }
+
+        /**
          * Saves a FeedItem object in the database. This method will save all attributes of the FeedItem object including
          * the content of FeedComponent-attributes.
          *
