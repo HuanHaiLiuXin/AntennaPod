@@ -148,7 +148,7 @@ class Feed : Serializable {
      * This constructor is used for requesting a feed download (it must not be used for anything else!).
      * It should NOT be used if the title of the feed is already known.
      */
-    constructor(url: String, lastModified: String?) {
+    constructor(url: String?, lastModified: String?) {
         this.localFileUrl = null
         this.downloadUrl = url
         this.lastRefreshAttempt = 0
@@ -159,7 +159,7 @@ class Feed : Serializable {
      * This constructor is used for requesting a feed download (it must not be used for anything else!). It should be
      * used if the title of the feed is already known.
      */
-    constructor(url: String, lastModified: String?, title: String?) : this(url, lastModified) {
+    constructor(url: String?, lastModified: String?, title: String?) : this(url, lastModified) {
         this.feedTitle = title
     }
 
@@ -167,7 +167,7 @@ class Feed : Serializable {
      * This constructor is used for requesting a feed download (it must not be used for anything else!). It should be
      * used if the title of the feed is already known.
      */
-    constructor(url: String, lastModified: String?, title: String?, username: String?, password: String?)
+    constructor(url: String?, lastModified: String?, title: String?, username: String?, password: String?)
             : this(url, lastModified, title) {
         preferences = FeedPreferences(0, FeedPreferences.AutoDownloadSetting.GLOBAL,
                 FeedPreferences.AutoDeleteAction.GLOBAL, VolumeAdaptionSetting.OFF,
