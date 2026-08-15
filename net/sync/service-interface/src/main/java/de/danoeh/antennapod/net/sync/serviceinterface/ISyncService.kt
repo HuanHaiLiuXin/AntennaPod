@@ -1,7 +1,5 @@
 package de.danoeh.antennapod.net.sync.serviceinterface
 
-import java.util.List
-
 interface ISyncService {
 
     @Throws(SyncServiceException::class)

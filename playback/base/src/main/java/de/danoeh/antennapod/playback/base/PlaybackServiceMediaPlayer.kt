@@ -38,7 +38,9 @@ abstract class PlaybackServiceMediaPlayer {
      */
     private var wifiLock: WifiManager.WifiLock? = null
 
+    @JvmField
     protected val callback: PSMPCallback
+    @JvmField
     protected val context: Context
 
     protected constructor(context: Context,

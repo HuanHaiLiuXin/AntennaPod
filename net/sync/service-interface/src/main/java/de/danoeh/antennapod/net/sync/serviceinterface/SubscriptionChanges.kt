@@ -1,7 +1,5 @@
 package de.danoeh.antennapod.net.sync.serviceinterface
 
-import java.util.List
-
 class SubscriptionChanges {
     private val added: List<String>
     private val removed: List<String>

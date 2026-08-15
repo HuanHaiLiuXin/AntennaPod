@@ -1,8 +1,6 @@
 package de.danoeh.antennapod.net.sync.serviceinterface
 
 
-import java.util.List
-
 class EpisodeActionChanges {
 
     private val episodeActions: List<EpisodeAction>
