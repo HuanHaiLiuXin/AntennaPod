@@ -1,7 +1,6 @@
 package de.danoeh.antennapod.model.feed
 
 import java.util.ArrayList
-import java.util.Set
 
 class Transcript() {
     private var speakers: Set<String>? = null
