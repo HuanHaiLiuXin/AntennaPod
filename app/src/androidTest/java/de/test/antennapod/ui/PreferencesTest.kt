@@ -37,8 +37,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import de.test.antennapod.EspressoTestUtils.clickPreference
-import de.test.antennapod.EspressoTestUtils.waitForView
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -71,20 +69,20 @@ class PreferencesTest {
         // Preference is hidden on Android 11+ where the system controls notification persistence.
         assumeTrue(Build.VERSION.SDK_INT < Build.VERSION_CODES.R)
         val persistNotify = UserPreferences.isPersistNotify()
-        clickPreference(R.string.user_interface_label)
-        clickPreference(R.string.pref_persistNotify_title)
+        EspressoTestUtils.clickPreference(R.string.user_interface_label)
+        EspressoTestUtils.clickPreference(R.string.pref_persistNotify_title)
         Awaitility.await().atMost(1000L, MILLISECONDS)
                 .until { persistNotify != UserPreferences.isPersistNotify() }
-        clickPreference(R.string.pref_persistNotify_title)
+        EspressoTestUtils.clickPreference(R.string.pref_persistNotify_title)
         Awaitility.await().atMost(1000L, MILLISECONDS)
                 .until { persistNotify == UserPreferences.isPersistNotify() }
     }
 
     @Test
     fun testSetNotificationButtons() {
-        clickPreference(R.string.user_interface_label)
+        EspressoTestUtils.clickPreference(R.string.user_interface_label)
         val buttons = res.getStringArray(R.array.full_notification_buttons_options)
-        clickPreference(R.string.pref_full_notification_buttons_title)
+        EspressoTestUtils.clickPreference(R.string.pref_full_notification_buttons_title)
         // First uncheck checkboxes
         onView(withText(buttons[1])).perform(click())
         onView(withText(buttons[2])).perform(click())
@@ -101,7 +99,7 @@ class PreferencesTest {
 
     @Test
     fun testEnqueueLocation() {
-        clickPreference(R.string.playback_pref)
+        EspressoTestUtils.clickPreference(R.string.playback_pref)
         doTestEnqueueLocation(R.string.enqueue_location_after_current, EnqueueLocation.AFTER_CURRENTLY_PLAYING)
         doTestEnqueueLocation(R.string.enqueue_location_front, EnqueueLocation.FRONT)
         doTestEnqueueLocation(R.string.enqueue_location_back, EnqueueLocation.BACK)
@@ -109,7 +107,7 @@ class PreferencesTest {
     }
 
     private fun doTestEnqueueLocation(@StringRes optionResId: Int, expected: EnqueueLocation) {
-        clickPreference(R.string.pref_enqueue_location_title)
+        EspressoTestUtils.clickPreference(R.string.pref_enqueue_location_title)
         onView(withText(optionResId)).perform(click())
         Awaitility.await().atMost(1000L, MILLISECONDS)
                 .until { expected == UserPreferences.getEnqueueLocation() }
@@ -117,7 +115,7 @@ class PreferencesTest {
 
     @Test
     fun testHeadPhonesDisconnect() {
-        clickPreference(R.string.playback_pref)
+        EspressoTestUtils.clickPreference(R.string.playback_pref)
         val pauseOnHeadsetDisconnect = UserPreferences.isPauseOnHeadsetDisconnect()
         onView(withText(R.string.pref_pauseOnHeadsetDisconnect_title)).perform(click())
         Awaitility.await().atMost(1000L, MILLISECONDS)
@@ -130,7 +128,7 @@ class PreferencesTest {
     @Test
     fun testHeadPhonesReconnect() {
         assumeTrue(Build.VERSION.SDK_INT < 31) // Setting hidden on Android 12+
-        clickPreference(R.string.playback_pref)
+        EspressoTestUtils.clickPreference(R.string.playback_pref)
         if (!UserPreferences.isPauseOnHeadsetDisconnect()) {
             onView(withText(R.string.pref_pauseOnHeadsetDisconnect_title)).perform(click())
             Awaitility.await().atMost(1000L, MILLISECONDS)
@@ -148,7 +146,7 @@ class PreferencesTest {
     @Test
     fun testBluetoothReconnect() {
         assumeTrue(Build.VERSION.SDK_INT < 31) // Setting hidden on Android 12+
-        clickPreference(R.string.playback_pref)
+        EspressoTestUtils.clickPreference(R.string.playback_pref)
         if (!UserPreferences.isPauseOnHeadsetDisconnect()) {
             onView(withText(R.string.pref_pauseOnHeadsetDisconnect_title)).perform(click())
             Awaitility.await().atMost(1000L, MILLISECONDS)
@@ -165,19 +163,19 @@ class PreferencesTest {
 
     @Test
     fun testContinuousPlayback() {
-        clickPreference(R.string.playback_pref)
+        EspressoTestUtils.clickPreference(R.string.playback_pref)
         val continuousPlayback = UserPreferences.isFollowQueue()
-        clickPreference(R.string.pref_followQueue_title)
+        EspressoTestUtils.clickPreference(R.string.pref_followQueue_title)
         Awaitility.await().atMost(1000L, MILLISECONDS)
                 .until { continuousPlayback != UserPreferences.isFollowQueue() }
-        clickPreference(R.string.pref_followQueue_title)
+        EspressoTestUtils.clickPreference(R.string.pref_followQueue_title)
         Awaitility.await().atMost(1000L, MILLISECONDS)
                 .until { continuousPlayback == UserPreferences.isFollowQueue() }
     }
 
     @Test
     fun testAutoDelete() {
-        clickPreference(R.string.downloads_pref)
+        EspressoTestUtils.clickPreference(R.string.downloads_pref)
         onView(withText(R.string.pref_auto_delete_title)).perform(click())
         val autoDelete = UserPreferences.isAutoDelete()
         onView(withText(R.string.pref_auto_delete_playback_title)).perform(click())
@@ -190,7 +188,7 @@ class PreferencesTest {
 
     @Test
     fun testAutoDeleteLocal() {
-        clickPreference(R.string.downloads_pref)
+        EspressoTestUtils.clickPreference(R.string.downloads_pref)
         onView(withText(R.string.pref_auto_delete_title)).perform(click())
         onView(withText(R.string.pref_auto_delete_playback_title)).perform(click())
         assertTrue(UserPreferences.isAutoDelete())
@@ -208,9 +206,9 @@ class PreferencesTest {
 
     @Test
     fun testPlaybackSpeeds() {
-        clickPreference(R.string.playback_pref)
-        clickPreference(R.string.playback_speed)
-        onView(isRoot()).perform(waitForView(withText("1.25"), 1000L))
+        EspressoTestUtils.clickPreference(R.string.playback_pref)
+        EspressoTestUtils.clickPreference(R.string.playback_speed)
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(withText("1.25"), 1000L))
         onView(withText("1.25")).check(matches(isDisplayed()))
     }
 
@@ -220,10 +218,10 @@ class PreferencesTest {
         val values = res.getStringArray(R.array.episode_cache_size_values)
         val entry = entries[entries.size / 2]
         val value = values[values.size / 2].toInt()
-        clickPreference(R.string.downloads_pref)
-        clickPreference(R.string.pref_automatic_download_title)
-        clickPreference(R.string.pref_episode_cache_title)
-        onView(isRoot()).perform(waitForView(withText(entry), 1000L))
+        EspressoTestUtils.clickPreference(R.string.downloads_pref)
+        EspressoTestUtils.clickPreference(R.string.pref_automatic_download_title)
+        EspressoTestUtils.clickPreference(R.string.pref_episode_cache_title)
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(withText(entry), 1000L))
         onView(withText(entry)).perform(click())
         Awaitility.await().atMost(1000L, MILLISECONDS)
                 .until { UserPreferences.getEpisodeCacheSize() == value }
@@ -236,9 +234,9 @@ class PreferencesTest {
         val minEntry = entries[0]
         val minValue = values[0].toInt()
 
-        clickPreference(R.string.downloads_pref)
-        clickPreference(R.string.pref_automatic_download_title)
-        clickPreference(R.string.pref_episode_cache_title)
+        EspressoTestUtils.clickPreference(R.string.downloads_pref)
+        EspressoTestUtils.clickPreference(R.string.pref_automatic_download_title)
+        EspressoTestUtils.clickPreference(R.string.pref_episode_cache_title)
         onView(withId(R.id.select_dialog_listview)).perform(swipeDown())
         onView(withText(minEntry)).perform(click())
         Awaitility.await().atMost(1000L, MILLISECONDS)
@@ -263,28 +261,28 @@ class PreferencesTest {
     @Test
     fun testAutomaticDownload() {
         val automaticDownload = UserPreferences.isEnableAutodownloadGlobal()
-        clickPreference(R.string.downloads_pref)
-        clickPreference(R.string.pref_automatic_download_title)
-        clickPreference(R.string.pref_automatic_download_title)
+        EspressoTestUtils.clickPreference(R.string.downloads_pref)
+        EspressoTestUtils.clickPreference(R.string.pref_automatic_download_title)
+        EspressoTestUtils.clickPreference(R.string.pref_automatic_download_title)
         Awaitility.await().atMost(1000L, MILLISECONDS)
                 .until { automaticDownload != UserPreferences.isEnableAutodownloadGlobal() }
         if (!UserPreferences.isEnableAutodownloadGlobal()) {
-            clickPreference(R.string.pref_automatic_download_title)
+            EspressoTestUtils.clickPreference(R.string.pref_automatic_download_title)
         }
         Awaitility.await().atMost(1000L, MILLISECONDS)
                 .until { UserPreferences.isEnableAutodownloadGlobal() }
         val enableAutodownloadOnBattery = UserPreferences.isEnableAutodownloadOnBattery()
-        clickPreference(R.string.pref_automatic_download_on_battery_title)
+        EspressoTestUtils.clickPreference(R.string.pref_automatic_download_on_battery_title)
         Awaitility.await().atMost(1000L, MILLISECONDS)
                 .until { enableAutodownloadOnBattery != UserPreferences.isEnableAutodownloadOnBattery() }
-        clickPreference(R.string.pref_automatic_download_on_battery_title)
+        EspressoTestUtils.clickPreference(R.string.pref_automatic_download_on_battery_title)
         Awaitility.await().atMost(1000L, MILLISECONDS)
                 .until { enableAutodownloadOnBattery == UserPreferences.isEnableAutodownloadOnBattery() }
     }
 
     @Test
     fun testEpisodeCleanupFavoriteOnly() {
-        clickPreference(R.string.downloads_pref)
+        EspressoTestUtils.clickPreference(R.string.downloads_pref)
         onView(withText(R.string.pref_auto_delete_title)).perform(click())
         onView(withText(R.string.pref_episode_cleanup_title)).perform(click())
         onView(withId(R.id.select_dialog_listview)).perform(swipeDown())
@@ -295,7 +293,7 @@ class PreferencesTest {
 
     @Test
     fun testEpisodeCleanupQueueOnly() {
-        clickPreference(R.string.downloads_pref)
+        EspressoTestUtils.clickPreference(R.string.downloads_pref)
         onView(withText(R.string.pref_auto_delete_title)).perform(click())
         onView(withText(R.string.pref_episode_cleanup_title)).perform(click())
         onView(withId(R.id.select_dialog_listview)).perform(swipeDown())
@@ -306,7 +304,7 @@ class PreferencesTest {
 
     @Test
     fun testEpisodeCleanupNeverAlg() {
-        clickPreference(R.string.downloads_pref)
+        EspressoTestUtils.clickPreference(R.string.downloads_pref)
         onView(withText(R.string.pref_auto_delete_title)).perform(click())
         onView(withText(R.string.pref_episode_cleanup_title)).perform(click())
         onView(withId(R.id.select_dialog_listview)).perform(swipeUp())
@@ -317,7 +315,7 @@ class PreferencesTest {
 
     @Test
     fun testEpisodeCleanupClassic() {
-        clickPreference(R.string.downloads_pref)
+        EspressoTestUtils.clickPreference(R.string.downloads_pref)
         onView(withText(R.string.pref_auto_delete_title)).perform(click())
         onView(withText(R.string.pref_episode_cleanup_title)).perform(click())
         onView(withId(R.id.select_dialog_listview)).perform(swipeDown())
@@ -336,9 +334,9 @@ class PreferencesTest {
 
     @Test
     fun testEpisodeCleanupNumDays() {
-        clickPreference(R.string.downloads_pref)
+        EspressoTestUtils.clickPreference(R.string.downloads_pref)
         onView(withText(R.string.pref_auto_delete_title)).perform(click())
-        clickPreference(R.string.pref_episode_cleanup_title)
+        EspressoTestUtils.clickPreference(R.string.pref_episode_cleanup_title)
         val search = res.getQuantityString(R.plurals.episode_cleanup_days_after_listening, 3, 3)
         onView(withText(search)).perform(scrollTo())
         onView(withText(search)).perform(click())
@@ -359,15 +357,15 @@ class PreferencesTest {
         val seconds = UserPreferences.getRewindSecs()
         val deltas = res.getIntArray(R.array.seek_delta_values)
 
-        clickPreference(R.string.playback_pref)
-        clickPreference(R.string.pref_rewind)
+        EspressoTestUtils.clickPreference(R.string.playback_pref)
+        EspressoTestUtils.clickPreference(R.string.pref_rewind)
 
         val currentIndex = Arrays.binarySearch(deltas, seconds)
         assertTrue(currentIndex >= 0 && currentIndex < deltas.size)  // found?
 
         // Find next value (wrapping around to next)
         val newIndex = (currentIndex + 1) % deltas.size
-        onView(withText(deltas[newIndex] + " seconds")).perform(click())
+        onView(withText(deltas[newIndex].toString() + " seconds")).perform(click())
 
         Awaitility.await().atMost(1000L, MILLISECONDS)
                 .until { UserPreferences.getRewindSecs() == deltas[newIndex] }
@@ -375,12 +373,12 @@ class PreferencesTest {
 
     @Test
     fun testFastForwardChange() {
-        clickPreference(R.string.playback_pref)
+        EspressoTestUtils.clickPreference(R.string.playback_pref)
         for (i in 2 downTo 1) { // repeat twice to catch any error where fastforward is tracking rewind
             val seconds = UserPreferences.getFastForwardSecs()
             val deltas = res.getIntArray(R.array.seek_delta_values)
 
-            clickPreference(R.string.pref_fast_forward)
+            EspressoTestUtils.clickPreference(R.string.pref_fast_forward)
 
             val currentIndex = Arrays.binarySearch(deltas, seconds)
             assertTrue(currentIndex >= 0 && currentIndex < deltas.size)  // found?
@@ -388,7 +386,7 @@ class PreferencesTest {
             // Find next value (wrapping around to next)
             val newIndex = (currentIndex + 1) % deltas.size
 
-            onView(withText(deltas[newIndex] + " seconds")).perform(click())
+            onView(withText(deltas[newIndex].toString() + " seconds")).perform(click())
 
             Awaitility.await().atMost(1000L, MILLISECONDS)
                     .until { UserPreferences.getFastForwardSecs() == deltas[newIndex] }
@@ -397,9 +395,9 @@ class PreferencesTest {
 
     @Test
     fun testDeleteRemovesFromQueue() {
-        clickPreference(R.string.downloads_pref)
+        EspressoTestUtils.clickPreference(R.string.downloads_pref)
         if (!UserPreferences.shouldDeleteRemoveFromQueue()) {
-            clickPreference(R.string.pref_delete_removes_from_queue_title)
+            EspressoTestUtils.clickPreference(R.string.pref_delete_removes_from_queue_title)
             Awaitility.await().atMost(1000L, MILLISECONDS)
                     .until { UserPreferences.shouldDeleteRemoveFromQueue() }
         }

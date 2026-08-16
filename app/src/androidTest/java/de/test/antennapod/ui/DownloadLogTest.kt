@@ -33,8 +33,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import de.test.antennapod.EspressoTestUtils.waitForView
-import de.test.antennapod.EspressoTestUtils.waitForViewGlobally
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matchers.allOf
 
@@ -73,7 +71,7 @@ class DownloadLogTest {
         openDialog(result)
         // Open feed
         onView(withText(R.string.download_log_open_feed)).perform(click())
-        waitForViewGlobally(withText(feed.getAuthor()), 2000L)
+        EspressoTestUtils.waitForViewGlobally(withText(feed.getAuthor()), 2000L)
     }
 
     @Test
@@ -85,8 +83,8 @@ class DownloadLogTest {
         openDialog(result)
         // Opens online feed view
         onView(withText(R.string.download_log_open_feed)).perform(click())
-        waitForViewGlobally(withText(feed.getAuthor()), 2000L)
-        onView(isRoot()).perform(waitForView(allOf(withText(R.string.subscribe_label), isDisplayed()), 2000L))
+        EspressoTestUtils.waitForViewGlobally(withText(feed.getAuthor()), 2000L)
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(withText(R.string.subscribe_label), isDisplayed()), 2000L))
     }
 
     @Test
@@ -105,7 +103,7 @@ class DownloadLogTest {
         openDialog(result)
         // Opens feed
         onView(withText(R.string.download_log_open_feed)).perform(click())
-        waitForViewGlobally(withText(feed.getAuthor()), 2000L)
+        EspressoTestUtils.waitForViewGlobally(withText(feed.getAuthor()), 2000L)
     }
 
     @Test
@@ -121,8 +119,8 @@ class DownloadLogTest {
         DBWriter.addDownloadStatus(result)
         activityRule.launchActivity(completedDownloadsIntent)
         onView(withContentDescription(R.string.downloads_log_label)).perform(click())
-        onView(isRoot()).perform(waitForView(allOf(withText(result.getTitle()), isDisplayed()), 1000L))
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(withText(result.getTitle()), isDisplayed()), 1000L))
         onView(withText(result.getTitle())).perform(click())
-        onView(isRoot()).perform(waitForView(allOf(withText(result.getReasonDetailed()), isDisplayed()), 1000L))
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(withText(result.getReasonDetailed()), isDisplayed()), 1000L))
     }
 }

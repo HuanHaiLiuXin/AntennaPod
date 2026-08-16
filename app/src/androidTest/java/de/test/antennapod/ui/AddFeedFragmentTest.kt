@@ -25,7 +25,6 @@ import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import de.test.antennapod.EspressoTestUtils.waitForViewGlobally
 
 @RunWith(AndroidJUnit4::class)
 class AddFeedFragmentTest {
@@ -67,10 +66,10 @@ class AddFeedFragmentTest {
 
         // subscribe podcast
         Espresso.closeSoftKeyboard()
-        waitForViewGlobally(withText(R.string.subscribe_label), 15000L)
+        EspressoTestUtils.waitForViewGlobally(withText(R.string.subscribe_label), 15000L)
         onView(withText(R.string.subscribe_label)).perform(click())
 
         // wait for podcast feed item list
-        waitForViewGlobally(withId(R.id.butShowSettings), 15000L)
+        EspressoTestUtils.waitForViewGlobally(withId(R.id.butShowSettings), 15000L)
     }
 }

@@ -4,7 +4,7 @@ import de.danoeh.antennapod.model.playback.MediaType
 import de.danoeh.antennapod.model.playback.Playable
 import de.danoeh.antennapod.playback.base.PlaybackServiceMediaPlayer
 
-class DefaultPSMPCallback : PlaybackServiceMediaPlayer.PSMPCallback {
+open class DefaultPSMPCallback : PlaybackServiceMediaPlayer.PSMPCallback {
     override fun statusChanged(newInfo: PlaybackServiceMediaPlayer.PSMPInfo) {
 
     }

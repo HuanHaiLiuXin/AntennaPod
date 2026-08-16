@@ -16,7 +16,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withClassName
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import de.test.antennapod.NthMatcher.first
+import de.test.antennapod.NthMatcher
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.endsWith
 
@@ -39,23 +39,23 @@ class QueueFragmentTest {
 
     @Test
     fun testLockEmptyQueue() {
-        onView(first(EspressoTestUtils.actionBarOverflow())).perform(click())
+        onView(NthMatcher.first(EspressoTestUtils.actionBarOverflow())).perform(click())
         onView(withText(R.string.lock_queue)).perform(click())
         onView(allOf(withClassName(endsWith("Button")), withText(R.string.lock_queue))).perform(click())
-        onView(first(EspressoTestUtils.actionBarOverflow())).perform(click())
+        onView(NthMatcher.first(EspressoTestUtils.actionBarOverflow())).perform(click())
         onView(withText(R.string.lock_queue)).perform(click())
     }
 
     @Test
     fun testSortEmptyQueue() {
-        onView(first(EspressoTestUtils.actionBarOverflow())).perform(click())
+        onView(NthMatcher.first(EspressoTestUtils.actionBarOverflow())).perform(click())
         onView(withText(R.string.sort)).perform(click())
         onView(withText(R.string.random)).perform(click())
     }
 
     @Test
     fun testKeepEmptyQueueSorted() {
-        onView(first(EspressoTestUtils.actionBarOverflow())).perform(click())
+        onView(NthMatcher.first(EspressoTestUtils.actionBarOverflow())).perform(click())
         onView(withText(R.string.sort)).perform(click())
         onView(withText(R.string.keep_sorted)).perform(click())
     }

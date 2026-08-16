@@ -6,6 +6,7 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.PerformException
@@ -217,7 +218,7 @@ class EspressoTestUtils {
         @JvmStatic
         fun clickPreference(@StringRes title: Int) {
             onView(withId(R.id.recycler_view)).perform(
-                    RecyclerViewActions.actionOnItem(
+                    RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
                             allOf(hasDescendant(withText(title)),
                                     hasDescendant(withId(android.R.id.widget_frame))),
                             click()))

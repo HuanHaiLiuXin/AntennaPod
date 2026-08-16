@@ -34,7 +34,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import de.test.antennapod.EspressoTestUtils.waitForView
 import org.hamcrest.Matchers.allOf
 import org.junit.Assume.assumeTrue
 
@@ -67,7 +66,7 @@ class NavigationDrawerTest {
     }
 
     private fun openNavDrawer() {
-        onView(isRoot()).perform(waitForView(withId(R.id.drawer_layout), 1000L))
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(withId(R.id.drawer_layout), 1000L))
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open())
     }
 
@@ -85,50 +84,50 @@ class NavigationDrawerTest {
         // home
         openNavDrawer()
         onDrawerItem(withText(R.string.home_label)).perform(click())
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
                 withText(R.string.home_label)), 1000L))
 
         // queue
         openNavDrawer()
         onDrawerItem(withText(R.string.queue_label)).perform(click())
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
                 withText(R.string.queue_label)), 1000L))
 
         // Inbox
         openNavDrawer()
         onDrawerItem(withText(R.string.inbox_label)).perform(click())
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
                 withText(R.string.inbox_label)), 1000L))
 
         // episodes
         openNavDrawer()
         onDrawerItem(withText(R.string.episodes_label)).perform(click())
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
                 withText(R.string.episodes_label), isDisplayed()), 1000L))
 
         // Subscriptions
         openNavDrawer()
         onDrawerItem(withText(R.string.subscriptions_label)).perform(click())
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
                 withText(R.string.subscriptions_label), isDisplayed()), 1000L))
 
         // downloads
         openNavDrawer()
         onDrawerItem(withText(R.string.downloads_label)).perform(click())
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
                 withText(R.string.downloads_label), isDisplayed()), 1000L))
 
         // playback history
         openNavDrawer()
         onDrawerItem(withText(R.string.playback_history_label)).perform(click())
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
                 withText(R.string.playback_history_label), isDisplayed()), 1000L))
 
         // add podcast
         openNavDrawer()
         onView(withId(R.id.nav_list)).perform(swipeUp())
         onDrawerItem(withText(R.string.add_feed_label)).perform(click())
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
                 withText(R.string.add_feed_label), isDisplayed()), 1000L))
 
         // podcasts
@@ -136,7 +135,7 @@ class NavigationDrawerTest {
             val f = uiTestUtils.hostedFeeds.get(i)
             openNavDrawer()
             onDrawerItem(withText(f.getTitle())).perform(click())
-            onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.appBar)),
+            onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.appBar)),
                     withText(f.getTitle()), isDisplayed()), 1000L))
         }
     }

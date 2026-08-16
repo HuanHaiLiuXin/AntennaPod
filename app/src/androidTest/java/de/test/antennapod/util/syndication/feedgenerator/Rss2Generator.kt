@@ -118,7 +118,7 @@ class Rss2Generator : FeedGenerator {
                 if (item.getMedia() != null) {
                     xml.startTag(null, "enclosure")
                     xml.attribute(null, "url", item.getMedia()!!.getDownloadUrl())
-                    xml.attribute(null, "length", String.valueOf(item.getMedia()!!.getSize()))
+                    xml.attribute(null, "length", item.getMedia()!!.getSize().toString())
                     xml.attribute(null, "type", item.getMedia()!!.getMimeType())
                     xml.endTag(null, "enclosure")
                 }

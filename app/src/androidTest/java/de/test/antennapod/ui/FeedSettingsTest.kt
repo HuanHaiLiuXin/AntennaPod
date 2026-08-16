@@ -22,8 +22,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import de.test.antennapod.EspressoTestUtils.clickPreference
-import de.test.antennapod.EspressoTestUtils.waitForView
 import org.hamcrest.Matchers.allOf
 
 @RunWith(AndroidJUnit4::class)
@@ -58,25 +56,25 @@ class FeedSettingsTest {
 
     @Test
     fun testClickFeedSettings() {
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.appBar)),
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.appBar)),
                 withText(feed.getTitle()), isDisplayed()), 1000L))
         onView(withId(R.id.butShowSettings)).perform(click())
 
-        clickPreference(R.string.keep_updated)
+        EspressoTestUtils.clickPreference(R.string.keep_updated)
 
-        clickPreference(R.string.authentication_label)
+        EspressoTestUtils.clickPreference(R.string.authentication_label)
         onView(withText(R.string.cancel_label)).perform(click())
 
-        clickPreference(R.string.playback_speed)
+        EspressoTestUtils.clickPreference(R.string.playback_speed)
         onView(withText(R.string.cancel_label)).perform(click())
 
-        clickPreference(R.string.pref_feed_skip)
+        EspressoTestUtils.clickPreference(R.string.pref_feed_skip)
         onView(withText(R.string.cancel_label)).perform(click())
 
-        clickPreference(R.string.pref_auto_delete_playback_title)
+        EspressoTestUtils.clickPreference(R.string.pref_auto_delete_playback_title)
         onView(withText(R.string.cancel_label)).perform(click())
 
-        clickPreference(R.string.feed_volume_adapdation)
+        EspressoTestUtils.clickPreference(R.string.feed_volume_adapdation)
         onView(withText(R.string.cancel_label)).perform(click())
     }
 }

@@ -19,7 +19,6 @@ import java.net.URLConnection
 import java.util.ArrayList
 import java.util.Arrays
 import java.util.Locale
-import java.util.Map
 import java.util.Random
 import java.util.zip.GZIPOutputStream
 
@@ -138,7 +137,7 @@ class HTTPBin : NanoHTTPD(0) { // Let system pick a free port
                 return getUnauthorizedResponse()
             }
             try {
-                val credentials = String(Base64.decode(headers.get("authorization")!!.split(" ")[1], 0), "UTF-8")
+                val credentials = String(Base64.decode(headers.get("authorization")!!.split(" ")[1], 0), Charsets.UTF_8)
                 val credentialParts = credentials.split(":").toTypedArray()
                 if (credentialParts.size != 2) {
                     Log.w(TAG, "Unable to split credentials: " + Arrays.toString(credentialParts))
@@ -259,7 +258,7 @@ class HTTPBin : NanoHTTPD(0) { // Let system pick a free port
         if (contentRange != null) {
             response.addHeader("Content-Range", contentRange)
         }
-        response.addHeader("Content-Length", String.valueOf(file.length()))
+        response.addHeader("Content-Length", file.length().toString())
         return response
     }
 
@@ -282,7 +281,7 @@ class HTTPBin : NanoHTTPD(0) { // Let system pick a free port
         val inputStream: InputStream = ByteArrayInputStream(compressed.toByteArray())
         val response = Response(Response.Status.OK, MIME_PLAIN, inputStream)
         response.addHeader("Content-Encoding", "gzip")
-        response.addHeader("Content-Length", String.valueOf(compressed.size()))
+        response.addHeader("Content-Length", compressed.size().toString())
         return response
     }
 

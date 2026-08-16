@@ -23,9 +23,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import de.test.antennapod.EspressoTestUtils.clickBottomNavItem
-import de.test.antennapod.EspressoTestUtils.clickBottomNavOverflow
-import de.test.antennapod.EspressoTestUtils.waitForView
 import org.hamcrest.Matchers.allOf
 import org.junit.Assume.assumeTrue
 
@@ -65,36 +62,36 @@ class BottomNavigationTest {
         UserPreferences.setDrawerItemOrder(Collections.emptyList(), Collections.emptyList())
         activityRule.launchActivity(Intent())
 
-        clickBottomNavItem(R.string.home_label_short)
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
+        EspressoTestUtils.clickBottomNavItem(R.string.home_label_short)
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
                 withText(R.string.home_label)), 1000L))
 
-        clickBottomNavItem(R.string.queue_label_short)
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
+        EspressoTestUtils.clickBottomNavItem(R.string.queue_label_short)
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
                 withText(R.string.queue_label)), 1000L))
 
-        clickBottomNavItem(R.string.inbox_label_short)
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
+        EspressoTestUtils.clickBottomNavItem(R.string.inbox_label_short)
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
                 withText(R.string.inbox_label)), 1000L))
 
-        clickBottomNavItem(R.string.subscriptions_label_short)
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
+        EspressoTestUtils.clickBottomNavItem(R.string.subscriptions_label_short)
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
                 withText(R.string.subscriptions_label)), 1000L))
 
-        clickBottomNavOverflow(R.string.episodes_label)
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
+        EspressoTestUtils.clickBottomNavOverflow(R.string.episodes_label)
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
                 withText(R.string.episodes_label)), 1000L))
 
-        clickBottomNavOverflow(R.string.downloads_label)
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
+        EspressoTestUtils.clickBottomNavOverflow(R.string.downloads_label)
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
                 withText(R.string.downloads_label)), 1000L))
 
-        clickBottomNavOverflow(R.string.playback_history_label)
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
+        EspressoTestUtils.clickBottomNavOverflow(R.string.playback_history_label)
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
                 withText(R.string.playback_history_label)), 1000L))
 
-        clickBottomNavOverflow(R.string.add_feed_label)
-        onView(isRoot()).perform(waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
+        EspressoTestUtils.clickBottomNavOverflow(R.string.add_feed_label)
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allOf(isDescendantOfA(withId(R.id.toolbar)),
                 withText(R.string.add_feed_label)), 1000L))
     }
 }

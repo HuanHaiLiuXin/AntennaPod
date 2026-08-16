@@ -21,7 +21,6 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import de.test.antennapod.EspressoTestUtils.waitForView
 import org.hamcrest.CoreMatchers.allOf
 
 /**
@@ -61,7 +60,7 @@ class TextOnlyFeedsTest {
         EspressoTestUtils.setLaunchScreen("" + feed.getId())
         activityRule.launchActivity(Intent())
         onView(withText(feed.getItemAtIndex(0)!!.getTitle())).perform(click())
-        onView(isRoot()).perform(waitForView(withText(R.string.mark_read_no_media_label), 3000L))
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(withText(R.string.mark_read_no_media_label), 3000L))
         onView(allOf(withText(R.string.mark_read_no_media_label), isDisplayed())).perform(click())
         EspressoTestUtils.waitForViewToDisappear(withText(R.string.mark_read_no_media_label), 3000L)
     }

@@ -35,13 +35,11 @@ import java.util.concurrent.TimeUnit
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import de.test.antennapod.EspressoTestUtils.clickBottomNavOverflow
-import de.test.antennapod.EspressoTestUtils.clickChildViewWithId
-import de.test.antennapod.EspressoTestUtils.waitForView
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import org.hamcrest.Matchers.allOf
 import org.junit.Assert.assertEquals
@@ -183,14 +181,14 @@ class PlaybackTest {
     }
 
     protected fun startLocalPlayback() {
-        clickBottomNavOverflow(R.string.episodes_label)
+        EspressoTestUtils.clickBottomNavOverflow(R.string.episodes_label)
 
         val episodes = DBReader.getEpisodes(0, 10,
                 FeedItemFilter.unfiltered(), SortOrder.DATE_NEW_OLD)
         val allEpisodesMatcher: Matcher<View> = allOf(withId(R.id.recyclerView), isDisplayed(),
                 hasMinimumChildCount(2))
-        onView(isRoot()).perform(waitForView(allEpisodesMatcher, 1000L))
-        onView(allEpisodesMatcher).perform(actionOnItemAtPosition(0, clickChildViewWithId(R.id.secondaryActionButton)))
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(allEpisodesMatcher, 1000L))
+        onView(allEpisodesMatcher).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, EspressoTestUtils.clickChildViewWithId(R.id.secondaryActionButton)))
 
         val media = episodes.get(0).getMedia()!!
         Awaitility.await().atMost(1L, TimeUnit.SECONDS).until {
@@ -206,8 +204,8 @@ class PlaybackTest {
         val queue = DBReader.getQueue()
 
         val queueMatcher: Matcher<View> = allOf(withId(R.id.recyclerView), isDisplayed(), hasMinimumChildCount(2))
-        onView(isRoot()).perform(waitForView(queueMatcher, 1000L))
-        onView(queueMatcher).perform(actionOnItemAtPosition(itemIdx, clickChildViewWithId(R.id.secondaryActionButton)))
+        onView(isRoot()).perform(EspressoTestUtils.waitForView(queueMatcher, 1000L))
+        onView(queueMatcher).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(itemIdx, EspressoTestUtils.clickChildViewWithId(R.id.secondaryActionButton)))
 
         val media = queue.get(itemIdx).getMedia()!!
         Awaitility.await().atMost(1L, TimeUnit.SECONDS).until {
