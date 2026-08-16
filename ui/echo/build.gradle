@@ -19,7 +19,6 @@ dependencies {
     implementation project(':ui:common')
     implementation project(':ui:episodes')
 
-    annotationProcessor libs.androidx.annotation
     implementation libs.androidx.appcompat
     implementation libs.google.material
     implementation libs.rxandroid
