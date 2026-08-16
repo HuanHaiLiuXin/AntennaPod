@@ -16,7 +16,6 @@ dependencies {
     implementation project(':ui:app-start-intent')
     implementation project(':ui:common')
 
-    annotationProcessor libs.androidx.annotation
     implementation libs.androidx.appcompat
     implementation libs.google.material
     implementation libs.rxandroid
