@@ -16,6 +16,5 @@ dependencies {
     implementation project(':storage:preferences')
     implementation project(':ui:i18n')
 
-    annotationProcessor libs.androidx.annotation
     implementation libs.androidx.core
 }

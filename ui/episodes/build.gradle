@@ -12,7 +12,6 @@ dependencies {
     implementation project(":storage:preferences")
     implementation project(":ui:common")
 
-    annotationProcessor libs.androidx.annotation
     implementation libs.androidx.appcompat
     implementation libs.androidx.core
     implementation libs.google.material
