@@ -1,6 +1,6 @@
 android {
     compileSdk 36
-    enableKotlin false
+    enableKotlin true
 
     defaultConfig {
         minSdk 23
@@ -43,7 +43,7 @@ android {
 
     tasks.withType(JavaCompile) {
         options.compilerArgs.addAll([
-            "-Xlint:all,-deprecation,-serial,-this-escape,-unchecked,-processing,-classfile",
+            "-Xlint:all,-deprecation,-serial,-this-escape,-unchecked,-processing,-classfile,-dangling-doc-comments",
             "-Werror",
         ])
     }
@@ -56,7 +56,7 @@ android {
     }
 
     lint {
-        disable "GradleDependency", "OutdatedLibrary", "AndroidGradlePluginVersion", "CheckResult"
+        disable "GradleDependency", "OutdatedLibrary", "AndroidGradlePluginVersion", "CheckResult", "UseKtx"
         checkDependencies true
         warningsAsErrors true
         abortOnError true

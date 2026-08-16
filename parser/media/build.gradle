@@ -10,8 +10,6 @@ android {
 dependencies {
     implementation project(':model')
 
-    annotationProcessor libs.androidx.annotation
-
     implementation libs.commons.io
 
     testImplementation libs.junit

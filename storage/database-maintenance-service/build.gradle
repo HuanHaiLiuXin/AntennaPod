@@ -12,7 +12,6 @@ dependencies {
     implementation project(':storage:database')
     implementation project(':ui:notifications')
 
-    annotationProcessor libs.androidx.annotation
     implementation libs.androidx.core
     implementation libs.androidx.work.runtime
     implementation libs.guava

@@ -30,10 +30,10 @@ class EpisodeDetailViewModel(application: Application, private val episode: Feed
     private val _uiState = MutableStateFlow(
         EpisodeDetailUiState(
             item = episode,
-            position = episode.media?.position ?: 0,
-            duration = episode.media?.duration ?: 0,
+            position = episode.getMedia()?.getPosition() ?: 0,
+            duration = episode.getMedia()?.getDuration() ?: 0,
             hasStartedPlaying = WearDataRepository.nowPlaying.value
-                ?.takeIf { it.item.id == episode.id }?.isPlaying == true
+                ?.takeIf { it.item.getId() == episode.getId() }?.isPlaying == true
         )
     )
     val uiState: StateFlow<EpisodeDetailUiState> = _uiState
@@ -48,9 +48,9 @@ class EpisodeDetailViewModel(application: Application, private val episode: Feed
 
         viewModelScope.launch {
             WearDataRepository.nowPlaying.collect { nowPlaying ->
-                val liveData = nowPlaying?.takeIf { it.item.id == episode.id }
-                val position = liveData?.item?.media?.position ?: episode.media?.position ?: 0
-                val duration = liveData?.item?.media?.duration?.takeIf { it > 0 } ?: episode.media?.duration ?: 0
+                val liveData = nowPlaying?.takeIf { it.item.getId() == episode.getId() }
+                val position = liveData?.item?.getMedia()?.getPosition() ?: episode.getMedia()?.getPosition() ?: 0
+                val duration = liveData?.item?.getMedia()?.getDuration()?.takeIf { it > 0 } ?: episode.getMedia()?.getDuration() ?: 0
                 val isCurrentlyPlaying = liveData?.isPlaying == true
                 _uiState.update {
                     it.copy(
@@ -66,7 +66,7 @@ class EpisodeDetailViewModel(application: Application, private val episode: Feed
 
     fun play() {
         viewModelScope.launch(Dispatchers.IO) {
-            WearMessageSender.send(getApplication(), WearDataPaths.playPath(episode.id))
+            WearMessageSender.send(getApplication(), WearDataPaths.playPath(episode.getId()))
         }
     }
 
@@ -84,7 +84,7 @@ class EpisodeDetailViewModel(application: Application, private val episode: Feed
 
     fun openOnPhone() {
         viewModelScope.launch(Dispatchers.IO) {
-            WearMessageSender.send(getApplication(), WearDataPaths.openOnPhonePath(episode.id))
+            WearMessageSender.send(getApplication(), WearDataPaths.openOnPhonePath(episode.getId()))
         }
     }
 

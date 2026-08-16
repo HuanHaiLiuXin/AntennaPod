@@ -1,0 +1,19 @@
+package de.danoeh.antennapod.model.feed
+
+import java.util.Date
+
+import de.danoeh.antennapod.model.feed.FeedMother.anyFeed
+
+class FeedItemMother {
+    companion object {
+        private const val IMAGE_URL = "http://example.com/image"
+
+        @JvmStatic
+        fun anyFeedItemWithImage(): FeedItem {
+            val item = FeedItem(0, "Item", "Item", "url", Date(), FeedItem.PLAYED, anyFeed())
+            item.setImageUrl(IMAGE_URL)
+            return item
+        }
+    }
+
+}

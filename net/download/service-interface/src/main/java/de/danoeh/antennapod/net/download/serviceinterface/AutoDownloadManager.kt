@@ -1,0 +1,43 @@
+package de.danoeh.antennapod.net.download.serviceinterface
+
+import android.content.Context
+
+import java.util.concurrent.Future
+
+abstract class AutoDownloadManager {
+    companion object {
+        private var instance: AutoDownloadManager? = null
+
+        @JvmStatic
+        fun getInstance(): AutoDownloadManager? {
+            return instance
+        }
+
+        @JvmStatic
+        fun setInstance(instance: AutoDownloadManager?) {
+            AutoDownloadManager.instance = instance
+        }
+    }
+
+    /**
+     * Looks for non-downloaded episodes in the queue or list of unread items and request a download if
+     * 1. Network is available
+     * 2. The device is charging or the user allows auto download on battery
+     * 3. There is free space in the episode cache
+     * This method is executed on an internal single thread executor.
+     *
+     * @param context  Used for accessing the DB.
+     * @return A Future that can be used for waiting for the methods completion.
+     */
+    abstract fun autodownloadUndownloadedItems(context: Context): Future<*>?
+
+    /**
+     * Removed downloaded episodes outside of the queue if the episode cache is full. Episodes with a smaller
+     * 'lastPlayedTimeHistory'-value will be deleted first.
+     * <p/>
+     * This method should NOT be executed on the GUI thread.
+     *
+     * @param context Used for accessing the DB.
+     */
+    abstract fun performAutoCleanup(context: Context)
+}

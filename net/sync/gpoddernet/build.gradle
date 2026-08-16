@@ -10,7 +10,6 @@ android {
 dependencies {
     implementation project(':net:sync:service-interface')
 
-    annotationProcessor libs.androidx.annotation
     implementation libs.androidx.appcompat
 
     implementation libs.okhttp

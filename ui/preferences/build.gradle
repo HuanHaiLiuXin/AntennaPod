@@ -39,7 +39,6 @@ dependencies {
     implementation project(':net:sync:service-interface')
     implementation project(':net:sync:service')
 
-    annotationProcessor libs.androidx.annotation
     implementation libs.androidx.appcompat
     implementation libs.androidx.fragment
     implementation libs.google.material

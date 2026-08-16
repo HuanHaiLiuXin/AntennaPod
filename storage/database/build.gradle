@@ -21,7 +21,6 @@ dependencies {
     implementation project(':system')
     implementation project(':ui:app-start-intent')
 
-    annotationProcessor libs.androidx.annotation
     implementation libs.androidx.core
     implementation libs.androidx.documentfile
 

@@ -96,7 +96,7 @@ fun MainListScreen(
             item {
                 if (uiState.nowPlaying != null) {
                     ListItem(
-                        text = uiState.nowPlaying.item.title ?: "",
+                        text = uiState.nowPlaying.item.getTitle() ?: "",
                         onClick = { onOpenEpisodeDetail(uiState.nowPlaying.item) }
                     )
                 } else {

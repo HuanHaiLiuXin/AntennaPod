@@ -24,8 +24,6 @@ dependencies {
     implementation project(':storage:preferences')
     implementation project(':ui:i18n')
 
-    annotationProcessor libs.androidx.annotation
-
     implementation libs.rxandroid
     implementation libs.rxjava
     implementation libs.okhttp

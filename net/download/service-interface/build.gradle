@@ -17,7 +17,6 @@ dependencies {
     implementation project(':net:common')
     implementation project(':storage:preferences')
 
-    annotationProcessor libs.androidx.annotation
     implementation libs.commons.lang3
     implementation libs.commons.io
 
