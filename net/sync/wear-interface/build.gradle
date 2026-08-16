@@ -10,7 +10,6 @@ android {
 dependencies {
     implementation project(':model')
 
-    annotationProcessor libs.androidx.annotation
     implementation libs.google.play.services.wearable
 
     testImplementation libs.junit
