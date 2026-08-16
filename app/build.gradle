@@ -88,7 +88,6 @@ dependencies {
     implementation project(':ui:chapters')
     implementation project(':ui:transcript')
 
-    annotationProcessor libs.androidx.annotation
     implementation libs.androidx.appcompat
     implementation libs.androidx.coordinatorlayout
     implementation libs.androidx.core

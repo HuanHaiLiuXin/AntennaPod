@@ -223,7 +223,7 @@ class NavDrawerFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
         constructor() : super()
 
         override fun onRemoveButtonPressed() {
-            if (feeds.get(0).getId().toString() == getLastNavFragment(getContext()!!)) {
+            if (feeds!!.get(0).getId().toString() == getLastNavFragment(getContext()!!)) {
                 // Make sure fragment is hidden before actually starting to delete
                 (getActivity() as MainActivity).loadFragment(UserPreferences.getDefaultPage()!!, null)
                 getActivity()!!.getSupportFragmentManager().executePendingTransactions()

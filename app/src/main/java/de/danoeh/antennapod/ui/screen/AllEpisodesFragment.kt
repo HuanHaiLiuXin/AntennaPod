@@ -143,7 +143,7 @@ class AllEpisodesFragment : EpisodesListFragment() {
 
         override fun onSelectionChanged() {
             super.onSelectionChanged()
-            UserPreferences.setAllEpisodesSortOrder(sortOrder)
+            UserPreferences.setAllEpisodesSortOrder(sortOrder!!)
             EventBus.getDefault().post(FeedListUpdateEvent(0))
         }
     }

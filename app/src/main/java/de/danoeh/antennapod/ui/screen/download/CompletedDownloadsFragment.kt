@@ -392,7 +392,7 @@ class CompletedDownloadsFragment : Fragment(),
 
         override fun onSelectionChanged() {
             super.onSelectionChanged()
-            UserPreferences.setDownloadsSortedOrder(sortOrder)
+            UserPreferences.setDownloadsSortedOrder(sortOrder!!)
             EventBus.getDefault().post(DownloadLogEvent.listUpdated())
         }
     }

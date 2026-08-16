@@ -33,7 +33,7 @@ class RatingDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return MaterialAlertDialogBuilder(getContext())
+        return MaterialAlertDialogBuilder(getContext()!!)
                 .setView(onCreateView(getLayoutInflater(), null, savedInstanceState))
                 .create()
     }
@@ -45,7 +45,7 @@ class RatingDialogFragment : DialogFragment() {
         val oldestDate = getArguments()!!.getLong(EXTRA_OLDEST_DATE, 0)
 
         viewBinding.headerLabel.setText(HtmlCompat.fromHtml(getString(R.string.rating_tagline,
-                DateFormatter.formatAbbrev(getContext(), Date(oldestDate)),
+                DateFormatter.formatAbbrev(getContext()!!, Date(oldestDate)),
                 "<br/><b><big><big><big><big><big>", totalTime / 3600L,
                 "</big></big></big></big></big></b><br/>"), HtmlCompat.FROM_HTML_MODE_LEGACY))
         viewBinding.neverAgainButton.setOnClickListener {

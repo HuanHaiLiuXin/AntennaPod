@@ -96,7 +96,7 @@ class SearchFragment : Fragment(), SelectableAdapter.OnSelectModeListener {
          * Create a new SearchFragment that searches one specific feed.
          */
         @JvmStatic
-        fun newInstance(feed: Long, feedTitle: String): SearchFragment {
+        fun newInstance(feed: Long, feedTitle: String?): SearchFragment {
             val fragment = newInstance()
             fragment.getArguments()!!.putLong(ARG_FEED, feed)
             fragment.getArguments()!!.putString(ARG_FEED_NAME, feedTitle)

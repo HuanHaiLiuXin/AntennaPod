@@ -136,7 +136,7 @@ class InboxFragment : EpisodesListFragment() {
 
         override fun onSelectionChanged() {
             super.onSelectionChanged()
-            UserPreferences.setInboxSortedOrder(sortOrder)
+            UserPreferences.setInboxSortedOrder(sortOrder!!)
             EventBus.getDefault().post(FeedListUpdateEvent(0))
         }
     }

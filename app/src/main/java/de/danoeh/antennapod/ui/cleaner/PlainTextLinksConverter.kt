@@ -21,7 +21,7 @@ class PlainTextLinksConverter {
                         "[-a-zA-Z0-9@:%_+.*~#?!&$/=()\\[\\],;]*", // Path, query params
                 Pattern.CASE_INSENSITIVE
         )
-        protected val NOT_ALLOWED_END_CHARS: List<String> = listOf(
+        internal val NOT_ALLOWED_END_CHARS: List<String> = listOf(
                 ".", ",", ";", ":", "?", "!", ")", "(", "[", "]", "-", "_", "~", "#", "@", "$", "*", "+")
 
         private const val STARTS_WITH_HTTP = "(?i)https?://.*"
