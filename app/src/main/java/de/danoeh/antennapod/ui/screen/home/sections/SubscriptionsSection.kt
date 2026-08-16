@@ -87,7 +87,7 @@ class SubscriptionsSection : HomeSection() {
         if (disposable != null) {
             disposable!!.dispose()
         }
-        val prefs: SharedPreferences = getContext()!!
+        val prefs: SharedPreferences = requireContext()
                 .getSharedPreferences(StatisticsFragment.PREF_NAME, Context.MODE_PRIVATE)
         val includeMarkedAsPlayed = prefs.getBoolean(StatisticsFragment.PREF_INCLUDE_MARKED_PLAYED, false)
 

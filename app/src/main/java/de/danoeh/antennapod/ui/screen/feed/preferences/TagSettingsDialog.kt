@@ -51,7 +51,7 @@ class TagSettingsDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val feedPreferencesList =
-                getArguments()!!.getSerializable(ARG_FEED_PREFERENCES) as ArrayList<FeedPreferences>
+                requireArguments().getSerializable(ARG_FEED_PREFERENCES) as ArrayList<FeedPreferences>
         val commonTags = HashSet(feedPreferencesList.get(0).getTags())
 
         for (preference in feedPreferencesList) {
@@ -62,8 +62,8 @@ class TagSettingsDialog : DialogFragment() {
 
         viewBinding = EditTagsDialogBinding.inflate(getLayoutInflater())
         viewBinding!!.tagsRecycler.setLayoutManager(GridLayoutManager(getContext(), 2))
-        viewBinding!!.tagsRecycler.addItemDecoration(ItemOffsetDecoration(getContext()!!, 4))
-        adapter = object : SimpleChipAdapter(getContext()!!) {
+        viewBinding!!.tagsRecycler.addItemDecoration(ItemOffsetDecoration(requireContext(), 4))
+        adapter = object : SimpleChipAdapter(requireContext()) {
             override fun getChips(): List<String> {
                 return displayedTags!!
             }
@@ -96,7 +96,7 @@ class TagSettingsDialog : DialogFragment() {
             viewBinding!!.commonTagsInfo.setVisibility(View.VISIBLE)
         }
 
-        val dialog = MaterialAlertDialogBuilder(getContext()!!)
+        val dialog = MaterialAlertDialogBuilder(requireContext())
         dialog.setView(viewBinding!!.getRoot())
         dialog.setTitle(R.string.feed_tags_label)
         dialog.setPositiveButton(android.R.string.ok) { d, input ->
@@ -125,7 +125,7 @@ class TagSettingsDialog : DialogFragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { result ->
-                            val acAdapter = ArrayAdapter(getContext()!!,
+                            val acAdapter = ArrayAdapter(requireContext(),
                                     R.layout.single_tag_text_view, result)
                             viewBinding!!.newTagEditText.setAdapter(acAdapter)
                         }, { error ->
@@ -136,7 +136,7 @@ class TagSettingsDialog : DialogFragment() {
     private fun addTag(name: String) {
         if (TextUtils.isEmpty(name) || displayedTags!!.contains(name) || FeedPreferences.TAG_UNTAGGED == name) {
             viewBinding!!.newTagEditText.requestFocus()
-            Keyboard.show(getContext()!!, viewBinding!!.newTagEditText)
+            Keyboard.show(requireContext(), viewBinding!!.newTagEditText)
             return
         }
         displayedTags!!.add(name)

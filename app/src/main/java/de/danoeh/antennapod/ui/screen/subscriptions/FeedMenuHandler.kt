@@ -49,9 +49,9 @@ class FeedMenuHandler private constructor() {
         fun onMenuItemClicked(fragment: Fragment, menuItemId: Int, selectedFeed: Feed): Boolean {
             val context = fragment.requireContext()
             if (menuItemId == R.id.rename_folder_item) {
-                RenameFeedDialog(fragment.getActivity()!!, selectedFeed).show()
+                RenameFeedDialog(fragment.requireActivity(), selectedFeed).show()
             } else if (menuItemId == R.id.remove_all_inbox_item) {
-                FeedMultiSelectActionHandler(fragment.getActivity()!!, Collections.singletonList(selectedFeed))
+                FeedMultiSelectActionHandler(fragment.requireActivity(), Collections.singletonList(selectedFeed))
                         .handleAction(R.id.remove_all_inbox_item)
             } else if (menuItemId == R.id.edit_tags) {
                 TagSettingsDialog.newInstance(Collections.singletonList(selectedFeed.getPreferences()!!))

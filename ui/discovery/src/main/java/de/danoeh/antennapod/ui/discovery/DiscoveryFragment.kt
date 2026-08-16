@@ -92,7 +92,7 @@ class DiscoveryFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prefs = getActivity()!!.getSharedPreferences(ItunesTopListLoader.PREFS, Context.MODE_PRIVATE)
+        prefs = requireActivity().getSharedPreferences(ItunesTopListLoader.PREFS, Context.MODE_PRIVATE)
         countryCode = prefs.getString(ItunesTopListLoader.PREF_KEY_COUNTRY_CODE, Locale.getDefault().getCountry())!!
         hidden = prefs.getBoolean(ItunesTopListLoader.PREF_KEY_HIDDEN_DISCOVERY_COUNTRY, false)
         needsConfirm = prefs.getBoolean(ItunesTopListLoader.PREF_KEY_NEEDS_CONFIRM, true)
@@ -102,7 +102,7 @@ class DiscoveryFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         // Inflate the layout for this fragment
         val root = inflater.inflate(R.layout.fragment_online_search, container, false)
         gridView = root.findViewById(R.id.gridView)
-        adapter = OnlineSearchAdapter(getActivity()!!, ArrayList())
+        adapter = OnlineSearchAdapter(requireActivity(), ArrayList())
         gridView!!.setAdapter(adapter)
 
         toolbar = root.findViewById(R.id.toolbar)
@@ -118,7 +118,7 @@ class DiscoveryFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             if (podcast.feedUrl == null) {
                 return@setOnItemClickListener
             }
-            startActivity(OnlineFeedviewActivityStarter(getContext()!!, podcast.feedUrl!!).getIntent())
+            startActivity(OnlineFeedviewActivityStarter(requireContext(), podcast.feedUrl!!).getIntent())
         }
 
         progressBar = root.findViewById(R.id.progressBar)
@@ -174,7 +174,7 @@ class DiscoveryFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             return
         }
 
-        val loader = ItunesTopListLoader(getContext()!!)
+        val loader = ItunesTopListLoader(requireContext())
         disposable = Observable.fromCallable<List<PodcastSearchResult>> {
                     loader.loadToplist(country, NUM_OF_TOP_PODCASTS, DBReader.getFeedList()) }
                 .subscribeOn(Schedulers.io())
@@ -208,7 +208,7 @@ class DiscoveryFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
             val inflater = getLayoutInflater()
             val selectCountryDialogView = inflater.inflate(R.layout.select_country_dialog, null)
-            val builder = MaterialAlertDialogBuilder(getContext()!!)
+            val builder = MaterialAlertDialogBuilder(requireContext())
             builder.setView(selectCountryDialogView)
 
             val countryCodeArray: List<String> = ArrayList(Arrays.asList(*Locale.getISOCountries()))
@@ -225,7 +225,7 @@ class DiscoveryFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             Collections.sort(countryNamesSort)
 
             val dataAdapter =
-                    ArrayAdapter(this.getContext()!!, android.R.layout.simple_list_item_1, countryNamesSort)
+                    ArrayAdapter(this.requireContext(), android.R.layout.simple_list_item_1, countryNamesSort)
             val textInput = selectCountryDialogView.findViewById<TextInputLayout>(R.id.country_text_input)
             val editText = textInput.getEditText() as MaterialAutoCompleteTextView
             editText.setAdapter(dataAdapter)

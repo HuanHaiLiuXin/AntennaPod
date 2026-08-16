@@ -91,7 +91,7 @@ class FeedInfoFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         viewBinding!!.imgvBackground.setColorFilter(LightingColorFilter(0xff828282.toInt(), 0x000000))
         viewBinding!!.urlLabel.setOnClickListener(copyUrlToClipboard)
 
-        val feedId = getArguments()!!.getLong(EXTRA_FEED_ID)
+        val feedId = requireArguments().getLong(EXTRA_FEED_ID)
         getParentFragmentManager().beginTransaction().replace(R.id.statisticsFragmentContainer,
                         FeedStatisticsFragment.newInstance(feedId, false), "feed_statistics_fragment")
                 .commitAllowingStateLoss()
@@ -114,7 +114,7 @@ class FeedInfoFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val feedId = getArguments()!!.getLong(EXTRA_FEED_ID)
+        val feedId = requireArguments().getLong(EXTRA_FEED_ID)
         disposable = Maybe.create<Feed> { emitter ->
             val loadedFeed = DBReader.getFeed(feedId, false, 0, 0)
             if (loadedFeed != null) {
@@ -202,7 +202,7 @@ class FeedInfoFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             var str = StringBuilder()
             for (funding in fundingList) {
                 str.append(if (funding.content!!.isEmpty())
-                    getContext()!!.getResources().getString(R.string.support_podcast)
+                    requireContext().getResources().getString(R.string.support_podcast)
                 else funding.content).append(" ").append(funding.url)
                 str.append("\n")
             }
@@ -217,15 +217,15 @@ class FeedInfoFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             viewBinding!!.supportUrl.setVisibility(View.GONE)
             viewBinding!!.header.butSubscribe.setVisibility(View.VISIBLE)
             viewBinding!!.header.butSubscribe.setOnClickListener {
-                DBWriter.setFeedState(getContext()!!, feed!!, Feed.STATE_SUBSCRIBED)
-                val mainActivityStarter = MainActivityStarter(getContext()!!)
+                DBWriter.setFeedState(requireContext(), feed!!, Feed.STATE_SUBSCRIBED)
+                val mainActivityStarter = MainActivityStarter(requireContext())
                 mainActivityStarter.withOpenFeed(feed!!.getId())
                 mainActivityStarter.withClearBackStack()
-                getActivity()!!.finish()
+                requireActivity().finish()
                 startActivity(mainActivityStarter.getIntent())
             }
         } else {
-            val feedId = getArguments()!!.getLong(EXTRA_FEED_ID)
+            val feedId = requireArguments().getLong(EXTRA_FEED_ID)
             getParentFragmentManager().beginTransaction().replace(R.id.statisticsFragmentContainer,
                             FeedStatisticsFragment.newInstance(feedId, false), "feed_statistics_fragment")
                     .commitAllowingStateLoss()
@@ -251,7 +251,7 @@ class FeedInfoFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         viewBinding!!.toolbar.getMenu().findItem(R.id.share_item)!!.setVisible(isSubscribed && !feed!!.isLocalFeed())
         viewBinding!!.toolbar.getMenu().findItem(R.id.visit_website_item)!!.setVisible(isSubscribed
                 && feed!!.getLink() != null
-                && IntentUtils.isCallable(getContext()!!, Intent(Intent.ACTION_VIEW, Uri.parse(feed!!.getLink()))))
+                && IntentUtils.isCallable(requireContext(), Intent(Intent.ACTION_VIEW, Uri.parse(feed!!.getLink()))))
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -260,9 +260,9 @@ class FeedInfoFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             return false
         }
         if (item.getItemId() == R.id.visit_website_item) {
-            IntentUtils.openInBrowser(getContext()!!, feed!!.getLink()!!)
+            IntentUtils.openInBrowser(requireContext(), feed!!.getLink()!!)
         } else if (item.getItemId() == R.id.share_item) {
-            ShareUtils.shareFeedLink(getContext()!!, feed!!)
+            ShareUtils.shareFeedLink(requireContext(), feed!!)
         } else {
             return false
         }

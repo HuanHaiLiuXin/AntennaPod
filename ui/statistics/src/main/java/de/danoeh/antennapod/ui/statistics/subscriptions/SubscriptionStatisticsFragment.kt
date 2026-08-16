@@ -85,7 +85,7 @@ class SubscriptionStatisticsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.getItemId() == R.id.statistics_filter) {
             if (statisticsResult != null) {
-                StatisticsFilterDialog(getContext()!!, statisticsResult!!.oldestDate).show()
+                StatisticsFilterDialog(requireContext(), statisticsResult!!.oldestDate).show()
             }
             return true
         }
@@ -102,7 +102,7 @@ class SubscriptionStatisticsFragment : Fragment() {
         if (disposable != null) {
             disposable!!.dispose()
         }
-        val prefs: SharedPreferences = getContext()!!.getSharedPreferences(StatisticsFragment.PREF_NAME, Context.MODE_PRIVATE)
+        val prefs: SharedPreferences = requireContext().getSharedPreferences(StatisticsFragment.PREF_NAME, Context.MODE_PRIVATE)
         val includeMarkedAsPlayed = prefs.getBoolean(StatisticsFragment.PREF_INCLUDE_MARKED_PLAYED, false)
         val timeFilterFrom = prefs.getLong(StatisticsFragment.PREF_FILTER_FROM, 0L)
         val timeFilterTo = prefs.getLong(StatisticsFragment.PREF_FILTER_TO, Long.MAX_VALUE)

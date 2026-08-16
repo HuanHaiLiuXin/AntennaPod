@@ -65,7 +65,7 @@ class AutomaticDeletionPreferencesFragment : AnimatedPreferenceFragment() {
 
 
     private fun buildEpisodeCleanupPreference() {
-        val res: Resources = getActivity()!!.getResources()
+        val res: Resources = requireActivity().getResources()
 
         val pref = findPreference<ListPreference>(UserPreferences.PREF_EPISODE_CLEANUP)!!
         val values = res.getStringArray(

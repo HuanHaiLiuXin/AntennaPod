@@ -70,7 +70,7 @@ class OnlineSearchFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         for (info in PodcastSearcherRegistry.getSearchProviders()) {
-            if (info.searcher.javaClass.getName() == getArguments()!!.getString(ARG_SEARCHER)) {
+            if (info.searcher.javaClass.getName() == requireArguments().getString(ARG_SEARCHER)) {
                 searchProvider = info.searcher
                 break
             }
@@ -84,13 +84,13 @@ class OnlineSearchFragment : Fragment() {
         // Inflate the layout for this fragment
         val root = inflater.inflate(R.layout.fragment_online_search, container, false)
         gridView = root.findViewById(R.id.gridView)
-        adapter = OnlineSearchAdapter(getActivity()!!, ArrayList())
+        adapter = OnlineSearchAdapter(requireActivity(), ArrayList())
         gridView!!.setAdapter(adapter)
 
         //Show information about the podcast when the list item is clicked
         gridView!!.setOnItemClickListener { parent, view1, position, id ->
             val podcast = searchResults!!.get(position)
-            startActivity(OnlineFeedviewActivityStarter(getContext()!!, podcast.feedUrl!!).getIntent())
+            startActivity(OnlineFeedviewActivityStarter(requireContext(), podcast.feedUrl!!).getIntent())
         }
         progressBar = root.findViewById(R.id.progressBar)
         txtvError = root.findViewById(R.id.txtvError)
@@ -103,7 +103,7 @@ class OnlineSearchFragment : Fragment() {
         gridView!!.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    Keyboard.hide(getActivity()!!)
+                    Keyboard.hide(requireActivity())
                 }
             }
 
@@ -141,7 +141,7 @@ class OnlineSearchFragment : Fragment() {
         })
         sv.setOnQueryTextFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
-                Keyboard.show(getContext()!!, view.findFocus())
+                Keyboard.show(requireContext(), view.findFocus())
             }
         }
         searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
@@ -150,14 +150,14 @@ class OnlineSearchFragment : Fragment() {
             }
 
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-                getActivity()!!.getSupportFragmentManager().popBackStack()
+                requireActivity().getSupportFragmentManager().popBackStack()
                 return true
             }
         })
         searchItem.expandActionView()
 
-        if (getArguments()!!.getString(ARG_QUERY, null) != null) {
-            sv.setQuery(getArguments()!!.getString(ARG_QUERY, null), true)
+        if (requireArguments().getString(ARG_QUERY, null) != null) {
+            sv.setQuery(requireArguments().getString(ARG_QUERY, null), true)
         }
     }
 

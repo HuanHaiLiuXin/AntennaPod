@@ -61,7 +61,7 @@ class EchoSection : Fragment() {
     }
 
     internal fun hideThisYear() {
-        getContext()!!.getSharedPreferences(HomeFragment.PREF_NAME, Context.MODE_PRIVATE)
+        requireContext().getSharedPreferences(HomeFragment.PREF_NAME, Context.MODE_PRIVATE)
                 .edit().putInt(HomeFragment.PREF_HIDE_ECHO, EchoConfig.RELEASE_YEAR).apply()
         if (isVisible()) {
             (getActivity() as MainActivity).loadFragment(HomeFragment.TAG, null)

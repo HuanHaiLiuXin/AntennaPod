@@ -33,7 +33,7 @@ class RatingDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return MaterialAlertDialogBuilder(getContext()!!)
+        return MaterialAlertDialogBuilder(requireContext())
                 .setView(onCreateView(getLayoutInflater(), null, savedInstanceState))
                 .create()
     }
@@ -41,35 +41,35 @@ class RatingDialogFragment : DialogFragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val viewBinding = RatingDialogBinding.inflate(inflater)
-        val totalTime = getArguments()!!.getLong(EXTRA_TOTAL_TIME, 0)
-        val oldestDate = getArguments()!!.getLong(EXTRA_OLDEST_DATE, 0)
+        val totalTime = requireArguments().getLong(EXTRA_TOTAL_TIME, 0)
+        val oldestDate = requireArguments().getLong(EXTRA_OLDEST_DATE, 0)
 
         viewBinding.headerLabel.setText(HtmlCompat.fromHtml(getString(R.string.rating_tagline,
-                DateFormatter.formatAbbrev(getContext()!!, Date(oldestDate)),
+                DateFormatter.formatAbbrev(requireContext(), Date(oldestDate)),
                 "<br/><b><big><big><big><big><big>", totalTime / 3600L,
                 "</big></big></big></big></big></b><br/>"), HtmlCompat.FROM_HTML_MODE_LEGACY))
         viewBinding.neverAgainButton.setOnClickListener {
-            RatingDialogManager(getActivity()!!).saveRated()
+            RatingDialogManager(requireActivity()).saveRated()
             dismiss()
         }
         viewBinding.showLaterButton.setOnClickListener {
-            RatingDialogManager(getActivity()!!).resetStartDate()
+            RatingDialogManager(requireActivity()).resetStartDate()
             dismiss()
         }
         viewBinding.rateButton.setOnClickListener {
-            IntentUtils.openInBrowser(getContext()!!,
+            IntentUtils.openInBrowser(requireContext(),
                     "https://play.google.com/store/apps/details?id=de.danoeh.antennapod")
-            RatingDialogManager(getActivity()!!).saveRated()
+            RatingDialogManager(requireActivity()).saveRated()
         }
         viewBinding.contibuteButton.setOnClickListener {
-            IntentUtils.openInBrowser(getContext()!!, "https://antennapod.org/contribute/")
-            RatingDialogManager(getActivity()!!).saveRated()
+            IntentUtils.openInBrowser(requireContext(), "https://antennapod.org/contribute/")
+            RatingDialogManager(requireActivity()).saveRated()
         }
         return viewBinding.getRoot()
     }
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        RatingDialogManager(getActivity()!!).resetStartDate()
+        RatingDialogManager(requireActivity()).resetStartDate()
     }
 }

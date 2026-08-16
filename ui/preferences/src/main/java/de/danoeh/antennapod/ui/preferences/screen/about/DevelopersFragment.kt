@@ -28,7 +28,7 @@ class DevelopersFragment : ListFragment() {
             developers.clear()
             try {
                 BufferedReader(InputStreamReader(
-                        getContext()!!.getAssets().open("developers.csv"), "UTF-8")).use { reader ->
+                        requireContext().getAssets().open("developers.csv"), "UTF-8")).use { reader ->
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
                         val info = line!!.split(";")
@@ -44,14 +44,14 @@ class DevelopersFragment : ListFragment() {
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { loadedDevelopers -> setListAdapter(SimpleIconListAdapter(getContext()!!, loadedDevelopers)) },
+                        { loadedDevelopers -> setListAdapter(SimpleIconListAdapter(requireContext(), loadedDevelopers)) },
                         { error -> Toast.makeText(getContext(), error.message, Toast.LENGTH_LONG).show() }
                 )
     }
 
     override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
         super.onListItemClick(l, v, position, id)
-        IntentUtils.openInBrowser(getContext()!!, "https://github.com/" + developers.get(position).title)
+        IntentUtils.openInBrowser(requireContext(), "https://github.com/" + developers.get(position).title)
     }
 
     override fun onStop() {

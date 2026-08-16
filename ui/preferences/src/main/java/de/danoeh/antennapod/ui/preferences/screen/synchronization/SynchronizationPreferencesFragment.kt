@@ -77,7 +77,7 @@ class SynchronizationPreferencesFragment : AnimatedPreferenceFragment() {
     }
 
     private fun setupScreen() {
-        val activity = getActivity()!!
+        val activity = requireActivity()
         findPreference<Preference>(PREFERENCE_GPODNET_SETLOGIN_INFORMATION)!!
                 .setOnPreferenceClickListener {
                     val dialog = object : AuthenticationDialog(activity,
@@ -101,7 +101,7 @@ class SynchronizationPreferencesFragment : AnimatedPreferenceFragment() {
         findPreference<Preference>(PREFERENCE_LOGOUT)!!.setOnPreferenceClickListener {
             SynchronizationCredentials.clear()
             SynchronizationQueue.getInstance()!!.clear()
-            Snackbar.make(getView()!!, R.string.pref_synchronization_logout_toast, Snackbar.LENGTH_LONG).show()
+            Snackbar.make(requireView(), R.string.pref_synchronization_logout_toast, Snackbar.LENGTH_LONG).show()
             SynchronizationSettings.setSelectedSyncProvider(null)
             updateScreen()
             updateActionBar()
@@ -156,12 +156,12 @@ class SynchronizationPreferencesFragment : AnimatedPreferenceFragment() {
     }
 
     private fun chooseProviderAndLogin() {
-        val builder = MaterialAlertDialogBuilder(getContext()!!)
+        val builder = MaterialAlertDialogBuilder(requireContext())
         builder.setTitle(R.string.dialog_choose_sync_service_title)
 
         val providers = SynchronizationProvider.values()
         val adapter: ListAdapter = object : ArrayAdapter<SynchronizationProvider>(
-                getContext()!!, R.layout.alertdialog_sync_provider_chooser, providers) {
+                requireContext(), R.layout.alertdialog_sync_provider_chooser, providers) {
 
             internal var holder: ViewHolder? = null
 

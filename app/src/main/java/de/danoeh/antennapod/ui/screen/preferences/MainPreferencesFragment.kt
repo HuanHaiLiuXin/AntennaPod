@@ -29,10 +29,10 @@ class MainPreferencesFragment : AnimatedPreferenceFragment() {
         // and afterwards remove the following lines. Please keep in mind that AntennaPod is licensed under the GPL.
         // This means that your application needs to be open-source under the GPL, too.
         // It must also include a prominent copyright notice.
-        val packageHash = getContext()!!.getPackageName().hashCode()
+        val packageHash = requireContext().getPackageName().hashCode()
         if (packageHash != 1790437538 && packageHash != -1190467065) {
             findPreference<Preference>(PREF_CATEGORY_PROJECT)!!.setVisible(false)
-            val copyrightNotice = Preference(getContext()!!)
+            val copyrightNotice = Preference(requireContext())
             copyrightNotice.setIcon(R.drawable.ic_info_white)
             copyrightNotice.getIcon()!!.mutate()
                     .setColorFilter(PorterDuffColorFilter(0xffcc0000.toInt(), PorterDuff.Mode.MULTIPLY))
@@ -42,7 +42,7 @@ class MainPreferencesFragment : AnimatedPreferenceFragment() {
                     + " violate the GNU General Public License (GPL).")
             findPreference<Preference>(PREF_CATEGORY_PROJECT)!!.getParent()!!.addPreference(copyrightNotice)
         } else if (packageHash == -1190467065) {
-            val debugNotice = Preference(getContext()!!)
+            val debugNotice = Preference(requireContext())
             debugNotice.setIcon(R.drawable.ic_info_white)
             debugNotice.getIcon()!!.mutate()
                     .setColorFilter(PorterDuffColorFilter(0xffcc0000.toInt(), PorterDuff.Mode.MULTIPLY))
@@ -89,15 +89,15 @@ class MainPreferencesFragment : AnimatedPreferenceFragment() {
             true
         }
         findPreference<Preference>(PREF_DOCUMENTATION)!!.setOnPreferenceClickListener {
-            IntentUtils.openInBrowser(getContext()!!, "https://antennapod.org/documentation/")
+            IntentUtils.openInBrowser(requireContext(), "https://antennapod.org/documentation/")
             true
         }
         findPreference<Preference>(PREF_VIEW_FORUM)!!.setOnPreferenceClickListener {
-            IntentUtils.openInBrowser(getContext()!!, "https://forum.antennapod.org/")
+            IntentUtils.openInBrowser(requireContext(), "https://forum.antennapod.org/")
             true
         }
         findPreference<Preference>(PREF_CONTRIBUTE)!!.setOnPreferenceClickListener {
-            IntentUtils.openInBrowser(getContext()!!, "https://antennapod.org/contribute/")
+            IntentUtils.openInBrowser(requireContext(), "https://antennapod.org/contribute/")
             true
         }
         findPreference<Preference>(PREF_SEND_BUG_REPORT)!!.setOnPreferenceClickListener {

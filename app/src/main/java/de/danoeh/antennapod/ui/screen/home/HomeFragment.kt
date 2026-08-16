@@ -80,12 +80,12 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private fun populateSectionList() {
         viewBinding!!.homeContainer.removeAllViews()
 
-        val prefs: SharedPreferences = getContext()!!.getSharedPreferences(HomeFragment.PREF_NAME, Context.MODE_PRIVATE)
+        val prefs: SharedPreferences = requireContext().getSharedPreferences(HomeFragment.PREF_NAME, Context.MODE_PRIVATE)
         if (EchoConfig.isCurrentlyVisible() && prefs.getInt(PREF_HIDE_ECHO, 0) != EchoConfig.RELEASE_YEAR) {
             addSection(EchoSection(), R.id.home_section_echo)
         }
 
-        val sectionTags = HomePreferences.getSortedSectionTags(getContext()!!)
+        val sectionTags = HomePreferences.getSortedSectionTags(requireContext())
         for (sectionTag in sectionTags) {
             addSection(getSection(sectionTag), getSectionContainerId(sectionTag))
         }
@@ -95,7 +95,7 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         if (section == null) { // Can happen when stored settings reference a section that no longer exists
             return
         }
-        val containerView = FragmentContainerView(getContext()!!)
+        val containerView = FragmentContainerView(requireContext())
         containerView.setId(id)
         viewBinding!!.homeContainer.addView(containerView)
         getChildFragmentManager().beginTransaction().replace(containerView.getId(), section).commit()
@@ -130,7 +130,7 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         if (item.getItemId() == R.id.homesettings_items) {
-            HomeSectionsSettingsDialog(getContext()!!) { populateSectionList() }.show()
+            HomeSectionsSettingsDialog(requireContext()) { populateSectionList() }.show()
             return true
         } else if (item.getItemId() == R.id.refresh_item) {
             FeedUpdateManager.getInstance()!!.runOnceOrAsk(requireContext())

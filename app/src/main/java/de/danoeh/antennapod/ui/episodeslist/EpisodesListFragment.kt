@@ -169,7 +169,7 @@ abstract class EpisodesListFragment : Fragment(),
             FeedUpdateManager.getInstance()!!.runOnceOrAsk(requireContext())
         }
 
-        listAdapter = object : EpisodeItemListAdapter(getActivity()!!) {
+        listAdapter = object : EpisodeItemListAdapter(requireActivity()) {
             override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
                 super.onCreateContextMenu(menu, v, menuInfo)
                 if (!inActionMode()) {
@@ -189,7 +189,7 @@ abstract class EpisodesListFragment : Fragment(),
         progressBar = root.findViewById(R.id.progressBar)
         progressBar.setVisibility(View.VISIBLE)
 
-        emptyView = EmptyViewHandler(getContext()!!)
+        emptyView = EmptyViewHandler(requireContext())
         emptyView.attachToRecyclerView(recyclerView)
         emptyView.setIcon(R.drawable.ic_feed)
         emptyView.setTitle(R.string.no_all_episodes_head_label)
@@ -216,7 +216,7 @@ abstract class EpisodesListFragment : Fragment(),
             if (confirmationString == 0) {
                 performMultiSelectAction(menuItem.getItemId())
             } else {
-                object : ConfirmationDialog(getActivity()!!, R.string.multi_select, confirmationString) {
+                object : ConfirmationDialog(requireActivity(), R.string.multi_select, confirmationString) {
                     override fun onConfirmButtonPressed(dialog: DialogInterface) {
                         performMultiSelectAction(menuItem.getItemId())
                     }
@@ -229,7 +229,7 @@ abstract class EpisodesListFragment : Fragment(),
     }
 
     private fun performMultiSelectAction(actionItemId: Int) {
-        val handler = EpisodeMultiSelectActionHandler(getActivity()!!, actionItemId)
+        val handler = EpisodeMultiSelectActionHandler(requireActivity(), actionItemId)
         Completable.fromAction(
                 {
                     handler.handleAction(listAdapter.getSelectedItems())

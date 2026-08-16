@@ -30,10 +30,10 @@ class FeedStatisticsDialogFragment : BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val binding = FeedStatisticsDialogBinding.inflate(inflater, container, false)
-        binding.title.setText(getArguments()!!.getString(EXTRA_FEED_TITLE))
+        binding.title.setText(requireArguments().getString(EXTRA_FEED_TITLE))
         binding.openPodcastButton.setOnClickListener {
-            val feedId = getArguments()!!.getLong(EXTRA_FEED_ID)
-            MainActivityStarter(getContext()!!).withOpenFeed(feedId).start()
+            val feedId = requireArguments().getLong(EXTRA_FEED_ID)
+            MainActivityStarter(requireContext()).withOpenFeed(feedId).start()
             dismiss()
         }
         return binding.getRoot()
@@ -41,7 +41,7 @@ class FeedStatisticsDialogFragment : BottomSheetDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        val feedId = getArguments()!!.getLong(EXTRA_FEED_ID)
+        val feedId = requireArguments().getLong(EXTRA_FEED_ID)
         getChildFragmentManager().beginTransaction().replace(R.id.statisticsContainer,
                         FeedStatisticsFragment.newInstance(feedId, true), "feed_statistics_fragment")
                 .commitAllowingStateLoss()

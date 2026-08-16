@@ -55,12 +55,12 @@ class DownloadLogDetailsDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        downloadResult = getArguments()!!.getSerializable(EXTRA_DOWNLOAD_RESULT) as DownloadResult?
-        isJumpToFeed = getArguments()!!.getBoolean(EXTRA_IS_JUMP_TO_FEED, true)
+        downloadResult = requireArguments().getSerializable(EXTRA_DOWNLOAD_RESULT) as DownloadResult?
+        isJumpToFeed = requireArguments().getBoolean(EXTRA_IS_JUMP_TO_FEED, true)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = MaterialAlertDialogBuilder(getContext()!!)
+        val dialog = MaterialAlertDialogBuilder(requireContext())
         dialog.setTitle(R.string.download_error_details)
         dialog.setPositiveButton(android.R.string.ok, null)
         dialog.setNeutralButton(R.string.copy_to_clipboard) { copyDialog, which ->
@@ -161,10 +161,10 @@ class DownloadLogDetailsDialog : DialogFragment() {
         }
         val intent: Intent
         if (feed!!.getState() == Feed.STATE_SUBSCRIBED) {
-            intent = MainActivityStarter(getContext()!!).withOpenFeed(feed!!.getId()).getIntent()
+            intent = MainActivityStarter(requireContext()).withOpenFeed(feed!!.getId()).getIntent()
         } else {
-            intent = OnlineFeedviewActivityStarter(getContext()!!, feed!!.getDownloadUrl()!!).getIntent()
+            intent = OnlineFeedviewActivityStarter(requireContext(), feed!!.getDownloadUrl()!!).getIntent()
         }
-        getContext()!!.startActivity(intent)
+        requireContext().startActivity(intent)
     }
 }

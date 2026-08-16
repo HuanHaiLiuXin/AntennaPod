@@ -51,8 +51,8 @@ fun FeedListScreen(uiState: FeedListUiState, onOpenFeedEpisodes: (Long) -> Unit)
     ) {
         items(feeds!!) { feed ->
             ListItem(
-                text = feed.title ?: "",
-                onClick = { onOpenFeedEpisodes(feed.id) }
+                text = feed.getTitle() ?: "",
+                onClick = { onOpenFeedEpisodes(feed.getId()) }
             )
         }
     }

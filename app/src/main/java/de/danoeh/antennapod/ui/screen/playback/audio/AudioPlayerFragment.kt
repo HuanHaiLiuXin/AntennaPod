@@ -176,16 +176,16 @@ class AudioPlayerFragment : Fragment(),
     private fun setupControlButtons() {
         butRev!!.setOnClickListener {
             if (BuildConfig.USE_MEDIA3_PLAYBACK_SERVICE) {
-                PlaybackController.bindToMedia3Service(getContext()!!, MediaController::seekBack)
+                PlaybackController.bindToMedia3Service(requireContext(), MediaController::seekBack)
             } else {
-                PlaybackController.bindToService(getActivity()!!, Consumer { playbackService ->
+                PlaybackController.bindToService(requireActivity(), Consumer { playbackService ->
                     playbackService.seekTo(playbackService.getCurrentPosition()
                             - UserPreferences.getRewindSecs() * 1000)
                 })
             }
         }
         butRev!!.setOnLongClickListener {
-            SkipPreferenceDialog.showSkipPreference(getContext()!!,
+            SkipPreferenceDialog.showSkipPreference(requireContext(),
                     SkipPreferenceDialog.SkipDirection.SKIP_REWIND, txtvRev)
             true
         }
@@ -193,38 +193,38 @@ class AudioPlayerFragment : Fragment(),
             if (PlaybackService.isRunning
                     && PlaybackPreferences.getCurrentPlayerStatus() == PlaybackPreferences.PLAYER_STATUS_PLAYING) {
                 if (BuildConfig.USE_MEDIA3_PLAYBACK_SERVICE) {
-                    PlaybackController.bindToMedia3Service(getContext()!!, MediaController::pause)
+                    PlaybackController.bindToMedia3Service(requireContext(), MediaController::pause)
                 } else {
-                    getActivity()!!.sendBroadcast(
-                            MediaButtonStarter.createIntent(getContext()!!, KeyEvent.KEYCODE_MEDIA_PAUSE))
+                    requireActivity().sendBroadcast(
+                            MediaButtonStarter.createIntent(requireContext(), KeyEvent.KEYCODE_MEDIA_PAUSE))
                 }
             } else {
-                PlaybackServiceStarter(getContext()!!, currentMedia)
+                PlaybackServiceStarter(requireContext(), currentMedia)
                         .callEvenIfRunning(true)
                         .start()
             }
         }
         butFF!!.setOnClickListener {
             if (BuildConfig.USE_MEDIA3_PLAYBACK_SERVICE) {
-                PlaybackController.bindToMedia3Service(getContext()!!, MediaController::seekForward)
+                PlaybackController.bindToMedia3Service(requireContext(), MediaController::seekForward)
             } else {
-                PlaybackController.bindToService(getActivity()!!, Consumer { playbackService ->
+                PlaybackController.bindToService(requireActivity(), Consumer { playbackService ->
                     playbackService.seekTo(playbackService.getCurrentPosition()
                             + UserPreferences.getFastForwardSecs() * 1000)
                 })
             }
         }
         butFF!!.setOnLongClickListener {
-            SkipPreferenceDialog.showSkipPreference(getContext()!!,
+            SkipPreferenceDialog.showSkipPreference(requireContext(),
                     SkipPreferenceDialog.SkipDirection.SKIP_FORWARD, txtvFF)
             false
         }
         butSkip!!.setOnClickListener {
             if (BuildConfig.USE_MEDIA3_PLAYBACK_SERVICE) {
-                PlaybackController.bindToMedia3Service(getContext()!!, MediaController::seekToNextMediaItem)
+                PlaybackController.bindToMedia3Service(requireContext(), MediaController::seekToNextMediaItem)
             } else {
-                getActivity()!!.sendBroadcast(
-                        MediaButtonStarter.createIntent(getContext()!!, KeyEvent.KEYCODE_MEDIA_NEXT))
+                requireActivity().sendBroadcast(
+                        MediaButtonStarter.createIntent(requireContext(), KeyEvent.KEYCODE_MEDIA_NEXT))
             }
         }
     }
@@ -278,7 +278,7 @@ class AudioPlayerFragment : Fragment(),
             val media = DBReader.getFeedMedia(PlaybackPreferences.getCurrentlyPlayingFeedMediaId())
             if (media != null) {
                 if (includingChapters) {
-                    ChapterUtils.loadChapters(media, getContext()!!, false)
+                    ChapterUtils.loadChapters(media, requireContext(), false)
                 }
                 emitter.onSuccess(media)
             } else {
@@ -377,15 +377,15 @@ class AudioPlayerFragment : Fragment(),
         }
         txtvPosition!!.setText(Converter.getDurationStringLong(convertedPosition))
         txtvPosition!!.setContentDescription(getString(R.string.position,
-                Converter.getDurationStringLocalized(getContext()!!, convertedPosition.toLong())))
+                Converter.getDurationStringLocalized(requireContext(), convertedPosition.toLong())))
         showTimeLeft = UserPreferences.shouldShowRemainingTime()
         if (showTimeLeft) {
             txtvLength!!.setContentDescription(getString(R.string.remaining_time,
-                    Converter.getDurationStringLocalized(getContext()!!, remainingTime.toLong())))
+                    Converter.getDurationStringLocalized(requireContext(), remainingTime.toLong())))
             txtvLength!!.setText((if (remainingTime > 0) "-" else "") + Converter.getDurationStringLong(remainingTime))
         } else {
             txtvLength!!.setContentDescription(getString(R.string.chapter_duration,
-                    Converter.getDurationStringLocalized(getContext()!!, convertedDuration.toLong())))
+                    Converter.getDurationStringLocalized(requireContext(), convertedDuration.toLong())))
             txtvLength!!.setText(Converter.getDurationStringLong(convertedDuration))
         }
 
@@ -397,7 +397,7 @@ class AudioPlayerFragment : Fragment(),
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun mediaPlayerError(event: PlayerErrorEvent) {
-        MediaPlayerErrorDialog.show(getActivity()!!, event)
+        MediaPlayerErrorDialog.show(requireActivity(), event)
     }
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -419,11 +419,11 @@ class AudioPlayerFragment : Fragment(),
                     seekedToChapterStart = true
                     val positionFinal = position
                     if (BuildConfig.USE_MEDIA3_PLAYBACK_SERVICE) {
-                        PlaybackController.bindToMedia3Service(getContext()!!, Consumer { controller ->
+                        PlaybackController.bindToMedia3Service(requireContext(), Consumer { controller ->
                             controller.seekTo(positionFinal.toLong())
                         })
                     } else {
-                        PlaybackController.bindToService(getActivity()!!, Consumer { playbackService ->
+                        PlaybackController.bindToService(requireActivity(), Consumer { playbackService ->
                             playbackService.seekTo(positionFinal)
                         })
                     }
@@ -454,11 +454,11 @@ class AudioPlayerFragment : Fragment(),
         } else if (currentMedia != null) {
             val prog = seekBar.getProgress() / seekBar.getMax().toFloat()
             if (BuildConfig.USE_MEDIA3_PLAYBACK_SERVICE) {
-                PlaybackController.bindToMedia3Service(getContext()!!, Consumer { controller ->
+                PlaybackController.bindToMedia3Service(requireContext(), Consumer { controller ->
                     controller.seekTo((controller.getDuration() * prog).toLong())
                 })
             } else {
-                PlaybackController.bindToService(getActivity()!!, Consumer { playbackService ->
+                PlaybackController.bindToService(requireActivity(), Consumer { playbackService ->
                     playbackService.seekTo((playbackService.getDuration() * prog).toInt())
                 })
             }
@@ -495,7 +495,7 @@ class AudioPlayerFragment : Fragment(),
             return true
         } else if (itemId == R.id.transcript_item) {
             TranscriptDialogFragment().show(
-                    getActivity()!!.getSupportFragmentManager(), TranscriptDialogFragment.TAG)
+                    requireActivity().getSupportFragmentManager(), TranscriptDialogFragment.TAG)
             return true
         } else if (itemId == R.id.open_feed_item) {
             if (feedItem != null) {
@@ -511,15 +511,15 @@ class AudioPlayerFragment : Fragment(),
             return
         }
         if (feed.getState() == Feed.STATE_NOT_SUBSCRIBED) {
-            startActivity(OnlineFeedviewActivityStarter(getContext()!!, feed.getDownloadUrl()!!).getIntent())
+            startActivity(OnlineFeedviewActivityStarter(requireContext(), feed.getDownloadUrl()!!).getIntent())
         } else {
-            MainActivityStarter(getContext()!!).withOpenFeed(feed.getId()).withClearTop().start()
+            MainActivityStarter(requireContext()).withOpenFeed(feed.getId()).withClearTop().start()
         }
     }
 
     fun fadePlayerToToolbar(slideOffset: Float) {
         val playerFadeProgress = Math.max(0.0f, Math.min(0.2f, slideOffset - 0.2f)) / 0.2f
-        val player = getView()!!.findViewById<View>(R.id.playerFragment)
+        val player = requireView().findViewById<View>(R.id.playerFragment)
         player.setAlpha(1 - playerFadeProgress)
         player.setVisibility(if (playerFadeProgress > 0.99f) View.INVISIBLE else View.VISIBLE)
         val toolbarFadeProgress = Math.max(0.0f, Math.min(0.2f, slideOffset - 0.6f)) / 0.2f

@@ -31,12 +31,12 @@ class ShareDialog : BottomSheetDialogFragment() {
         if (getArguments() == null) {
             return null
         }
-        val item = getArguments()!!.getSerializable(ARGUMENT_FEED_ITEM) as FeedItem
+        val item = requireArguments().getSerializable(ARGUMENT_FEED_ITEM) as FeedItem
         val viewBinding = ShareEpisodeDialogBinding.inflate(inflater)
 
         if (item.getMedia() != null && item.getMedia()!!.isDownloaded()) {
             viewBinding.mediaFileCardCard.setOnClickListener {
-                ShareUtils.shareFeedItemFile(getContext()!!, item.getMedia()!!)
+                ShareUtils.shareFeedItemFile(requireContext(), item.getMedia()!!)
                 dismiss()
             }
         } else {
@@ -46,25 +46,25 @@ class ShareDialog : BottomSheetDialogFragment() {
         if (item.getMedia() != null && item.getMedia()!!.getDownloadUrl() != null) {
             viewBinding.mediaAddressText.setText(item.getMedia()!!.getDownloadUrl())
             viewBinding.mediaAddressCard.setOnClickListener {
-                ShareUtils.shareLink(getContext()!!, item.getMedia()!!.getDownloadUrl()!!)
+                ShareUtils.shareLink(requireContext(), item.getMedia()!!.getDownloadUrl()!!)
                 dismiss()
             }
         } else {
             viewBinding.mediaAddressCard.setVisibility(View.GONE)
         }
 
-        val prefs: SharedPreferences = getContext()!!.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val prefs: SharedPreferences = requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         viewBinding.sharePositionCheckbox.setChecked(prefs.getBoolean(PREF_SHARE_EPISODE_START_AT, false))
         viewBinding.socialMessageText.setText(ShareUtils.getSocialFeedItemShareText(
-                getContext()!!, item, viewBinding.sharePositionCheckbox.isChecked(), true))
+                requireContext(), item, viewBinding.sharePositionCheckbox.isChecked(), true))
         viewBinding.sharePositionCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
             prefs.edit().putBoolean(PREF_SHARE_EPISODE_START_AT, isChecked).apply()
             viewBinding.socialMessageText.setText(
-                    ShareUtils.getSocialFeedItemShareText(getContext()!!, item, isChecked, true))
+                    ShareUtils.getSocialFeedItemShareText(requireContext(), item, isChecked, true))
         }
         viewBinding.socialMessageCard.setOnClickListener {
-            ShareUtils.shareLink(getContext()!!, ShareUtils.getSocialFeedItemShareText(
-                    getContext()!!, item, viewBinding.sharePositionCheckbox.isChecked(), false))
+            ShareUtils.shareLink(requireContext(), ShareUtils.getSocialFeedItemShareText(
+                    requireContext(), item, viewBinding.sharePositionCheckbox.isChecked(), false))
             dismiss()
         }
 

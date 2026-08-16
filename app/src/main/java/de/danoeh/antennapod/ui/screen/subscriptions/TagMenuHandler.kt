@@ -19,10 +19,10 @@ class TagMenuHandler private constructor() {
                               item: MenuItem, tagAdapter: SubscriptionTagAdapter): Boolean {
             val itemId = item.getItemId()
             if (itemId == R.id.rename_folder_item) {
-                RenameFeedDialog(fragment.getActivity()!!, selectedTag).show()
+                RenameFeedDialog(fragment.requireActivity(), selectedTag).show()
                 return true
             } else if (itemId == R.id.delete_folder_item) {
-                val dialog = object : ConfirmationDialog(fragment.getContext()!!, R.string.delete_tag_label,
+                val dialog = object : ConfirmationDialog(fragment.requireContext(), R.string.delete_tag_label,
                         fragment.getString(R.string.delete_tag_confirmation, selectedTag.getTitle())) {
 
                     override fun onConfirmButtonPressed(dialog: DialogInterface) {

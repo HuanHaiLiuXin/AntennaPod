@@ -107,7 +107,7 @@ class CompletedDownloadsFragment : Fragment(),
         }
 
         recyclerView = root.findViewById(R.id.recyclerView)
-        adapter = CompletedDownloadsListAdapter(getActivity()!!)
+        adapter = CompletedDownloadsListAdapter(requireActivity())
         adapter!!.setOnSelectModeListener(this)
         recyclerView.setAdapter(adapter!!)
         recyclerView.addOnScrollListener(LiftOnScrollListener(root.findViewById(R.id.appbar)))
@@ -124,12 +124,12 @@ class CompletedDownloadsFragment : Fragment(),
                 EventBus.getDefault().post(MessageEvent(getString(R.string.no_items_selected_message)))
                 return@setOnMenuItemClickListener false
             }
-            EpisodeMultiSelectActionHandler(getActivity()!!, menuItem.getItemId())
+            EpisodeMultiSelectActionHandler(requireActivity(), menuItem.getItemId())
                     .handleAction(adapter!!.getSelectedItems())
             adapter!!.endSelectMode()
             return@setOnMenuItemClickListener true
         }
-        if (getArguments() != null && getArguments()!!.getBoolean(ARG_SHOW_LOGS, false)) {
+        if (getArguments() != null && requireArguments().getBoolean(ARG_SHOW_LOGS, false)) {
             DownloadLogFragment().show(getChildFragmentManager(), DownloadLogFragment.TAG)
         }
 
@@ -179,7 +179,7 @@ class CompletedDownloadsFragment : Fragment(),
             DownloadsSortDialog().show(getChildFragmentManager(), "SortDialog")
             return true
         } else if (item.getItemId() == R.id.action_delete_downloads_played) {
-            val dialog = object : ConfirmationDialog(getActivity()!!,
+            val dialog = object : ConfirmationDialog(requireActivity(),
                     R.string.delete_downloads_played, R.string.delete_downloads_played_confirmation) {
                 override fun onConfirmButtonPressed(clickedDialog: DialogInterface) {
                     clickedDialog.dismiss()
@@ -192,7 +192,7 @@ class CompletedDownloadsFragment : Fragment(),
                             .subscribeOn(Schedulers.computation())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ items ->
-                                EpisodeMultiSelectActionHandler(getActivity()!!, R.id.remove_item)
+                                EpisodeMultiSelectActionHandler(requireActivity(), R.id.remove_item)
                                         .handleAction(items)
                             }, { error -> Log.e(TAG, Log.getStackTraceString(error)) })
                 }
@@ -238,7 +238,7 @@ class CompletedDownloadsFragment : Fragment(),
     }
 
     private fun addEmptyView() {
-        emptyView = EmptyViewHandler(getActivity()!!)
+        emptyView = EmptyViewHandler(requireActivity())
         emptyView.setIcon(R.drawable.ic_download)
         emptyView.setTitle(R.string.no_comp_downloads_head_label)
         emptyView.setMessage(R.string.no_comp_downloads_label)

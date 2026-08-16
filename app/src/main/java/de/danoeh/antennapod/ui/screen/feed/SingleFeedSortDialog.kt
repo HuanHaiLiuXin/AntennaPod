@@ -53,19 +53,19 @@ class SingleFeedSortDialog : ItemSortDialog() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sortOrder = SortOrder.fromCodeString(getArguments()!!.getString(ARG_SORT_ORDER))
+        sortOrder = SortOrder.fromCodeString(requireArguments().getString(ARG_SORT_ORDER))
     }
 
     override fun onAddItem(title: Int, ascending: SortOrder, descending: SortOrder, ascendingIsDefault: Boolean) {
         if (ascending == SortOrder.DATE_OLD_NEW || ascending == SortOrder.DURATION_SHORT_LONG
                 || ascending == SortOrder.EPISODE_TITLE_A_Z
-                || (getArguments()!!.getBoolean(ARG_FEED_IS_LOCAL) && ascending == SortOrder.EPISODE_FILENAME_A_Z)) {
+                || (requireArguments().getBoolean(ARG_FEED_IS_LOCAL) && ascending == SortOrder.EPISODE_FILENAME_A_Z)) {
             super.onAddItem(title, ascending, descending, ascendingIsDefault)
         }
     }
 
     override fun onSelectionChanged() {
         super.onSelectionChanged()
-        DBWriter.setFeedItemSortOrder(getArguments()!!.getLong(ARG_FEED_ID), sortOrder!!)
+        DBWriter.setFeedItemSortOrder(requireArguments().getLong(ARG_FEED_ID), sortOrder!!)
     }
 }

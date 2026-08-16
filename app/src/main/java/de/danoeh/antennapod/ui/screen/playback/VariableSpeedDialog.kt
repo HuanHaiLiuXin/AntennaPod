@@ -51,7 +51,7 @@ open class VariableSpeedDialog : BottomSheetDialogFragment {
 
     override fun onStart() {
         super.onStart()
-        controller = object : PlaybackController(getActivity()!!) {
+        controller = object : PlaybackController(requireActivity()) {
             override fun loadMediaInfo() {
                 this@VariableSpeedDialog.loadMediaInfo()
             }
@@ -110,7 +110,7 @@ open class VariableSpeedDialog : BottomSheetDialogFragment {
         speedSeekBar!!.setProgressChangedListener { multiplier ->
             UserPreferences.setPlaybackSpeed(multiplier)
             if (BuildConfig.USE_MEDIA3_PLAYBACK_SERVICE) {
-                PlaybackController.bindToMedia3Service(getContext()!!,
+                PlaybackController.bindToMedia3Service(requireContext(),
                         Consumer { controller -> controller.setPlaybackSpeed(multiplier) })
             } else if (controller != null) {
                 controller!!.setPlaybackSpeed(multiplier)
@@ -118,7 +118,7 @@ open class VariableSpeedDialog : BottomSheetDialogFragment {
         }
         val selectedSpeedsGrid = root.findViewById<RecyclerView>(R.id.selected_speeds_grid)
         selectedSpeedsGrid.setLayoutManager(GridLayoutManager(getContext(), 3))
-        selectedSpeedsGrid.addItemDecoration(ItemOffsetDecoration(getContext()!!, 4))
+        selectedSpeedsGrid.addItemDecoration(ItemOffsetDecoration(requireContext(), 4))
         adapter = SpeedSelectionAdapter()
         adapter!!.setHasStableIds(true)
         selectedSpeedsGrid.setAdapter(adapter)
@@ -135,7 +135,7 @@ open class VariableSpeedDialog : BottomSheetDialogFragment {
         skipSilenceCheckbox!!.setOnCheckedChangeListener { buttonView, isChecked ->
             UserPreferences.setSkipSilence(isChecked)
             if (BuildConfig.USE_MEDIA3_PLAYBACK_SERVICE) {
-                PlaybackController.bindToMedia3Service(getContext()!!, Consumer { mediaController ->
+                PlaybackController.bindToMedia3Service(requireContext(), Consumer { mediaController ->
                     mediaController.sendCustomCommand(MediaLibrarySessionCallback.SESSION_COMMAND_SKIP_SILENCE,
                             MediaLibrarySessionCallback.createBundle(isChecked))
                 })
@@ -180,7 +180,7 @@ open class VariableSpeedDialog : BottomSheetDialogFragment {
             holder.chip.setOnClickListener {
                 UserPreferences.setPlaybackSpeed(speed)
                 if (BuildConfig.USE_MEDIA3_PLAYBACK_SERVICE) {
-                    PlaybackController.bindToMedia3Service(getContext()!!,
+                    PlaybackController.bindToMedia3Service(requireContext(),
                             Consumer { controller -> controller.setPlaybackSpeed(speed) })
                 } else if (controller != null) {
                     controller!!.setPlaybackSpeed(speed)

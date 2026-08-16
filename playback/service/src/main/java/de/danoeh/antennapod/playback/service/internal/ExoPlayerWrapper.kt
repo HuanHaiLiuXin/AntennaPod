@@ -7,6 +7,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.SurfaceHolder
 
+import android.annotation.SuppressLint
 import androidx.core.util.Consumer
 
 import androidx.media3.common.C
@@ -58,6 +59,7 @@ import java.util.HashMap
 import java.util.concurrent.TimeUnit
 
 @OptIn(UnstableApi::class)
+@SuppressLint("UnsafeOptInUsageError")
 class ExoPlayerWrapper {
     companion object {
         const val BUFFERING_STARTED = -1

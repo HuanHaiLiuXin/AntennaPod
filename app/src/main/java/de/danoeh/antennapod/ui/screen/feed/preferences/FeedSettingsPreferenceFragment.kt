@@ -97,7 +97,7 @@ class FeedSettingsPreferenceFragment : PreferenceFragmentCompat() {
                 }
                 if (notificationPermissionDenied) {
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri = Uri.fromParts("package", getContext()!!.getPackageName(), null)
+                    val uri = Uri.fromParts("package", requireContext().getPackageName(), null)
                     intent.setData(uri)
                     startActivity(intent)
                     return@registerForActivityResult
@@ -119,7 +119,7 @@ class FeedSettingsPreferenceFragment : PreferenceFragmentCompat() {
         // To prevent displaying partially loaded data
         findPreference<Preference>(PREF_SCREEN)!!.setVisible(false)
 
-        val feedId = getArguments()!!.getLong(EXTRA_FEED_ID)
+        val feedId = requireArguments().getLong(EXTRA_FEED_ID)
         disposable = Maybe.create<Feed> { emitter ->
             val loadedFeed = DBReader.getFeed(feedId, false, 0, 0)
             if (loadedFeed != null) {
@@ -160,7 +160,7 @@ class FeedSettingsPreferenceFragment : PreferenceFragmentCompat() {
 
     private fun setupPreferences() {
         findPreference<Preference>(PREF_AUTO_SKIP)!!.setOnPreferenceClickListener {
-            object : FeedPreferenceSkipDialog(getContext()!!,
+            object : FeedPreferenceSkipDialog(requireContext(),
                     feedPreferences!!.getFeedSkipIntro(), feedPreferences!!.getFeedSkipEnding()) {
                 override fun onConfirmed(skipIntro: Int, skipEnding: Int) {
                     feedPreferences!!.setFeedSkipIntro(skipIntro)
@@ -175,7 +175,7 @@ class FeedSettingsPreferenceFragment : PreferenceFragmentCompat() {
         }
         findPreference<Preference>(PREF_FEED_PLAYBACK_SPEED)!!.setOnPreferenceClickListener { showPlaybackSpeedDialog(it) }
         findPreference<Preference>(PREF_EPISODE_FILTER)!!.setOnPreferenceClickListener {
-            object : EpisodeFilterDialog(getContext()!!, feedPreferences!!.getFilter()) {
+            object : EpisodeFilterDialog(requireContext(), feedPreferences!!.getFilter()) {
                 override fun onConfirmed(filter: FeedFilter) {
                     feedPreferences!!.setFilter(filter)
                     DBWriter.setFeedPreferences(feedPreferences!!)
@@ -184,7 +184,7 @@ class FeedSettingsPreferenceFragment : PreferenceFragmentCompat() {
             false
         }
         findPreference<Preference>(PREF_AUTHENTICATION)!!.setOnPreferenceClickListener {
-            object : AuthenticationDialog(getContext()!!,
+            object : AuthenticationDialog(requireContext(),
                     R.string.authentication_label, true,
                     feedPreferences!!.getUsername(), feedPreferences!!.getPassword()) {
                 override fun onConfirmed(username: String, password: String) {
@@ -198,7 +198,7 @@ class FeedSettingsPreferenceFragment : PreferenceFragmentCompat() {
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
-                        FeedUpdateManager.getInstance()!!.runOnce(getContext()!!, feed!!)
+                        FeedUpdateManager.getInstance()!!.runOnce(requireContext(), feed!!)
                     }, "RefreshAfterCredentialChange").start()
                 }
             }.show()
@@ -262,7 +262,7 @@ class FeedSettingsPreferenceFragment : PreferenceFragmentCompat() {
         notificationPreference.setChecked(feedPreferences!!.getShowEpisodeNotification())
         notificationPreference.setOnPreferenceChangeListener { preference, newValue ->
             val checked = java.lang.Boolean.TRUE == newValue
-            if (checked && Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(getContext()!!,
+            if (checked && Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(requireContext(),
                             Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 enableNotificationsRequestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 return@setOnPreferenceChangeListener false
@@ -273,11 +273,11 @@ class FeedSettingsPreferenceFragment : PreferenceFragmentCompat() {
             false
         }
         findPreference<Preference>(PREF_RENAME)!!.setOnPreferenceClickListener {
-            RenameFeedDialog(getActivity()!!, feed!!).show()
+            RenameFeedDialog(requireActivity(), feed!!).show()
             true
         }
         findPreference<Preference>(PREF_EDIT_FEED_URL)!!.setOnPreferenceClickListener {
-            object : EditUrlSettingsDialog(getActivity()!!, feed!!) {
+            object : EditUrlSettingsDialog(requireActivity(), feed!!) {
                 override fun setUrl(url: String) {
                     feed!!.setDownloadUrl(url)
                 }
@@ -285,7 +285,7 @@ class FeedSettingsPreferenceFragment : PreferenceFragmentCompat() {
             true
         }
         findPreference<Preference>(PREF_RECONNECT_LOCAL_FOLDER)!!.setOnPreferenceClickListener {
-            val alert = MaterialAlertDialogBuilder(getContext()!!)
+            val alert = MaterialAlertDialogBuilder(requireContext())
             alert.setMessage(R.string.reconnect_local_folder_warning)
             alert.setPositiveButton(android.R.string.ok) { dialog, which ->
                 try {
@@ -376,15 +376,15 @@ class FeedSettingsPreferenceFragment : PreferenceFragmentCompat() {
             return
         }
         Completable.fromAction {
-            getActivity()!!.getContentResolver()
+            requireActivity().getContentResolver()
                     .takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION
                             or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            val documentFile = DocumentFile.fromTreeUri(getContext()!!, uri)
+            val documentFile = DocumentFile.fromTreeUri(requireContext(), uri)
             if (documentFile == null) {
                 throw IllegalArgumentException("Unable to retrieve document tree")
             }
             feed!!.setDownloadUrl(Feed.PREFIX_LOCAL_FOLDER + uri.toString())
-            FeedDatabaseWriter.updateFeed(getContext()!!, feed!!, false)
+            FeedDatabaseWriter.updateFeed(requireContext(), feed!!, false)
         }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -423,7 +423,7 @@ class FeedSettingsPreferenceFragment : PreferenceFragmentCompat() {
         val skipSilence = feedPreferences!!.getFeedSkipSilence()
         viewBinding.skipSilenceFeed.setChecked(!isGlobal
                 && skipSilence == FeedPreferences.SkipSilence.AGGRESSIVE)
-        MaterialAlertDialogBuilder(getContext()!!)
+        MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.playback_speed)
                 .setView(viewBinding.getRoot())
                 .setPositiveButton(android.R.string.ok) { dialog, which ->

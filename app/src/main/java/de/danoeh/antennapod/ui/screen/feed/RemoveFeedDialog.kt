@@ -48,12 +48,12 @@ open class RemoveFeedDialog : BottomSheetDialogFragment {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = RemoveFeedDialogBinding.inflate(inflater, container, false)
-        if (getArguments() == null || !getArguments()!!.containsKey(ARGUMENT_FEEDS)) {
+        if (getArguments() == null || !requireArguments().containsKey(ARGUMENT_FEEDS)) {
             Log.e(TAG, "No feeds specified")
             dismiss()
             return binding!!.getRoot()
         }
-        feeds = getArguments()!!.getSerializable(ARGUMENT_FEEDS) as List<Feed>
+        feeds = requireArguments().getSerializable(ARGUMENT_FEEDS) as List<Feed>
         if (feeds!!.size == 1) {
             binding!!.selectionText.setText(feeds!!.get(0).getTitle())
         } else {
@@ -175,7 +175,7 @@ open class RemoveFeedDialog : BottomSheetDialogFragment {
     private fun updateProgressText(stringResId: Int, currentIndex: Int, total: Int) {
         // Update UI on main thread if fragment is still attached
         if (isAdded() && getActivity() != null) {
-            getActivity()!!.runOnUiThread {
+            requireActivity().runOnUiThread {
                 if (binding != null) {
                     val progressText = getString(stringResId, currentIndex, total)
                     binding!!.selectionText.setText(progressText)

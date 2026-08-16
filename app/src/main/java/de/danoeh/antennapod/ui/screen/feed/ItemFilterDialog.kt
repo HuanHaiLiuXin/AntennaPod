@@ -35,7 +35,7 @@ abstract class ItemFilterDialog : BottomSheetDialogFragment() {
         val layout = inflater.inflate(R.layout.filter_dialog, null, false)
         val binding = FilterDialogBinding.bind(layout)
         rows = binding.filterRows
-        val filter = getArguments()!!.getSerializable(ARGUMENT_FILTER) as FeedItemFilter
+        val filter = requireArguments().getSerializable(ARGUMENT_FILTER) as FeedItemFilter
 
         //add filter rows
         for (item in FeedItemFilterGroup.values()) {

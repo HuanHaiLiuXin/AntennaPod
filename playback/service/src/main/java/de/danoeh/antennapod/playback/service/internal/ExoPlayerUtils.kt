@@ -2,6 +2,7 @@ package de.danoeh.antennapod.playback.service.internal
 
 import android.content.Context
 import android.net.Uri
+import android.annotation.SuppressLint
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
@@ -38,6 +39,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 
 @OptIn(UnstableApi::class)
+@SuppressLint("UnsafeOptInUsageError")
 class ExoPlayerUtils {
     companion object {
         @Volatile

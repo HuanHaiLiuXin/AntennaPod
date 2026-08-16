@@ -42,7 +42,7 @@ class InboxFragment : EpisodesListFragment() {
         val root = super.onCreateView(inflater, container, savedInstanceState)
         toolbar!!.inflateMenu(R.menu.inbox)
         toolbar!!.setTitle(R.string.inbox_label)
-        prefs = getActivity()!!.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        prefs = requireActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         updateToolbar()
         emptyView.setIcon(R.drawable.ic_inbox)
         emptyView.setTitle(R.string.no_inbox_head_label)
@@ -105,11 +105,11 @@ class InboxFragment : EpisodesListFragment() {
     }
 
     private fun showRemoveAllDialog() {
-        val builder = MaterialAlertDialogBuilder(getContext()!!)
+        val builder = MaterialAlertDialogBuilder(requireContext())
         builder.setTitle(R.string.remove_all_inbox_label)
         builder.setMessage(R.string.remove_all_inbox_confirmation_msg)
 
-        val view = View.inflate(getContext()!!, R.layout.checkbox_do_not_show_again, null)
+        val view = View.inflate(requireContext(), R.layout.checkbox_do_not_show_again, null)
         val checkNeverAskAgain = view.findViewById<CheckBox>(R.id.checkbox_do_not_show_again)
         builder.setView(view)
 

@@ -40,7 +40,7 @@ class LicensesFragment : ListFragment() {
         licensesLoader = Single.create<ArrayList<LicenseItem>> { emitter ->
             licenses.clear()
             try {
-                getContext()!!.getAssets().open("licenses.xml").use { stream ->
+                requireContext().getAssets().open("licenses.xml").use { stream ->
                     val docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
                     val libraryList = docBuilder.parse(stream).getElementsByTagName("library")
                     for (i in 0 until libraryList.getLength()) {
@@ -63,7 +63,7 @@ class LicensesFragment : ListFragment() {
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { loadedDevelopers -> setListAdapter(SimpleIconListAdapter(getContext()!!, loadedDevelopers)) },
+                        { loadedDevelopers -> setListAdapter(SimpleIconListAdapter(requireContext(), loadedDevelopers)) },
                         { error -> Toast.makeText(getContext(), error.message, Toast.LENGTH_LONG).show() }
                 )
     }
@@ -77,11 +77,11 @@ class LicensesFragment : ListFragment() {
 
         val item = licenses.get(position)
         val items = arrayOf("View website", "View license")
-        MaterialAlertDialogBuilder(getContext()!!)
+        MaterialAlertDialogBuilder(requireContext())
                 .setTitle(item.title)
                 .setItems(items) { dialog, which ->
                     if (which == 0) {
-                        IntentUtils.openInBrowser(getContext()!!, item.licenseUrl)
+                        IntentUtils.openInBrowser(requireContext(), item.licenseUrl)
                     } else if (which == 1) {
                         showLicenseText(item.licenseTextFile)
                     }
@@ -91,14 +91,14 @@ class LicensesFragment : ListFragment() {
     private fun showLicenseText(licenseTextFile: String) {
         try {
             BufferedReader(InputStreamReader(
-                    getContext()!!.getAssets().open(licenseTextFile), "UTF-8")).use { reader ->
+                    requireContext().getAssets().open(licenseTextFile), "UTF-8")).use { reader ->
                 val licenseText = StringBuilder()
                 var line: String?
                 while (reader.readLine().also { line = it } != null) {
                     licenseText.append(line).append("\n")
                 }
 
-                MaterialAlertDialogBuilder(getContext()!!)
+                MaterialAlertDialogBuilder(requireContext())
                         .setMessage(licenseText)
                         .show()
             }

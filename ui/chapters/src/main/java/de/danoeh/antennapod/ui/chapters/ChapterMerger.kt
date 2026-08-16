@@ -56,10 +56,10 @@ class ChapterMerger private constructor() {
         private fun score(chapters: List<Chapter>): Int {
             var score = 0
             for (chapter in chapters) {
-                score = score
-                        + (if (TextUtils.isEmpty(chapter.getTitle())) 0 else 1)
-                        + (if (TextUtils.isEmpty(chapter.getLink())) 0 else 1)
-                        + (if (TextUtils.isEmpty(chapter.getImageUrl())) 0 else 1)
+                score = score +
+                        (if (TextUtils.isEmpty(chapter.getTitle())) 0 else 1) +
+                        (if (TextUtils.isEmpty(chapter.getLink())) 0 else 1) +
+                        (if (TextUtils.isEmpty(chapter.getImageUrl())) 0 else 1)
             }
             return score
         }

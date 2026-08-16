@@ -56,13 +56,13 @@ class DownloadLogFragment : BottomSheetDialogFragment(),
         viewBinding!!.toolbar.inflateMenu(R.menu.download_log)
         viewBinding!!.toolbar.setOnMenuItemClickListener(this)
 
-        val emptyView = EmptyViewHandler(getActivity()!!)
+        val emptyView = EmptyViewHandler(requireActivity())
         emptyView.setIcon(R.drawable.ic_download)
         emptyView.setTitle(R.string.no_log_downloads_head_label)
         emptyView.setMessage(R.string.no_log_downloads_label)
         emptyView.attachToListView(viewBinding!!.list)
 
-        adapter = DownloadLogAdapter(getActivity()!!)
+        adapter = DownloadLogAdapter(requireActivity())
         viewBinding!!.list.setAdapter(adapter!!)
         viewBinding!!.list.setOnItemClickListener(this)
         viewBinding!!.list.setNestedScrollingEnabled(true)

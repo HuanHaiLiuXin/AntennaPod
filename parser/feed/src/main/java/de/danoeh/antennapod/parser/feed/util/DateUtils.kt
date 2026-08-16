@@ -15,10 +15,12 @@ import java.util.TimeZone
 abstract class DateUtils private constructor() {
     companion object {
         private val TIME_ZONE_GMT = TimeZone.getTimeZone("GMT")
-        private val RFC822_DATE_FORMAT = ThreadLocal.withInitial {
-            val dateFormat = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US)
-            dateFormat.timeZone = TIME_ZONE_GMT
-            dateFormat
+        private val RFC822_DATE_FORMAT = object : ThreadLocal<SimpleDateFormat>() {
+            override fun initialValue(): SimpleDateFormat {
+                val dateFormat = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US)
+                dateFormat.timeZone = TIME_ZONE_GMT
+                return dateFormat
+            }
         }
 
         @JvmStatic

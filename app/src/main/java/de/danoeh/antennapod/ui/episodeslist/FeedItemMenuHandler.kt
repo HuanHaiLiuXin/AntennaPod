@@ -189,10 +189,10 @@ class FeedItemMenuHandler private constructor() {
             } else if (menuItemId == R.id.remove_inbox_item) {
                 removeNewFlagWithUndo(fragment, selectedItem)
             } else if (menuItemId == R.id.mark_read_item) {
-                EpisodeMultiSelectActionHandler(fragment.getActivity()!!, R.id.mark_read_item)
+                EpisodeMultiSelectActionHandler(fragment.requireActivity(), R.id.mark_read_item)
                         .handleAction(Collections.singletonList(selectedItem))
             } else if (menuItemId == R.id.mark_unread_item) {
-                EpisodeMultiSelectActionHandler(fragment.getActivity()!!, R.id.mark_unread_item)
+                EpisodeMultiSelectActionHandler(fragment.requireActivity(), R.id.mark_unread_item)
                         .handleAction(Collections.singletonList(selectedItem))
             } else if (menuItemId == R.id.add_to_queue_item) {
                 DBWriter.addQueueItem(context, selectedItem)
@@ -223,7 +223,7 @@ class FeedItemMenuHandler private constructor() {
                         .show()
             } else if (menuItemId == R.id.share_item) {
                 val shareDialog = ShareDialog.newInstance(selectedItem)
-                shareDialog.show((fragment.getActivity()!!.getSupportFragmentManager()), "ShareEpisodeDialog")
+                shareDialog.show((fragment.requireActivity().getSupportFragmentManager()), "ShareEpisodeDialog")
             } else {
                 Log.d(TAG, "Unknown menuItemId: " + menuItemId)
                 return false

@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -54,6 +55,7 @@ import java.util.Collections
 /**
  * Provides actions for adding new podcast subscriptions.
  */
+@SuppressLint("UseRequireInsteadOfGet")
 class AddFeedFragment : Fragment() {
 
     companion object {
@@ -140,14 +142,14 @@ class AddFeedFragment : Fragment() {
     }
 
     private fun showAddViaUrlDialog() {
-        val builder = MaterialAlertDialogBuilder(getContext()!!)
+        val builder = MaterialAlertDialogBuilder(requireContext())
         builder.setTitle(R.string.add_podcast_by_url)
         val dialogBinding = EditTextDialogBinding.inflate(getLayoutInflater())
         dialogBinding.textInput.setHint(R.string.rss_address)
         dialogBinding.textInput.setInputType(InputType.TYPE_CLASS_TEXT
                 or InputType.TYPE_TEXT_FLAG_MULTI_LINE or InputType.TYPE_TEXT_VARIATION_URI)
 
-        val clipboard = getContext()!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData: ClipData? = clipboard.getPrimaryClip()
         if (clipData != null && clipData.getItemCount() > 0 && clipData.getItemAt(0).getText() != null) {
             val clipboardContent = clipData.getItemAt(0).getText().toString()
@@ -173,11 +175,11 @@ class AddFeedFragment : Fragment() {
     }
 
     private fun addUrl(url: String) {
-        startActivity(OnlineFeedviewActivityStarter(getContext()!!, url).withManualUrl().getIntent())
+        startActivity(OnlineFeedviewActivityStarter(requireContext(), url).withManualUrl().getIntent())
     }
 
     private fun performSearch() {
-        Keyboard.hide(getActivity()!!)
+        Keyboard.hide(requireActivity())
         viewBinding!!.combinedFeedSearchEditText.clearFocus()
         val query = viewBinding!!.combinedFeedSearchEditText.getText().toString()
         if (query.matches(Regex("http[s]?://.*"))) {
@@ -215,9 +217,9 @@ class AddFeedFragment : Fragment() {
     }
 
     private fun addLocalFolder(uri: Uri): Feed {
-        getActivity()!!.getContentResolver().takePersistableUriPermission(uri,
+        requireActivity().getContentResolver().takePersistableUriPermission(uri,
                 Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-        val documentFile = DocumentFile.fromTreeUri(getContext()!!, uri)
+        val documentFile = DocumentFile.fromTreeUri(requireContext(), uri)
         if (documentFile == null) {
             throw IllegalArgumentException("Unable to retrieve document tree")
         }
@@ -228,7 +230,7 @@ class AddFeedFragment : Fragment() {
         val dirFeed = Feed(Feed.PREFIX_LOCAL_FOLDER + uri.toString(), null, title)
         dirFeed.setItems(Collections.emptyList())
         dirFeed.setSortOrder(SortOrder.EPISODE_TITLE_A_Z)
-        val fromDatabase = FeedDatabaseWriter.updateFeed(getContext()!!, dirFeed, false)
+        val fromDatabase = FeedDatabaseWriter.updateFeed(requireContext(), dirFeed, false)
         FeedUpdateManager.getInstance()!!.runOnce(requireContext(), fromDatabase)
         return fromDatabase
     }

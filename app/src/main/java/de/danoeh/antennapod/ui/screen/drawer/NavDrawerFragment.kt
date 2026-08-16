@@ -116,7 +116,7 @@ class NavDrawerFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
             var navigationBarHeight = 0f
             val activity = getActivity()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && activity != null) {
-                navigationBarHeight = if (getActivity()!!.getWindow().getNavigationBarDividerColor()
+                navigationBarHeight = if (requireActivity().getWindow().getNavigationBarDividerColor()
                         == Color.TRANSPARENT) 0f else 1 * getResources().getDisplayMetrics().density
                 // Assuming the divider is 1dp in height
             }
@@ -125,15 +125,15 @@ class NavDrawerFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
             insets
         }
 
-        val preferences = getContext()!!.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val preferences = requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         openFolders = HashSet(preferences.getStringSet(PREF_OPEN_FOLDERS, HashSet())!!) // Must not modify
 
         progressBar = root.findViewById(R.id.progressBar)
         val navList = root.findViewById<RecyclerView>(R.id.nav_list)
-        navAdapter = NavListAdapter(itemAccess, getActivity()!!)
+        navAdapter = NavListAdapter(itemAccess, requireActivity())
         navAdapter!!.setHasStableIds(true)
         navList.setAdapter(navAdapter!!)
-        navList.setLayoutManager(LinearLayoutManager(getContext()!!))
+        navList.setLayoutManager(LinearLayoutManager(requireContext()))
 
         root.findViewById<View>(R.id.nav_settings).setOnClickListener {
             startActivity(Intent(getActivity(), PreferenceActivity::class.java))
@@ -171,13 +171,13 @@ class NavDrawerFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
         if (disposable != null) {
             disposable!!.dispose()
         }
-        getContext()!!.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
                 .unregisterOnSharedPreferenceChangeListener(this)
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
-        val inflater = getActivity()!!.getMenuInflater()
+        val inflater = requireActivity().getMenuInflater()
         if (contextPressedItem!!.isFeed()) {
             menu.setHeaderTitle(contextPressedItem!!.asFeed()!!.getTitle())
             inflater.inflate(R.menu.nav_feed_context, menu)
@@ -223,10 +223,10 @@ class NavDrawerFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
         constructor() : super()
 
         override fun onRemoveButtonPressed() {
-            if (feeds!!.get(0).getId().toString() == getLastNavFragment(getContext()!!)) {
+            if (feeds!!.get(0).getId().toString() == getLastNavFragment(requireContext())) {
                 // Make sure fragment is hidden before actually starting to delete
                 (getActivity() as MainActivity).loadFragment(UserPreferences.getDefaultPage()!!, null)
-                getActivity()!!.getSupportFragmentManager().executePendingTransactions()
+                requireActivity().getSupportFragmentManager().executePendingTransactions()
             }
             super.onRemoveButtonPressed()
         }
@@ -235,10 +235,10 @@ class NavDrawerFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
     private fun onTagContextMenuClicked(drawerItem: NavDrawerData.TagItem, item: MenuItem): Boolean {
         val itemId = item.getItemId()
         if (itemId == R.id.rename_folder_item) {
-            RenameFeedDialog(getActivity()!!, drawerItem).show()
+            RenameFeedDialog(requireActivity(), drawerItem).show()
             return true
         } else if (itemId == R.id.delete_folder_item) {
-            val dialog = object : ConfirmationDialog(getContext()!!, R.string.delete_tag_label,
+            val dialog = object : ConfirmationDialog(requireContext(), R.string.delete_tag_label,
                     getString(R.string.delete_tag_confirmation, drawerItem.getTitle())) {
                 override fun onConfirmButtonPressed(dialog: DialogInterface) {
                     for (feed in drawerItem.getFeeds()) {
@@ -302,7 +302,7 @@ class NavDrawerFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
         }
 
         override fun isSelected(position: Int): Boolean {
-            val lastNavFragment = getLastNavFragment(getContext()!!)
+            val lastNavFragment = getLastNavFragment(requireContext())
             if (position < navAdapter!!.getSubscriptionOffset()) {
                 return navAdapter!!.getFragmentTags()[position] == lastNavFragment
             } else if (StringUtils.isNumeric(lastNavFragment)) { // last fragment was not a list, but a feed
@@ -371,7 +371,7 @@ class NavDrawerFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
                             openFolders.add(folder.getTitle())
                         }
 
-                        getContext()!!.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+                        requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
                                 .edit()
                                 .putStringSet(PREF_OPEN_FOLDERS, openFolders)
                                 .apply()
@@ -396,10 +396,10 @@ class NavDrawerFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
 
         override fun onItemLongClick(position: Int): Boolean {
             if (position < navAdapter!!.getFragmentTags().size) {
-                DrawerPreferencesDialog(getContext()!!, Runnable {
+                DrawerPreferencesDialog(requireContext(), Runnable {
                     navAdapter!!.notifyDataSetChanged()
-                    if (UserPreferences.getHiddenDrawerItems().contains(getLastNavFragment(getContext()!!))) {
-                        MainActivityStarter(getContext()!!)
+                    if (UserPreferences.getHiddenDrawerItems().contains(getLastNavFragment(requireContext()))) {
+                        MainActivityStarter(requireContext())
                                 .withFragmentLoaded(UserPreferences.getDefaultPage()!!)
                                 .withClearBackStack()
                                 .withDrawerOpen()

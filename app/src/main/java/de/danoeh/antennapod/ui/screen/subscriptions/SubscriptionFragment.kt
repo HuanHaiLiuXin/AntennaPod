@@ -85,7 +85,7 @@ class SubscriptionFragment : Fragment(), Toolbar.OnMenuItemClickListener,
         super.onCreate(savedInstanceState)
         prefs = requireActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         if (getArguments() != null) {
-            stateToShow = getArguments()!!.getInt(ARGUMENT_STATE, Feed.STATE_SUBSCRIBED)
+            stateToShow = requireArguments().getInt(ARGUMENT_STATE, Feed.STATE_SUBSCRIBED)
         }
     }
 
@@ -169,7 +169,7 @@ class SubscriptionFragment : Fragment(), Toolbar.OnMenuItemClickListener,
         }
         floatingSelectMenu.setOnMenuItemClickListener { menuItem ->
             val selection = subscriptionAdapter!!.getSelectedItems()
-            FeedMultiSelectActionHandler(getActivity()!!, selection)
+            FeedMultiSelectActionHandler(requireActivity(), selection)
                     .handleAction(menuItem.getItemId())
             if (selection.size <= 1) {
                 subscriptionAdapter!!.endSelectMode()
@@ -178,10 +178,10 @@ class SubscriptionFragment : Fragment(), Toolbar.OnMenuItemClickListener,
         }
 
         tagsRecycler = root.findViewById(R.id.tags_recycler)
-        tagsRecycler.setLayoutManager(LinearLayoutManager(getContext()!!, LinearLayoutManager.HORIZONTAL, false))
-        tagsRecycler.addItemDecoration(ItemOffsetDecoration(getContext()!!, 4, 0))
+        tagsRecycler.setLayoutManager(LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false))
+        tagsRecycler.addItemDecoration(ItemOffsetDecoration(requireContext(), 4, 0))
         registerForContextMenu(tagsRecycler)
-        tagAdapter = object : SubscriptionTagAdapter(getActivity()!!) {
+        tagAdapter = object : SubscriptionTagAdapter(requireActivity()) {
             override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
                 super.onCreateContextMenu(menu, v, menuInfo)
                 MenuItemUtils.setOnClickListeners(menu) { item -> this@SubscriptionFragment.onTagContextItemSelected(item) }
@@ -275,11 +275,11 @@ class SubscriptionFragment : Fragment(), Toolbar.OnMenuItemClickListener,
         }
         val layoutManager: RecyclerView.LayoutManager
         if (columns == 1 && getDefaultNumOfColumns() == 5) { // Tablet
-            layoutManager = GridLayoutManager(getContext()!!, 2, RecyclerView.VERTICAL, false)
+            layoutManager = GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
         } else if (columns == 1) {
-            layoutManager = GridLayoutManager(getContext()!!, 1, RecyclerView.VERTICAL, false)
+            layoutManager = GridLayoutManager(requireContext(), 1, RecyclerView.VERTICAL, false)
         } else {
-            layoutManager = GridLayoutManager(getContext()!!, columns, RecyclerView.VERTICAL, false)
+            layoutManager = GridLayoutManager(requireContext(), columns, RecyclerView.VERTICAL, false)
             itemDecoration = SubscriptionsRecyclerAdapter.GridDividerItemDecorator()
             subscriptionRecycler.addItemDecoration(itemDecoration!!)
         }
@@ -290,7 +290,7 @@ class SubscriptionFragment : Fragment(), Toolbar.OnMenuItemClickListener,
     }
 
     private fun setupEmptyView() {
-        emptyView = EmptyViewHandler(getContext()!!)
+        emptyView = EmptyViewHandler(requireContext())
         emptyView.setIcon(R.drawable.ic_subscriptions)
         if (stateToShow == Feed.STATE_ARCHIVED) {
             emptyView.setTitle(R.string.no_archive_head_label)

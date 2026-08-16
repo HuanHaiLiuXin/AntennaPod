@@ -25,7 +25,7 @@ class TranslatorsFragment : ListFragment() {
             val translators = ArrayList<SimpleIconListAdapter.ListItem>()
             try {
                 BufferedReader(InputStreamReader(
-                        getContext()!!.getAssets().open("translators.csv"), "UTF-8")).use { reader ->
+                        requireContext().getAssets().open("translators.csv"), "UTF-8")).use { reader ->
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
                         val info = line!!.split(";")
@@ -40,7 +40,7 @@ class TranslatorsFragment : ListFragment() {
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { translators -> setListAdapter(SimpleIconListAdapter(getContext()!!, translators)) },
+                        { translators -> setListAdapter(SimpleIconListAdapter(requireContext(), translators)) },
                         { error -> Toast.makeText(getContext(), error.message, Toast.LENGTH_LONG).show() }
                 )
     }

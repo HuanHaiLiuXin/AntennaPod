@@ -21,7 +21,7 @@ class AboutFragment : AnimatedPreferenceFragment() {
 
         var versionName: String? = "?"
         try {
-            val packageInfo: PackageInfo = getContext()!!.getPackageManager().getPackageInfo(getContext()!!.getPackageName(), 0)
+            val packageInfo: PackageInfo = requireContext().getPackageManager().getPackageInfo(requireContext().getPackageName(), 0)
             versionName = packageInfo.versionName
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
@@ -33,12 +33,12 @@ class AboutFragment : AnimatedPreferenceFragment() {
         findPreference<androidx.preference.Preference>("about_version")!!.setSummary(String.format(
                 "%s (%s)", versionName, BuildConfig.COMMIT_HASH))
         findPreference<androidx.preference.Preference>("about_version")!!.setOnPreferenceClickListener {
-            val clipboard = getContext()!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText(getString(R.string.about_pref),
                     findPreference<androidx.preference.Preference>("about_version")!!.getSummary())
             clipboard.setPrimaryClip(clip)
             if (Build.VERSION.SDK_INT <= 32) {
-                Snackbar.make(getView()!!, R.string.copied_to_clipboard, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), R.string.copied_to_clipboard, Snackbar.LENGTH_SHORT).show()
             }
             true
         }
@@ -49,7 +49,7 @@ class AboutFragment : AnimatedPreferenceFragment() {
             true
         }
         findPreference<androidx.preference.Preference>("about_privacy_policy")!!.setOnPreferenceClickListener {
-            IntentUtils.openInBrowser(getContext()!!, "https://antennapod.org/privacy/")
+            IntentUtils.openInBrowser(requireContext(), "https://antennapod.org/privacy/")
             true
         }
         findPreference<androidx.preference.Preference>("about_licenses")!!.setOnPreferenceClickListener {

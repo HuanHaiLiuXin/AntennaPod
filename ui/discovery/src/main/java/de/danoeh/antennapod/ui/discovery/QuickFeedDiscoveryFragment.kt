@@ -45,16 +45,16 @@ class QuickFeedDiscoveryFragment : Fragment(), AdapterView.OnItemClickListener {
         super.onCreateView(inflater, container, savedInstanceState)
         viewBinding = QuickFeedDiscoveryBinding.inflate(inflater)
         viewBinding!!.discoverMore.setOnClickListener {
-            startActivity(MainActivityStarter(getContext()!!)
+            startActivity(MainActivityStarter(requireContext())
                     .withFragmentLoaded(DiscoveryFragment.TAG)
                     .getIntent())
         }
 
-        adapter = FeedDiscoverAdapter(getActivity()!!)
+        adapter = FeedDiscoverAdapter(requireActivity())
         viewBinding!!.discoverGrid.setAdapter(adapter)
         viewBinding!!.discoverGrid.setOnItemClickListener(this)
 
-        val displayMetrics: DisplayMetrics = getContext()!!.getResources().getDisplayMetrics()
+        val displayMetrics: DisplayMetrics = requireContext().getResources().getDisplayMetrics()
         val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
         if (screenWidthDp > 600) {
             viewBinding!!.discoverGrid.setNumColumns(6)
@@ -96,8 +96,8 @@ class QuickFeedDiscoveryFragment : Fragment(), AdapterView.OnItemClickListener {
         viewBinding!!.errorRetryButton.setText(R.string.retry_label)
         viewBinding!!.poweredByLabel.setVisibility(View.VISIBLE)
 
-        val loader = ItunesTopListLoader(getContext()!!)
-        val prefs: SharedPreferences = getActivity()!!.getSharedPreferences(ItunesTopListLoader.PREFS, Context.MODE_PRIVATE)
+        val loader = ItunesTopListLoader(requireContext())
+        val prefs: SharedPreferences = requireActivity().getSharedPreferences(ItunesTopListLoader.PREFS, Context.MODE_PRIVATE)
         val countryCode = prefs.getString(ItunesTopListLoader.PREF_KEY_COUNTRY_CODE,
                 Locale.getDefault().getCountry())!!
         if (prefs.getBoolean(ItunesTopListLoader.PREF_KEY_HIDDEN_DISCOVERY_COUNTRY, false)) {
@@ -152,6 +152,6 @@ class QuickFeedDiscoveryFragment : Fragment(), AdapterView.OnItemClickListener {
         if (TextUtils.isEmpty(podcast.feedUrl)) {
             return
         }
-        startActivity(OnlineFeedviewActivityStarter(getContext()!!, podcast.feedUrl!!).getIntent())
+        startActivity(OnlineFeedviewActivityStarter(requireContext(), podcast.feedUrl!!).getIntent())
     }
 }

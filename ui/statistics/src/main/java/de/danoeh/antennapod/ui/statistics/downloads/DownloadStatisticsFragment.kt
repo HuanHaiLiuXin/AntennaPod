@@ -39,7 +39,7 @@ class DownloadStatisticsFragment : Fragment() {
         val root = inflater.inflate(R.layout.statistics_fragment, container, false)
         downloadStatisticsList = root.findViewById(R.id.statistics_list)
         progressBar = root.findViewById(R.id.progressBar)
-        listAdapter = DownloadStatisticsListAdapter(getContext()!!, this)
+        listAdapter = DownloadStatisticsListAdapter(requireContext(), this)
         downloadStatisticsList!!.setLayoutManager(LinearLayoutManager(getContext()))
         downloadStatisticsList!!.setAdapter(listAdapter)
         return root

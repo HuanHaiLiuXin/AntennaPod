@@ -80,7 +80,7 @@ class PlaybackPreferencesFragment : AnimatedPreferenceFragment() {
     }
 
     private fun buildSmartMarkAsPlayedPreference() {
-        val res = getActivity()!!.getResources()
+        val res = requireActivity().getResources()
 
         val pref = findPreference<ListPreference>(UserPreferences.PREF_SMART_MARK_AS_PLAYED_SECS)!!
         val values = res.getStringArray(R.array.smart_mark_as_played_values)

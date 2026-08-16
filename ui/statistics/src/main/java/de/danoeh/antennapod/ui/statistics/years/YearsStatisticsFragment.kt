@@ -39,7 +39,7 @@ class YearsStatisticsFragment : Fragment() {
         val root = inflater.inflate(R.layout.statistics_fragment, container, false)
         yearStatisticsList = root.findViewById(R.id.statistics_list)
         progressBar = root.findViewById(R.id.progressBar)
-        listAdapter = YearStatisticsListAdapter(getContext()!!)
+        listAdapter = YearStatisticsListAdapter(requireContext())
         yearStatisticsList!!.setLayoutManager(LinearLayoutManager(getContext()))
         yearStatisticsList!!.setAdapter(listAdapter)
         EventBus.getDefault().register(this)

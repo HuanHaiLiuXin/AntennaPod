@@ -24,12 +24,12 @@ class DownloadsPreferencesFragment : AnimatedPreferenceFragment(),
     override fun onStart() {
         super.onStart()
         (getActivity() as PreferenceActivity).getSupportActionBar()!!.setTitle(R.string.downloads_pref)
-        PreferenceManager.getDefaultSharedPreferences(getContext()!!).registerOnSharedPreferenceChangeListener(this)
+        PreferenceManager.getDefaultSharedPreferences(requireContext()).registerOnSharedPreferenceChangeListener(this)
     }
 
     override fun onStop() {
         super.onStop()
-        PreferenceManager.getDefaultSharedPreferences(getContext()!!).unregisterOnSharedPreferenceChangeListener(this)
+        PreferenceManager.getDefaultSharedPreferences(requireContext()).unregisterOnSharedPreferenceChangeListener(this)
     }
 
     override fun onResume() {
@@ -48,12 +48,12 @@ class DownloadsPreferencesFragment : AnimatedPreferenceFragment(),
         }
         // validate and set correct value: number of downloads between 1 and 50 (inclusive)
         findPreference<Preference>(PREF_PROXY)!!.setOnPreferenceClickListener {
-            val dialog = ProxyDialog(getActivity()!!)
+            val dialog = ProxyDialog(requireActivity())
             dialog.show()
             true
         }
         findPreference<Preference>(PREF_CHOOSE_DATA_DIR)!!.setOnPreferenceClickListener {
-            ChooseDataFolderDialog.showDialog(getContext()!!) { path ->
+            ChooseDataFolderDialog.showDialog(requireContext()) { path ->
                 UserPreferences.setDataFolder(path)
                 setDataFolderText()
             }
@@ -72,7 +72,7 @@ class DownloadsPreferencesFragment : AnimatedPreferenceFragment(),
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
         if (UserPreferences.PREF_UPDATE_INTERVAL_MINUTES == key
                 || UserPreferences.PREF_MOBILE_UPDATE == key) {
-            FeedUpdateManager.getInstance()!!.restartUpdateAlarm(getContext()!!, true)
+            FeedUpdateManager.getInstance()!!.restartUpdateAlarm(requireContext(), true)
         }
     }
 

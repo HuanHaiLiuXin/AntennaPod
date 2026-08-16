@@ -73,9 +73,9 @@ class ChaptersFragment : AppCompatDialogFragment() {
         recyclerView.addItemDecoration(DividerItemDecoration(recyclerView.getContext(),
                 layoutManager.getOrientation()))
 
-        adapter = ChaptersListAdapter(getActivity()!!, ChaptersListAdapter.Callback { pos ->
+        adapter = ChaptersListAdapter(requireActivity(), ChaptersListAdapter.Callback { pos ->
             val chapter = adapter!!.getItem(pos)
-            PlaybackController.bindToMedia3Service(getActivity()!!) { controller ->
+            PlaybackController.bindToMedia3Service(requireActivity()) { controller ->
                 if (!controller.isPlaying()) {
                     controller.play()
                 }
@@ -134,7 +134,7 @@ class ChaptersFragment : AppCompatDialogFragment() {
         disposable = Maybe.create<Playable> { emitter ->
             val media = DBReader.getFeedMedia(PlaybackPreferences.getCurrentlyPlayingFeedMediaId())
             if (media != null) {
-                ChapterUtils.loadChapters(media, getContext()!!, forceRefresh)
+                ChapterUtils.loadChapters(media, requireContext(), forceRefresh)
                 emitter.onSuccess(media)
             } else {
                 emitter.onComplete()

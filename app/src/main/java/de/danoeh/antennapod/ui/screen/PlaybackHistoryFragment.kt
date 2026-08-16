@@ -61,7 +61,7 @@ class PlaybackHistoryFragment : EpisodesListFragment() {
             return true
         }
         if (item.getItemId() == R.id.clear_history_item) {
-            val conDialog = object : ConfirmationDialog(getActivity()!!,
+            val conDialog = object : ConfirmationDialog(requireActivity(),
                     R.string.clear_history_label,
                     R.string.clear_playback_history_msg) {
                 override fun onConfirmButtonPressed(dialog: DialogInterface) {

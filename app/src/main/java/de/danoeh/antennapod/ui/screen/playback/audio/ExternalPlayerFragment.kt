@@ -69,7 +69,7 @@ class ExternalPlayerFragment : Fragment() {
                 if (currentMedia!!.getMediaType() == MediaType.AUDIO) {
                     (getActivity() as MainActivity).getBottomSheet().setState(BottomSheetBehavior.STATE_EXPANDED)
                 } else {
-                    val intent = PlaybackService.getPlayerActivityIntent(getActivity()!!, currentMedia!!)
+                    val intent = PlaybackService.getPlayerActivityIntent(requireActivity(), currentMedia!!)
                     startActivity(intent)
                 }
             }
@@ -78,13 +78,13 @@ class ExternalPlayerFragment : Fragment() {
             if (PlaybackService.isRunning
                     && PlaybackPreferences.getCurrentPlayerStatus() == PlaybackPreferences.PLAYER_STATUS_PLAYING) {
                 if (BuildConfig.USE_MEDIA3_PLAYBACK_SERVICE) {
-                    PlaybackController.bindToMedia3Service(getContext()!!, Consumer { controller -> controller.pause() })
+                    PlaybackController.bindToMedia3Service(requireContext(), Consumer { controller -> controller.pause() })
                 } else {
-                    getContext()!!.sendBroadcast(
-                            MediaButtonStarter.createIntent(getContext()!!, KeyEvent.KEYCODE_MEDIA_PAUSE))
+                    requireContext().sendBroadcast(
+                            MediaButtonStarter.createIntent(requireContext(), KeyEvent.KEYCODE_MEDIA_PAUSE))
                 }
             } else {
-                PlaybackServiceStarter(getContext()!!, currentMedia)
+                PlaybackServiceStarter(requireContext(), currentMedia)
                         .callEvenIfRunning(true)
                         .start()
             }

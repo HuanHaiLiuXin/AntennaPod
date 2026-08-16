@@ -29,7 +29,7 @@ class SpecialThanksFragment : ListFragment() {
             specialMembers.clear()
             try {
                 BufferedReader(InputStreamReader(
-                        getContext()!!.getAssets().open("special_thanks.csv"), "UTF-8")).use { reader ->
+                        requireContext().getAssets().open("special_thanks.csv"), "UTF-8")).use { reader ->
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
                         val info = line!!.split(";")
@@ -44,7 +44,7 @@ class SpecialThanksFragment : ListFragment() {
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { translators -> setListAdapter(SimpleIconListAdapter(getContext()!!, translators)) },
+                        { translators -> setListAdapter(SimpleIconListAdapter(requireContext(), translators)) },
                         { error -> Toast.makeText(getContext(), error.message, Toast.LENGTH_LONG).show() }
                 )
     }
@@ -56,7 +56,7 @@ class SpecialThanksFragment : ListFragment() {
     override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
         super.onListItemClick(l, v, position, id)
 
-        IntentUtils.openInBrowser(getContext()!!, "https://github.com/" + specialMembers.get(position).githubUsername)
+        IntentUtils.openInBrowser(requireContext(), "https://github.com/" + specialMembers.get(position).githubUsername)
     }
 
     override fun onStop() {

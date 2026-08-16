@@ -95,7 +95,7 @@ class QueueFragment : Fragment(), Toolbar.OnMenuItemClickListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prefs = getActivity()!!.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        prefs = requireActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE)
     }
 
     override fun onStart() {
@@ -278,7 +278,7 @@ class QueueFragment : Fragment(), Toolbar.OnMenuItemClickListener,
             return true
         } else if (itemId == R.id.clear_queue) {
             // make sure the user really wants to clear the queue
-            val conDialog = object : ConfirmationDialog(getActivity()!!,
+            val conDialog = object : ConfirmationDialog(requireActivity(),
                     R.string.clear_queue_label,
                     R.string.clear_queue_confirmation_msg) {
 
@@ -307,11 +307,11 @@ class QueueFragment : Fragment(), Toolbar.OnMenuItemClickListener,
             if (!shouldShowLockWarning) {
                 setQueueLocked(true)
             } else {
-                val builder = MaterialAlertDialogBuilder(getContext()!!)
+                val builder = MaterialAlertDialogBuilder(requireContext())
                 builder.setTitle(R.string.lock_queue)
                 builder.setMessage(R.string.queue_lock_warning)
 
-                val view = View.inflate(getContext()!!, R.layout.checkbox_do_not_show_again, null)
+                val view = View.inflate(requireContext(), R.layout.checkbox_do_not_show_again, null)
                 val checkDoNotShowAgain = view.findViewById<CheckBox>(R.id.checkbox_do_not_show_again)
                 builder.setView(view)
 
@@ -442,7 +442,7 @@ class QueueFragment : Fragment(), Toolbar.OnMenuItemClickListener,
         swipeRefreshLayout.setDistanceToTriggerSync(getResources().getInteger(R.integer.swipe_refresh_distance))
         swipeRefreshLayout.setOnRefreshListener { FeedUpdateManager.getInstance()!!.runOnceOrAsk(requireContext()) }
 
-        emptyView = EmptyViewHandler(getContext()!!)
+        emptyView = EmptyViewHandler(requireContext())
         emptyView.attachToRecyclerView(recyclerView)
         emptyView.setIcon(R.drawable.ic_playlist_play)
         emptyView.setTitle(R.string.no_items_header_label)
@@ -456,7 +456,7 @@ class QueueFragment : Fragment(), Toolbar.OnMenuItemClickListener,
                 EventBus.getDefault().post(MessageEvent(getString(R.string.no_items_selected_message)))
                 return@setOnMenuItemClickListener false
             }
-            EpisodeMultiSelectActionHandler(getActivity()!!, menuItem.getItemId())
+            EpisodeMultiSelectActionHandler(requireActivity(), menuItem.getItemId())
                     .handleAction(recyclerAdapter!!.getSelectedItems())
             recyclerAdapter!!.endSelectMode()
             return@setOnMenuItemClickListener true

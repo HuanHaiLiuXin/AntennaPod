@@ -84,9 +84,9 @@ class ImportExportPreferencesFragment : AnimatedPreferenceFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_import_export)
         setupStorageScreen()
-        progressDialog = ProgressDialog(getContext()!!)
+        progressDialog = ProgressDialog(requireContext())
         progressDialog!!.setIndeterminate(true)
-        progressDialog!!.setMessage(getContext()!!.getString(R.string.please_wait))
+        progressDialog!!.setMessage(requireContext().getString(R.string.please_wait))
     }
 
     override fun onStart() {
@@ -114,7 +114,7 @@ class ImportExportPreferencesFragment : AnimatedPreferenceFragment() {
             try {
                 chooseOpmlImportPathLauncher.launch("*/*")
             } catch (e: ActivityNotFoundException) {
-                Snackbar.make(getView()!!, R.string.unable_to_start_system_file_manager, Snackbar.LENGTH_LONG)
+                Snackbar.make(requireView(), R.string.unable_to_start_system_file_manager, Snackbar.LENGTH_LONG)
                         .show()
             }
             true
@@ -127,7 +127,7 @@ class ImportExportPreferencesFragment : AnimatedPreferenceFragment() {
             try {
                 backupDatabaseLauncher.launch(dateStampFilename(DATABASE_EXPORT_FILENAME))
             } catch (e: ActivityNotFoundException) {
-                Snackbar.make(getView()!!, R.string.unable_to_start_system_file_manager, Snackbar.LENGTH_LONG)
+                Snackbar.make(requireView(), R.string.unable_to_start_system_file_manager, Snackbar.LENGTH_LONG)
                         .show()
             }
             true
@@ -139,13 +139,13 @@ class ImportExportPreferencesFragment : AnimatedPreferenceFragment() {
                 try {
                     automaticBackupLauncher.launch(null)
                 } catch (e: ActivityNotFoundException) {
-                    Snackbar.make(getView()!!, R.string.unable_to_start_system_file_manager, Snackbar.LENGTH_LONG)
+                    Snackbar.make(requireView(), R.string.unable_to_start_system_file_manager, Snackbar.LENGTH_LONG)
                             .show()
                 }
                 return@setOnPreferenceChangeListener false
             } else {
                 UserPreferences.setAutomaticExportFolder(null)
-                AutomaticDatabaseExportWorker.enqueueIfNeeded(getContext()!!, false)
+                AutomaticDatabaseExportWorker.enqueueIfNeeded(requireContext(), false)
             }
             return@setOnPreferenceChangeListener true
         }
@@ -161,7 +161,7 @@ class ImportExportPreferencesFragment : AnimatedPreferenceFragment() {
 
     private fun importDatabase() {
         // setup the alert builder
-        val builder = MaterialAlertDialogBuilder(getActivity()!!)
+        val builder = MaterialAlertDialogBuilder(requireActivity())
         builder.setTitle(R.string.database_import_label)
         builder.setMessage(R.string.database_import_warning)
 
@@ -173,7 +173,7 @@ class ImportExportPreferencesFragment : AnimatedPreferenceFragment() {
             try {
                 restoreDatabaseLauncher.launch(intent)
             } catch (e: ActivityNotFoundException) {
-                Snackbar.make(getView()!!, R.string.unable_to_start_system_file_manager, Snackbar.LENGTH_LONG)
+                Snackbar.make(requireView(), R.string.unable_to_start_system_file_manager, Snackbar.LENGTH_LONG)
                         .show()
             }
         }
@@ -183,7 +183,7 @@ class ImportExportPreferencesFragment : AnimatedPreferenceFragment() {
     }
 
     private fun showDatabaseImportSuccessDialog() {
-        val builder = MaterialAlertDialogBuilder(getContext()!!)
+        val builder = MaterialAlertDialogBuilder(requireContext())
         builder.setTitle(R.string.successful_import_label)
         builder.setMessage(R.string.import_ok)
         builder.setCancelable(false)
@@ -210,7 +210,7 @@ class ImportExportPreferencesFragment : AnimatedPreferenceFragment() {
 
     private fun showExportErrorDialog(error: Throwable) {
         progressDialog!!.dismiss()
-        val alert = MaterialAlertDialogBuilder(getContext()!!)
+        val alert = MaterialAlertDialogBuilder(requireContext())
         alert.setPositiveButton(android.R.string.ok) { dialog, which -> dialog.dismiss() }
         alert.setTitle(R.string.export_error_label)
         alert.setMessage(error.message)
@@ -219,7 +219,7 @@ class ImportExportPreferencesFragment : AnimatedPreferenceFragment() {
 
     private fun showImportErrorDialog(error: Throwable) {
         progressDialog!!.dismiss()
-        val alert = MaterialAlertDialogBuilder(getContext()!!)
+        val alert = MaterialAlertDialogBuilder(requireContext())
         alert.setPositiveButton(android.R.string.ok) { dialog, which -> dialog.dismiss() }
         alert.setTitle(R.string.import_error_label)
         alert.setMessage(error.message)
@@ -232,7 +232,7 @@ class ImportExportPreferencesFragment : AnimatedPreferenceFragment() {
         }
         val uri = result.getData()!!.getData()
         progressDialog!!.show()
-        disposable = Completable.fromAction { DatabaseExporter.importBackup(uri!!, getContext()!!) }
+        disposable = Completable.fromAction { DatabaseExporter.importBackup(uri!!, requireContext()) }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -246,7 +246,7 @@ class ImportExportPreferencesFragment : AnimatedPreferenceFragment() {
             return
         }
         progressDialog!!.show()
-        disposable = Completable.fromAction { DatabaseExporter.exportToDocument(uri, getContext()!!) }
+        disposable = Completable.fromAction { DatabaseExporter.exportToDocument(uri, requireContext()) }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -269,7 +269,7 @@ class ImportExportPreferencesFragment : AnimatedPreferenceFragment() {
             result.launch(intentPickAction)
             return
         } catch (e: ActivityNotFoundException) {
-            Snackbar.make(getView()!!, R.string.unable_to_start_system_file_manager, Snackbar.LENGTH_LONG)
+            Snackbar.make(requireView(), R.string.unable_to_start_system_file_manager, Snackbar.LENGTH_LONG)
                     .show()
         }
 
@@ -299,7 +299,7 @@ class ImportExportPreferencesFragment : AnimatedPreferenceFragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ outputFile ->
                     progressDialog!!.dismiss()
-                    val fileUri = FileProvider.getUriForFile(getActivity()!!.getApplicationContext(),
+                    val fileUri = FileProvider.getUriForFile(requireActivity().getApplicationContext(),
                             getString(R.string.provider_authority), output)
                     showExportSuccessSnackbar(fileUri, exportType.contentType)
                 }, this::showExportErrorDialog, { progressDialog!!.dismiss() })
@@ -310,10 +310,10 @@ class ImportExportPreferencesFragment : AnimatedPreferenceFragment() {
             return
         }
         progressDialog!!.show()
-        val output = DocumentFile.fromSingleUri(getContext()!!, result.getData()!!.getData()!!)
+        val output = DocumentFile.fromSingleUri(requireContext(), result.getData()!!.getData()!!)
         disposable = Observable.create<DocumentFile> { subscriber ->
             try {
-                getContext()!!.getContentResolver().openOutputStream(output!!.getUri(), "wt")!!.use { outputStream ->
+                requireContext().getContentResolver().openOutputStream(output!!.getUri(), "wt")!!.use { outputStream ->
                     writeToStream(outputStream, exportType)
                     subscriber.onNext(output!!)
                 }
@@ -333,12 +333,12 @@ class ImportExportPreferencesFragment : AnimatedPreferenceFragment() {
     private fun writeToStream(outputStream: OutputStream, type: Export) {
         OutputStreamWriter(outputStream, Charset.forName("UTF-8")).use { writer ->
             when (type) {
-                Export.HTML -> HtmlWriter.writeDocument(DBReader.getFeedList(), writer, getContext()!!)
+                Export.HTML -> HtmlWriter.writeDocument(DBReader.getFeedList(), writer, requireContext())
                 Export.OPML -> OpmlWriter.writeDocument(DBReader.getFeedList(), writer)
                 Export.FAVORITES -> {
                     val allFavorites = DBReader.getEpisodes(0, Integer.MAX_VALUE,
                             FeedItemFilter(FeedItemFilter.IS_FAVORITE), SortOrder.DATE_NEW_OLD)
-                    FavoritesWriter.writeDocument(allFavorites, writer, getContext()!!)
+                    FavoritesWriter.writeDocument(allFavorites, writer, requireContext())
                 }
                 else -> showExportErrorDialog(Exception("Invalid export type"))
             }
@@ -349,18 +349,18 @@ class ImportExportPreferencesFragment : AnimatedPreferenceFragment() {
         if (uri == null) {
             return
         }
-        getActivity()!!.getContentResolver().takePersistableUriPermission(uri,
+        requireActivity().getContentResolver().takePersistableUriPermission(uri,
                 Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
         UserPreferences.setAutomaticExportFolder(uri.toString())
-        AutomaticDatabaseExportWorker.enqueueIfNeeded(getContext()!!, true)
+        AutomaticDatabaseExportWorker.enqueueIfNeeded(requireContext(), true)
         findPreference<SwitchPreferenceCompat>(PREF_AUTOMATIC_DATABASE_EXPORT)!!.setChecked(true)
     }
 
     private fun forceRestart() {
-        val pm: PackageManager = getContext()!!.getPackageManager()
-        val intent = pm.getLaunchIntentForPackage(getContext()!!.getPackageName())!!
+        val pm: PackageManager = requireContext().getPackageManager()
+        val intent = pm.getLaunchIntentForPackage(requireContext().getPackageName())!!
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        getContext()!!.getApplicationContext().startActivity(intent)
+        requireContext().getApplicationContext().startActivity(intent)
         Runtime.getRuntime().exit(0)
     }
 

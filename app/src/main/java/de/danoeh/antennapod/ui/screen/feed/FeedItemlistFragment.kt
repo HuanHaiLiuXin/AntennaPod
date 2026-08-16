@@ -120,7 +120,7 @@ class FeedItemlistFragment : Fragment(), AdapterView.OnItemClickListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val args = getArguments()!!
+        val args = requireArguments()
         feedID = args.getLong(ARGUMENT_FEED_ID)
     }
 
@@ -143,13 +143,13 @@ class FeedItemlistFragment : Fragment(), AdapterView.OnItemClickListener,
             (getActivity() as MainActivity).setupToolbarToggle(viewBinding!!.toolbar, displayUpArrow)
         } else {
             viewBinding!!.toolbar.setNavigationIcon(R.drawable.ic_close)
-            viewBinding!!.toolbar.setNavigationOnClickListener { getActivity()!!.finish() }
+            viewBinding!!.toolbar.setNavigationOnClickListener { requireActivity().finish() }
         }
         updateToolbar()
         setupLoadMoreScrollListener()
         setupHeaderView()
 
-        adapter = FeedItemListAdapter(getActivity()!!)
+        adapter = FeedItemListAdapter(requireActivity())
         adapter!!.setOnSelectModeListener(this)
         viewBinding!!.recyclerView.setAdapter(adapter)
         swipeActions = SwipeActions(this, TAG).attachTo(viewBinding!!.recyclerView)
@@ -171,7 +171,7 @@ class FeedItemlistFragment : Fragment(), AdapterView.OnItemClickListener,
         nextPageLoader!!.setClickListener(object : MoreContentListFooterUtil.Listener {
             override fun onClick() {
                 if (feed != null) {
-                    FeedUpdateManager.getInstance()!!.runOnce(getContext()!!, feed!!, true)
+                    FeedUpdateManager.getInstance()!!.runOnce(requireContext(), feed!!, true)
                 }
             }
         })
@@ -198,7 +198,7 @@ class FeedItemlistFragment : Fragment(), AdapterView.OnItemClickListener,
                 return@setOnMenuItemClickListener false
             }
             val handler
-                    = EpisodeMultiSelectActionHandler(getActivity()!!, menuItem.getItemId())
+                    = EpisodeMultiSelectActionHandler(requireActivity(), menuItem.getItemId())
             Completable.fromAction { handleActionForAllSelectedItems(handler) }
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -294,10 +294,10 @@ class FeedItemlistFragment : Fragment(), AdapterView.OnItemClickListener,
             return true
         }
         if (item.getItemId() == R.id.visit_website_item) {
-            IntentUtils.openInBrowser(getContext()!!, feed!!.getLink()!!)
+            IntentUtils.openInBrowser(requireContext(), feed!!.getLink()!!)
             return true
         } else if (item.getItemId() == R.id.refresh_item) {
-            FeedUpdateManager.getInstance()!!.runOnceOrAsk(getContext()!!, feed!!)
+            FeedUpdateManager.getInstance()!!.runOnceOrAsk(requireContext(), feed!!)
             return true
         } else if (item.getItemId() == R.id.refresh_complete_item) {
             Thread {
@@ -305,7 +305,7 @@ class FeedItemlistFragment : Fragment(), AdapterView.OnItemClickListener,
                 feed!!.setPageNr(0)
                 try {
                     DBWriter.resetPagedFeedPage(feed!!)!!.get()
-                    FeedUpdateManager.getInstance()!!.runOnce(getContext()!!, feed!!)
+                    FeedUpdateManager.getInstance()!!.runOnce(requireContext(), feed!!)
                 } catch (e: Exception) {
                     throw RuntimeException(e)
                 }
@@ -333,7 +333,7 @@ class FeedItemlistFragment : Fragment(), AdapterView.OnItemClickListener,
         override fun onRemoveButtonPressed() {
             // Make sure fragment is hidden before actually starting to delete
             (getActivity() as MainActivity).loadFragment(UserPreferences.getDefaultPage()!!, null)
-            getActivity()!!.getSupportFragmentManager().executePendingTransactions()
+            requireActivity().getSupportFragmentManager().executePendingTransactions()
             super.onRemoveButtonPressed()
         }
     }
@@ -519,7 +519,7 @@ class FeedItemlistFragment : Fragment(), AdapterView.OnItemClickListener,
         viewBinding!!.header.butRestore.setVisibility(if (isArchived) View.VISIBLE else View.GONE)
 
         if (isNotSubscribed && feed!!.getLastRefreshAttempt() < System.currentTimeMillis() - 1000L * 3600 * 24) {
-            FeedUpdateManager.getInstance()!!.runOnce(getContext()!!, feed!!, true)
+            FeedUpdateManager.getInstance()!!.runOnce(requireContext(), feed!!, true)
         }
     }
 
@@ -533,17 +533,17 @@ class FeedItemlistFragment : Fragment(), AdapterView.OnItemClickListener,
             if (feed == null) {
                 return@setOnClickListener
             }
-            DBWriter.setFeedState(getContext()!!, feed!!, Feed.STATE_SUBSCRIBED)
-            val mainActivityStarter = MainActivityStarter(getContext()!!)
+            DBWriter.setFeedState(requireContext(), feed!!, Feed.STATE_SUBSCRIBED)
+            val mainActivityStarter = MainActivityStarter(requireContext())
             mainActivityStarter.withOpenFeed(feed!!.getId())
-            getActivity()!!.finish()
+            requireActivity().finish()
             startActivity(mainActivityStarter.getIntent())
         }
         viewBinding!!.header.butRestore.setOnClickListener {
             if (feed == null) {
                 return@setOnClickListener
             }
-            DBWriter.setFeedState(getContext()!!, feed!!, Feed.STATE_SUBSCRIBED)
+            DBWriter.setFeedState(requireContext(), feed!!, Feed.STATE_SUBSCRIBED)
         }
         viewBinding!!.header.butShowSettings.setOnClickListener {
             if (feed == null) {
@@ -594,7 +594,7 @@ class FeedItemlistFragment : Fragment(), AdapterView.OnItemClickListener,
         if (getActivity() is MainActivity) {
             (getActivity() as MainActivity).loadChildFragment(fragment)
         } else {
-            getActivity()!!.getSupportFragmentManager()
+            requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragmentContainer, fragment, "Info")
                     .addToBackStack("Info")

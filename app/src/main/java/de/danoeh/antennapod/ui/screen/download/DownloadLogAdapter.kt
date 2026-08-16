@@ -56,7 +56,11 @@ class DownloadLogAdapter(private val context: Activity) : BaseAdapter() {
                 System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS, 0)
         holder.status.setText(statusText)
 
-        holder.title.setText(status.getTitle())
+        if (status.getTitle() != null) {
+            holder.title.setText(status.getTitle())
+        } else {
+            holder.title.setText(R.string.download_log_title_unknown)
+        }
 
         if (status.isSuccessful()) {
             holder.icon.setImageResource(R.drawable.ic_check)

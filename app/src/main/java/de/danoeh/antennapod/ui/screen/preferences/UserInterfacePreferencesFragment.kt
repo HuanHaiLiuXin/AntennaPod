@@ -38,7 +38,7 @@ class UserInterfacePreferencesFragment : AnimatedPreferenceFragment() {
 
     private fun setupInterfaceScreen() {
         val restartApp = Preference.OnPreferenceChangeListener { preference, newValue ->
-            ActivityCompat.recreate(getActivity()!!)
+            ActivityCompat.recreate(requireActivity())
             true
         }
         findPreference<Preference>(UserPreferences.PREF_THEME)!!.setOnPreferenceChangeListener(restartApp)
@@ -58,7 +58,7 @@ class UserInterfacePreferencesFragment : AnimatedPreferenceFragment() {
 
         findPreference<Preference>(UserPreferences.PREF_HIDDEN_DRAWER_ITEMS)!!
                 .setOnPreferenceClickListener {
-                    DrawerPreferencesDialog(getContext()!!, null).show()
+                    DrawerPreferencesDialog(requireContext(), null).show()
                     true
                 }
 
@@ -98,7 +98,7 @@ class UserInterfacePreferencesFragment : AnimatedPreferenceFragment() {
         findPreference<Preference>(UserPreferences.PREF_BOTTOM_NAVIGATION)!!
                 .setOnPreferenceChangeListener { preference, newValue ->
                     if (newValue is Boolean && !newValue) {
-                        MaterialAlertDialogBuilder(getContext()!!)
+                        MaterialAlertDialogBuilder(requireContext())
                                 .setMessage(R.string.bottom_navigation_deprecation_warning)
                                 .setPositiveButton(android.R.string.ok, null)
                                 .show()
@@ -115,7 +115,7 @@ class UserInterfacePreferencesFragment : AnimatedPreferenceFragment() {
     }
 
     private fun showFullNotificationButtonsDialog() {
-        val context = getActivity()!!
+        val context = requireActivity()
 
         val preferredButtons = UserPreferences.getFullNotificationButtons() as MutableList<Int>
         val allButtonNames = context.getResources().getStringArray(

@@ -18,6 +18,6 @@ abstract class AnimatedPreferenceFragment : PreferenceFragmentCompat() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.setBackgroundColor(ThemeUtils.getColorFromAttr(getContext()!!, R.attr.colorSurface))
+        view.setBackgroundColor(ThemeUtils.getColorFromAttr(requireContext(), R.attr.colorSurface))
     }
 }

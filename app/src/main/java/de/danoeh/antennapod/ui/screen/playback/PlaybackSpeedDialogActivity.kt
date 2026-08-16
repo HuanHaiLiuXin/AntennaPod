@@ -17,7 +17,7 @@ class PlaybackSpeedDialogActivity : AppCompatActivity() {
     class InnerVariableSpeedDialog : VariableSpeedDialog() {
         override fun onDismiss(dialog: DialogInterface) {
             super.onDismiss(dialog)
-            getActivity()!!.finish()
+            requireActivity().finish()
         }
     }
 }

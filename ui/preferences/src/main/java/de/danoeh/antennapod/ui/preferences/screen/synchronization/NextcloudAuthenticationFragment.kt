@@ -33,7 +33,7 @@ class NextcloudAuthenticationFragment : DialogFragment(),
     private var shouldDismiss = false
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = MaterialAlertDialogBuilder(getContext()!!)
+        val dialog = MaterialAlertDialogBuilder(requireContext())
         dialog.setTitle(R.string.gpodnetauth_login_butLabel)
         dialog.setNegativeButton(R.string.cancel_label, null)
         dialog.setCancelable(false)
@@ -44,12 +44,12 @@ class NextcloudAuthenticationFragment : DialogFragment(),
 
         viewBinding!!.chooseHostButton.setOnClickListener {
             nextcloudLoginFlow = NextcloudLoginFlow(AntennapodHttpClient.getHttpClient(),
-                    viewBinding!!.serverUrlText.getText().toString(), getContext()!!, this)
+                    viewBinding!!.serverUrlText.getText().toString(), requireContext(), this)
             startLoginFlow()
         }
         if (savedInstanceState != null && savedInstanceState.getStringArrayList(EXTRA_LOGIN_FLOW) != null) {
             nextcloudLoginFlow = NextcloudLoginFlow.fromInstanceState(AntennapodHttpClient.getHttpClient(),
-                    getContext()!!, this, savedInstanceState.getStringArrayList(EXTRA_LOGIN_FLOW)!!)
+                    requireContext(), this, savedInstanceState.getStringArrayList(EXTRA_LOGIN_FLOW)!!)
             startLoginFlow()
         }
         return dialog.create()
@@ -104,7 +104,7 @@ class NextcloudAuthenticationFragment : DialogFragment(),
         viewBinding!!.chooseHostButton.setVisibility(View.VISIBLE)
         viewBinding!!.serverUrlText.setEnabled(true)
 
-        val errorDialog = MaterialAlertDialogBuilder(getContext()!!)
+        val errorDialog = MaterialAlertDialogBuilder(requireContext())
         errorDialog.setTitle(R.string.error_label)
         val genericMessage = getString(R.string.nextcloud_login_error_generic)
         val combinedMessage = SpannableString(genericMessage + "\n\n" + errorMessage)

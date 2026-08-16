@@ -90,8 +90,8 @@ class ItemPagerFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         toolbar.setNavigationOnClickListener { getParentFragmentManager().popBackStack() }
         toolbar.setOnMenuItemClickListener(this)
 
-        feedItems = getArguments()!!.getLongArray(ARG_FEEDITEMS)!!
-        val feedItemPos = Math.max(0, getArguments()!!.getInt(ARG_FEEDITEM_POS))
+        feedItems = requireArguments().getLongArray(ARG_FEEDITEMS)!!
+        val feedItemPos = Math.max(0, requireArguments().getInt(ARG_FEEDITEM_POS))
 
         pager = layout.findViewById(R.id.pager)
         // FragmentStatePagerAdapter documentation:
@@ -188,10 +188,10 @@ class ItemPagerFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             return
         }
         if (item!!.getFeed()!!.getState() == Feed.STATE_NOT_SUBSCRIBED) {
-            startActivity(OnlineFeedviewActivityStarter(getContext()!!,
+            startActivity(OnlineFeedviewActivityStarter(requireContext(),
                     item!!.getFeed()!!.getDownloadUrl()!!).getIntent())
         } else {
-            MainActivityStarter(getContext()!!).withOpenFeed(item!!.getFeedId()).withClearTop().start()
+            MainActivityStarter(requireContext()).withOpenFeed(item!!.getFeedId()).withClearTop().start()
         }
     }
 

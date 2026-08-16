@@ -59,10 +59,10 @@ class TranscriptDialogFragment : DialogFragment(),
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         viewBinding = TranscriptDialogBinding.inflate(getLayoutInflater())
-        layoutManager = LinearLayoutManager(getContext()!!)
+        layoutManager = LinearLayoutManager(requireContext())
         viewBinding!!.transcriptList.setLayoutManager(layoutManager)
 
-        adapter = TranscriptAdapter(getContext()!!, this)
+        adapter = TranscriptAdapter(requireContext(), this)
         viewBinding!!.transcriptList.setAdapter(adapter)
         viewBinding!!.transcriptList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -116,7 +116,7 @@ class TranscriptDialogFragment : DialogFragment(),
             val endTime = segment.getEndTime()
 
             scrollToPosition(pos)
-            PlaybackController.bindToMedia3Service(getActivity()!!, Consumer { controller ->
+            PlaybackController.bindToMedia3Service(requireActivity(), Consumer { controller ->
                 if (!(controller.getCurrentPosition() >= startTime
                                 && controller.getCurrentPosition() <= endTime)) {
                     controller.seekTo(startTime)

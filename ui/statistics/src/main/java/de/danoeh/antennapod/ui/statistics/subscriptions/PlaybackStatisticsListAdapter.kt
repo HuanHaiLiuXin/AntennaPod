@@ -16,7 +16,7 @@ import java.util.Locale
 /**
  * Adapter for the playback statistics list.
  */
-class PlaybackStatisticsListAdapter(private val fragment: Fragment) : StatisticsListAdapter(fragment.getContext()!!) {
+class PlaybackStatisticsListAdapter(private val fragment: Fragment) : StatisticsListAdapter(fragment.requireContext()) {
 
     private var timeFilterFrom = 0L
     private var timeFilterTo = Long.MAX_VALUE

@@ -195,7 +195,7 @@ class BugReportViewModel(application: Application) : AndroidViewModel(applicatio
         if (currentUiState != null) {
             if (currentUiState.getCrashLogState() != crashLogState) {
                 currentUiState.setCrashLogState(crashLogState)
-                uiState.setValue(currentUiState)
+                uiState.setValue(currentUiState!!)
             }
         }
     }

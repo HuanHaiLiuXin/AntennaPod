@@ -110,7 +110,7 @@ class StatisticsFragment : PagedToolbarFragment() {
 
     private fun confirmResetStatistics() {
         val conDialog = object : ConfirmationDialog(
-                getActivity()!!,
+                requireActivity(),
                 R.string.statistics_reset_data,
                 R.string.statistics_reset_data_msg) {
 
@@ -123,7 +123,7 @@ class StatisticsFragment : PagedToolbarFragment() {
     }
 
     private fun doResetStatistics() {
-        getContext()!!.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit()
+        requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit()
                 .putBoolean(PREF_INCLUDE_MARKED_PLAYED, false)
                 .putLong(PREF_FILTER_FROM, 0)
                 .putLong(PREF_FILTER_TO, Long.MAX_VALUE)

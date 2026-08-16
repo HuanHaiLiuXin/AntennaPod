@@ -59,7 +59,7 @@ class GpodderAuthenticationFragment : DialogFragment() {
     private var devices: List<GpodnetDevice>? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = MaterialAlertDialogBuilder(getContext()!!)
+        val dialog = MaterialAlertDialogBuilder(requireContext())
         dialog.setTitle(R.string.gpodnetauth_login_butLabel)
         dialog.setNegativeButton(R.string.cancel_label, null)
         dialog.setCancelable(false)
@@ -119,7 +119,7 @@ class GpodderAuthenticationFragment : DialogFragment() {
             login.setEnabled(false)
             progressBar.setVisibility(View.VISIBLE)
             txtvError.setVisibility(View.GONE)
-            Keyboard.hide(getActivity()!!)
+            Keyboard.hide(requireActivity())
 
             Completable.fromAction {
                 service!!.setCredentials(usernameStr, passwordStr)

@@ -1,5 +1,6 @@
 package de.danoeh.antennapod.ui.screen.playback
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -63,7 +64,7 @@ class SleepTimerDialog : BottomSheetDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        controller = object : PlaybackController(getActivity()!!) {
+        controller = object : PlaybackController(requireActivity()) {
             override fun loadMediaInfo() {
             }
         }
@@ -129,7 +130,7 @@ class SleepTimerDialog : BottomSheetDialogFragment() {
         spinnerContent.add(getString(R.string.time_minutes))
         spinnerContent.add(getString(R.string.sleep_timer_episodes_label))
         val spinnerAdapter = ArrayAdapter<String>(
-                getContext()!!, android.R.layout.simple_spinner_item, spinnerContent)
+                requireContext(), android.R.layout.simple_spinner_item, spinnerContent)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         viewBinding!!.sleepTimerType.setAdapter(spinnerAdapter)
         viewBinding!!.sleepTimerType.setSelection(SleepTimerPreferences.getSleepTimerType().index)
@@ -205,7 +206,7 @@ class SleepTimerDialog : BottomSheetDialogFragment() {
         }
         viewBinding!!.disableSleeptimerButton.setOnClickListener {
             if (BuildConfig.USE_MEDIA3_PLAYBACK_SERVICE) {
-                PlaybackController.bindToMedia3Service(getActivity()!!, Consumer { mediaController ->
+                PlaybackController.bindToMedia3Service(requireActivity(), Consumer { mediaController ->
                     mediaController.sendCustomCommand(
                             MediaLibrarySessionCallback.SESSION_COMMAND_DISABLE_SLEEP_TIMER,
                             Bundle.EMPTY)
@@ -225,7 +226,7 @@ class SleepTimerDialog : BottomSheetDialogFragment() {
                 SleepTimerPreferences.setLastTimer("" + getSelectedSleepTime())
                 val time = SleepTimerPreferences.timerMillisOrEpisodes()
                 if (BuildConfig.USE_MEDIA3_PLAYBACK_SERVICE) {
-                    PlaybackController.bindToMedia3Service(getActivity()!!, Consumer { mediaController ->
+                    PlaybackController.bindToMedia3Service(requireActivity(), Consumer { mediaController ->
                         mediaController.sendCustomCommand(
                                 MediaLibrarySessionCallback.SESSION_COMMAND_SET_SLEEP_TIMER,
                                 Bundle.EMPTY)
@@ -233,7 +234,7 @@ class SleepTimerDialog : BottomSheetDialogFragment() {
                 } else if (controller != null) {
                     controller!!.setSleepTimer(time)
                 }
-                Keyboard.hide(getActivity()!!)
+                Keyboard.hide(requireActivity())
             } catch (e: NumberFormatException) {
                 e.printStackTrace()
                 Snackbar.make(viewBinding!!.getRoot(), R.string.time_dialog_invalid_input, Snackbar.LENGTH_LONG).show()
@@ -380,7 +381,7 @@ class SleepTimerDialog : BottomSheetDialogFragment() {
         button.setText(text)
         button.setOnClickListener {
             if (BuildConfig.USE_MEDIA3_PLAYBACK_SERVICE) {
-                PlaybackController.bindToMedia3Service(getActivity()!!, Consumer { mediaController ->
+                PlaybackController.bindToMedia3Service(requireActivity(), Consumer { mediaController ->
                     mediaController.sendCustomCommand(
                             MediaLibrarySessionCallback.SESSION_COMMAND_EXTEND_SLEEP_TIMER,
                             MediaLibrarySessionCallback.createBundle(extendValue.toLong()))
@@ -391,6 +392,7 @@ class SleepTimerDialog : BottomSheetDialogFragment() {
         }
     }
 
+    @SuppressLint("UseRequireInsteadOfGet")
     private fun showTimeRangeDialog(context: Context?, from: Int, to: Int) {
         val dialog = TimeRangeDialog(context!!, from, to)
         dialog.setOnDismissListener {

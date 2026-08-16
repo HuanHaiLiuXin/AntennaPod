@@ -106,7 +106,7 @@ class ItemFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        itemId = getArguments()!!.getLong(ARG_FEEDITEM)
+        itemId = requireArguments().getLong(ARG_FEEDITEM)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -124,12 +124,12 @@ class ItemFragment : Fragment() {
                 return@setTimecodeSelectedListener
             }
             if (BuildConfig.USE_MEDIA3_PLAYBACK_SERVICE) {
-                PlaybackController.bindToMedia3Service(getActivity()!!) { controller ->
+                PlaybackController.bindToMedia3Service(requireActivity()) { controller ->
                     controller.seekTo(time.toLong())
                 }
                 return@setTimecodeSelectedListener
             }
-            PlaybackController.bindToService(getActivity()!!) { playbackService ->
+            PlaybackController.bindToService(requireActivity()) { playbackService ->
                 if (item!!.getMedia() != null && playbackService.getPlayable() != null
                         && item!!.getMedia()!!.getIdentifier() == playbackService.getPlayable()!!.getIdentifier()) {
                     playbackService.seekTo(time)
@@ -149,7 +149,7 @@ class ItemFragment : Fragment() {
             } else if (actionButton1 == null) {
                 return@setOnClickListener // Not loaded yet
             }
-            actionButton1!!.onClick(getContext()!!)
+            actionButton1!!.onClick(requireContext())
         }
         viewBinding!!.butAction2.setOnClickListener {
             if (actionButton2 is DownloadActionButton && UserPreferences.isStreamOverDownload()
@@ -159,7 +159,7 @@ class ItemFragment : Fragment() {
             } else if (actionButton2 == null) {
                 return@setOnClickListener // Not loaded yet
             }
-            actionButton2!!.onClick(getContext()!!)
+            actionButton2!!.onClick(requireContext())
         }
         viewBinding!!.txtvPodcast.setOnLongClickListener {
             ClipboardUtils.copyText(viewBinding!!.txtvPodcast)
@@ -175,14 +175,14 @@ class ItemFragment : Fragment() {
     private fun showOnDemandConfigBalloon(offerStreaming: Boolean) {
         val isLocaleRtl = TextUtils.getLayoutDirectionFromLocale(Locale.getDefault()) ==
                 View.LAYOUT_DIRECTION_RTL
-        val balloon = Balloon.Builder(getContext()!!)
+        val balloon = Balloon.Builder(requireContext())
                 .setArrowOrientation(ArrowOrientation.TOP)
                 .setArrowOrientationRules(ArrowOrientationRules.ALIGN_FIXED)
                 .setArrowPosition(0.25f + (if (isLocaleRtl xor offerStreaming) 0f else 0.5f))
                 .setWidthRatio(1.0f)
                 .setMarginLeft(8)
                 .setMarginRight(8)
-                .setBackgroundColor(ThemeUtils.getColorFromAttr(getContext()!!, R.attr.colorSecondary))
+                .setBackgroundColor(ThemeUtils.getColorFromAttr(requireContext(), R.attr.colorSecondary))
                 .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
                 .setLayout(R.layout.popup_bubble_view)
                 .setDismissWhenTouchOutside(true)
@@ -253,7 +253,7 @@ class ItemFragment : Fragment() {
         viewBinding!!.txtvPodcast.setText(item!!.getFeed()!!.getTitle())
         viewBinding!!.txtvTitle.setText(item!!.getTitle())
         if (item!!.getPubDate() != null) {
-            val pubDateStr = DateFormatter.formatAbbrev(getActivity()!!, item!!.getPubDate())
+            val pubDateStr = DateFormatter.formatAbbrev(requireActivity(), item!!.getPubDate())
             viewBinding!!.txtvPublished.setText(pubDateStr)
             viewBinding!!.txtvPublished.setContentDescription(
                     DateFormatter.formatForAccessibility(item!!.getPubDate()))
@@ -264,7 +264,7 @@ class ItemFragment : Fragment() {
         }
         val radius = 8 * getResources().getDisplayMetrics().density
         val options = RequestOptions()
-                .error(ImagePlaceholder.getDrawable(getContext()!!, radius))
+                .error(ImagePlaceholder.getDrawable(requireContext(), radius))
                 .transform(FitCenter(),
                         RoundedCorners(radius.toInt()))
                 .dontAnimate()
@@ -304,7 +304,7 @@ class ItemFragment : Fragment() {
             if (hasDuration) {
                 viewBinding!!.txtvDuration.setText(Converter.getDurationStringLong(media.getDuration()))
                 viewBinding!!.txtvDuration.setContentDescription(
-                        Converter.getDurationStringLocalized(getContext()!!, media.getDuration().toLong()))
+                        Converter.getDurationStringLocalized(requireContext(), media.getDuration().toLong()))
             }
             if (PlaybackStatus.isCurrentlyPlaying(media)) {
                 actionButton1 = PauseActionButton(item!!)
@@ -344,7 +344,7 @@ class ItemFragment : Fragment() {
             return
         }
         if (item!!.getFeed()!!.getState() == Feed.STATE_NOT_SUBSCRIBED) {
-            startActivity(OnlineFeedviewActivityStarter(getContext()!!,
+            startActivity(OnlineFeedviewActivityStarter(requireContext(),
                     item!!.getFeed()!!.getDownloadUrl()!!).getIntent())
         } else {
             val fragment = FeedItemlistFragment.newInstance(item!!.getFeedId())

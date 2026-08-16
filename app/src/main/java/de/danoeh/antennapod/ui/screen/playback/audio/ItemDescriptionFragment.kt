@@ -45,11 +45,11 @@ class ItemDescriptionFragment : Fragment() {
         webvDescription = root.findViewById(R.id.webview)
         webvDescription!!.setTimecodeSelectedListener(Consumer { time ->
             if (BuildConfig.USE_MEDIA3_PLAYBACK_SERVICE) {
-                PlaybackController.bindToMedia3Service(getActivity()!!, Consumer { controller ->
+                PlaybackController.bindToMedia3Service(requireActivity(), Consumer { controller ->
                     controller.seekTo(time.toLong())
                 })
             } else {
-                PlaybackController.bindToService(getActivity()!!, Consumer { playbackService ->
+                PlaybackController.bindToService(requireActivity(), Consumer { playbackService ->
                     playbackService.seekTo(time)
                 })
             }
@@ -131,7 +131,7 @@ class ItemDescriptionFragment : Fragment() {
 
     private fun savePreference() {
         Log.d(TAG, "Saving preferences")
-        val prefs = getActivity()!!.getSharedPreferences(PREF, Activity.MODE_PRIVATE)
+        val prefs = requireActivity().getSharedPreferences(PREF, Activity.MODE_PRIVATE)
         val editor = prefs.edit()
         if (webvDescription != null) {
             Log.d(TAG, "Saving scroll position: " + webvDescription!!.getScrollY())

@@ -88,7 +88,7 @@ class SearchFragment : Fragment(), SelectableAdapter.OnSelectModeListener {
         @JvmStatic
         fun newInstance(query: String): SearchFragment {
             val fragment = newInstance()
-            fragment.getArguments()!!.putString(ARG_QUERY, query)
+            fragment.requireArguments().putString(ARG_QUERY, query)
             return fragment
         }
 
@@ -98,15 +98,15 @@ class SearchFragment : Fragment(), SelectableAdapter.OnSelectModeListener {
         @JvmStatic
         fun newInstance(feed: Long, feedTitle: String?): SearchFragment {
             val fragment = newInstance()
-            fragment.getArguments()!!.putLong(ARG_FEED, feed)
-            fragment.getArguments()!!.putString(ARG_FEED_NAME, feedTitle)
+            fragment.requireArguments().putLong(ARG_FEED, feed)
+            fragment.requireArguments().putString(ARG_FEED_NAME, feedTitle)
             return fragment
         }
 
         @JvmStatic
         fun newInstance(filter: FeedItemFilter): SearchFragment {
             val fragment = newInstance()
-            fragment.getArguments()!!.putSerializable(ARG_FILTER, filter)
+            fragment.requireArguments().putSerializable(ARG_FILTER, filter)
             return fragment
         }
     }
@@ -149,7 +149,7 @@ class SearchFragment : Fragment(), SelectableAdapter.OnSelectModeListener {
         recyclerView = layout.findViewById(R.id.recyclerView)
         floatingSelectMenu = layout.findViewById(R.id.floatingSelectMenu)
         registerForContextMenu(recyclerView)
-        adapter = object : EpisodeItemListAdapter(getActivity()!!) {
+        adapter = object : EpisodeItemListAdapter(requireActivity()) {
             override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
                 super.onCreateContextMenu(menu, v, menuInfo)
                 if (!inActionMode()) {
@@ -189,7 +189,7 @@ class SearchFragment : Fragment(), SelectableAdapter.OnSelectModeListener {
         }
         recyclerViewFeeds.setAdapter(adapterFeeds!!)
 
-        emptyViewHandler = EmptyViewHandler(getContext()!!)
+        emptyViewHandler = EmptyViewHandler(requireContext())
         emptyViewHandler.attachToRecyclerView(recyclerView)
         emptyViewHandler.setIcon(R.drawable.ic_search)
         emptyViewHandler.setTitle(R.string.type_to_search)
@@ -197,19 +197,19 @@ class SearchFragment : Fragment(), SelectableAdapter.OnSelectModeListener {
 
         chipGroup = layout.findViewById(R.id.filter_chips)
         updateChipVisibility()
-        if (getArguments()!!.getString(ARG_QUERY, null) != null) {
+        if (requireArguments().getString(ARG_QUERY, null) != null) {
             search()
         }
         searchView.setOnQueryTextFocusChangeListener { view, hasFocus ->
             if (hasFocus && !isOtherViewInFoucus) {
-                Keyboard.show(getContext()!!, view.findFocus())
+                Keyboard.show(requireContext(), view.findFocus())
             }
         }
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    Keyboard.hide(getActivity()!!)
+                    Keyboard.hide(requireActivity())
                 }
             }
         })
@@ -219,7 +219,7 @@ class SearchFragment : Fragment(), SelectableAdapter.OnSelectModeListener {
                 EventBus.getDefault().post(MessageEvent(getString(R.string.no_items_selected_message)))
                 return@setOnMenuItemClickListener false
             }
-            EpisodeMultiSelectActionHandler(getActivity()!!, menuItem.getItemId())
+            EpisodeMultiSelectActionHandler(requireActivity(), menuItem.getItemId())
                     .handleAction(adapter!!.getSelectedItems())
             adapter!!.endSelectMode()
             return@setOnMenuItemClickListener true
@@ -242,7 +242,7 @@ class SearchFragment : Fragment(), SelectableAdapter.OnSelectModeListener {
         item.expandActionView()
         searchView = item.getActionView() as SearchView
         searchView.setQueryHint(getString(R.string.search_label))
-        searchView.setQuery(getArguments()!!.getString(ARG_QUERY), true)
+        searchView.setQuery(requireArguments().getString(ARG_QUERY), true)
         searchView.requestFocus()
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
@@ -365,22 +365,22 @@ class SearchFragment : Fragment(), SelectableAdapter.OnSelectModeListener {
 
     private fun updateChipVisibility() {
         chipGroup.removeAllViews()
-        val filter = getArguments()!!.getSerializable(ARG_FILTER) as FeedItemFilter?
+        val filter = requireArguments().getSerializable(ARG_FILTER) as FeedItemFilter?
         if (filter != null && filter.showQueued) {
             addChip(getString(R.string.queue_label)) {
-                getArguments()!!.putSerializable(ARG_FILTER, filter.without(FeedItemFilter.QUEUED))
+                requireArguments().putSerializable(ARG_FILTER, filter.without(FeedItemFilter.QUEUED))
                 searchWithProgressBar()
             }
         }
         if (filter != null && filter.includeArchived && !filter.includeSubscribed && !filter.includeNotSubscribed) {
             addChip(getString(R.string.archive_feed_label_noun)) {
-                getArguments()!!.putSerializable(ARG_FILTER, filter.without(FeedItemFilter.INCLUDE_ARCHIVED))
+                requireArguments().putSerializable(ARG_FILTER, filter.without(FeedItemFilter.INCLUDE_ARCHIVED))
                 searchWithProgressBar()
             }
         }
-        if (getArguments()!!.getLong(ARG_FEED, 0) != 0L) {
-            addChip(getArguments()!!.getString(ARG_FEED_NAME, "")) {
-                getArguments()!!.putLong(ARG_FEED, 0)
+        if (requireArguments().getLong(ARG_FEED, 0) != 0L) {
+            addChip(requireArguments().getString(ARG_FEED_NAME, "")) {
+                requireArguments().putLong(ARG_FEED, 0)
                 searchWithProgressBar()
             }
         }
@@ -403,8 +403,8 @@ class SearchFragment : Fragment(), SelectableAdapter.OnSelectModeListener {
         if (disposableEpisodes != null) {
             disposableEpisodes!!.dispose()
         }
-        val feed = getArguments()!!.getLong(ARG_FEED, 0)
-        val activeFilter = (getArguments()!!.getSerializable(ARG_FILTER) as FeedItemFilter?)
+        val feed = requireArguments().getLong(ARG_FEED, 0)
+        val activeFilter = (requireArguments().getSerializable(ARG_FILTER) as FeedItemFilter?)
                 ?: FeedItemFilter.unfiltered()
         for (value in activeFilter.getValues()) {
             if (!value!!.isEmpty()
@@ -457,10 +457,10 @@ class SearchFragment : Fragment(), SelectableAdapter.OnSelectModeListener {
             adapter!!.endSelectMode()
         }
         searchView.clearFocus()
-        Keyboard.hide(getActivity()!!)
+        Keyboard.hide(requireActivity())
         val query = searchView.getQuery().toString()
         if (query.matches(Regex("http[s]?://.*"))) {
-            startActivity(OnlineFeedviewActivityStarter(getContext()!!, query).getIntent())
+            startActivity(OnlineFeedviewActivityStarter(requireContext(), query).getIntent())
             return
         }
         (getActivity() as MainActivity).loadChildFragment(

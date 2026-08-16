@@ -78,9 +78,9 @@ class CoverFragment : Fragment() {
         viewBinding!!.imgvCover.setOnClickListener {
             if (BuildConfig.USE_MEDIA3_PLAYBACK_SERVICE) {
                 if (PlaybackService.isRunning) {
-                    PlaybackController.bindToMedia3Service(getActivity()!!, MediaController::pause)
+                    PlaybackController.bindToMedia3Service(requireActivity(), MediaController::pause)
                 } else if (media != null) {
-                    PlaybackServiceStarter(getContext()!!, media!!)
+                    PlaybackServiceStarter(requireContext(), media!!)
                             .callEvenIfRunning(true)
                             .start()
                 }
@@ -88,9 +88,9 @@ class CoverFragment : Fragment() {
             }
             if (PlaybackService.isRunning
                     && PlaybackPreferences.getCurrentPlayerStatus() == PlaybackPreferences.PLAYER_STATUS_PLAYING) {
-                getContext()!!.sendBroadcast(MediaButtonStarter.createIntent(getContext()!!, KeyEvent.KEYCODE_MEDIA_PAUSE))
+                requireContext().sendBroadcast(MediaButtonStarter.createIntent(requireContext(), KeyEvent.KEYCODE_MEDIA_PAUSE))
             } else if (media != null) {
-                PlaybackServiceStarter(getContext()!!, media!!)
+                PlaybackServiceStarter(requireContext(), media!!)
                         .callEvenIfRunning(true)
                         .start()
             }
@@ -123,7 +123,7 @@ class CoverFragment : Fragment() {
             val media = DBReader.getFeedMedia(PlaybackPreferences.getCurrentlyPlayingFeedMediaId())
             if (media != null) {
                 if (includingChapters) {
-                    ChapterUtils.loadChapters(media, getContext()!!, false)
+                    ChapterUtils.loadChapters(media, requireContext(), false)
                 }
                 emitter.onSuccess(media)
             } else {
@@ -141,7 +141,7 @@ class CoverFragment : Fragment() {
     }
 
     private fun displayMediaInfo(media: Playable) {
-        val pubDateStr = DateFormatter.formatAbbrev(getActivity()!!, media.getPubDate())
+        val pubDateStr = DateFormatter.formatAbbrev(requireActivity(), media.getPubDate())
         viewBinding!!.txtvPodcastTitle.setText(StringUtils.stripToEmpty(media.getFeedTitle())
                 + "\u00A0"
                 + "・"
@@ -159,9 +159,9 @@ class CoverFragment : Fragment() {
             val lines = viewBinding!!.txtvEpisodeTitle.getLineCount()
             val animUnit = 1500
             if (lines > viewBinding!!.txtvEpisodeTitle.getMaxLines()) {
-                val titleHeight = viewBinding!!.txtvEpisodeTitle.getHeight()
-                        - viewBinding!!.txtvEpisodeTitle.getPaddingTop()
-                        - viewBinding!!.txtvEpisodeTitle.getPaddingBottom()
+                val titleHeight = viewBinding!!.txtvEpisodeTitle.getHeight() -
+                        viewBinding!!.txtvEpisodeTitle.getPaddingTop() -
+                        viewBinding!!.txtvEpisodeTitle.getPaddingBottom()
                 val verticalMarquee = ObjectAnimator.ofInt(
                         viewBinding!!.txtvEpisodeTitle, "scrollY", 0,
                         (lines - viewBinding!!.txtvEpisodeTitle.getMaxLines())
@@ -193,9 +193,9 @@ class CoverFragment : Fragment() {
             return
         }
         if (feed.getState() == Feed.STATE_NOT_SUBSCRIBED) {
-            startActivity(OnlineFeedviewActivityStarter(getContext()!!, feed.getDownloadUrl()!!).getIntent())
+            startActivity(OnlineFeedviewActivityStarter(requireContext(), feed.getDownloadUrl()!!).getIntent())
         } else {
-            MainActivityStarter(getContext()!!).withOpenFeed(feed.getId()).withClearTop().start()
+            MainActivityStarter(requireContext()).withOpenFeed(feed.getId()).withClearTop().start()
         }
     }
 
@@ -248,7 +248,7 @@ class CoverFragment : Fragment() {
             return
         }
 
-        PlaybackController.bindToMedia3Service(getActivity()!!, Consumer { controller ->
+        PlaybackController.bindToMedia3Service(requireActivity(), Consumer { controller ->
             if (displayedChapterIndex < 1) {
                 controller.seekTo(0)
             } else if ((controller.getCurrentPosition().toFloat() - 10000 * controller.getPlaybackParameters().speed)
@@ -268,7 +268,7 @@ class CoverFragment : Fragment() {
         }
 
         refreshChapterData(displayedChapterIndex + 1)
-        PlaybackController.bindToMedia3Service(getActivity()!!, Consumer { controller ->
+        PlaybackController.bindToMedia3Service(requireActivity(), Consumer { controller ->
             controller.seekTo(media!!.getChapters()!!.get(displayedChapterIndex).getStart())
         })
     }

@@ -8,7 +8,7 @@ import de.danoeh.antennapod.ui.screen.feed.ItemFilterDialog
 class FeedItemFilterDialog : ItemFilterDialog() {
 
     override fun onFilterChanged(newFilterValues: Set<String>) {
-        val feedId = getArguments()!!.getLong(ARGUMENT_FEED_ID)
+        val feedId = requireArguments().getLong(ARGUMENT_FEED_ID)
         DBWriter.setFeedItemsFilter(feedId, newFilterValues)
     }
 

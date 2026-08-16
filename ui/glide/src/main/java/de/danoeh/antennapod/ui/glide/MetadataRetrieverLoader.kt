@@ -2,7 +2,6 @@ package de.danoeh.antennapod.ui.glide
 
 import android.content.ContentResolver
 import android.content.Context
-import androidx.annotation.Nullable
 import com.bumptech.glide.load.Options
 import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
@@ -28,7 +27,6 @@ class MetadataRetrieverLoader private constructor(private val context: Context) 
         }
     }
 
-    @Nullable
     override fun buildLoadData(model: String,
                                width: Int, height: Int, options: Options): ModelLoader.LoadData<InputStream>? {
         return ModelLoader.LoadData(ObjectKey(model),

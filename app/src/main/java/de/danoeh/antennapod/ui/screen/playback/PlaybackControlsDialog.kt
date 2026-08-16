@@ -47,7 +47,7 @@ class PlaybackControlsDialog : DialogFragment {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        dialog = MaterialAlertDialogBuilder(getContext()!!)
+        dialog = MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.audio_controls)
                 .setView(R.layout.audio_controls)
                 .setPositiveButton(R.string.close_label, null).create()
@@ -77,7 +77,7 @@ class PlaybackControlsDialog : DialogFragment {
             if (getActivity() == null || !isAdded()) {
                 return@Consumer
             }
-            getActivity()!!.runOnUiThread {
+            requireActivity().runOnUiThread {
                 container.removeAllViews()
                 val margin = (8 * getResources().getDisplayMetrics().density).toInt()
                 for (idx in 0 until trackOptions.size) {
