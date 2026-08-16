@@ -111,8 +111,8 @@ class ShownotesCleanerTest {
     fun testProcessShownotesAddTimecodeMultipleFormatsNoChapters() {
         val timeStrings = arrayOf("10:12", "1:10:12")
 
-        val shownotes = "<p> Some test text with a timecode " + timeStrings[0]
-                + " here. Hey look another one " + timeStrings[1] + " here!</p>"
+        val shownotes = "<p> Some test text with a timecode " + timeStrings[0] +
+                " here. Hey look another one " + timeStrings[1] + " here!</p>"
         val t = ShownotesCleaner(context, shownotes, 2 * 60 * 60 * 1000)
         val res = t.processShownotes()
         checkLinkCorrect(res, longArrayOf(10L * 60 * 1000 + 12L * 1000,
@@ -125,8 +125,8 @@ class ShownotesCleanerTest {
         // One of these timecodes fits as HH:MM and one does not so both should be parsed as MM:SS.
         val timeStrings = arrayOf("10:12", "2:12")
 
-        val shownotes = "<p> Some test text with a timecode " + timeStrings[0]
-                + " here. Hey look another one " + timeStrings[1] + " here!</p>"
+        val shownotes = "<p> Some test text with a timecode " + timeStrings[0] +
+                " here. Hey look another one " + timeStrings[1] + " here!</p>"
         val t = ShownotesCleaner(context, shownotes, 3 * 60 * 60 * 1000)
         val res = t.processShownotes()
         checkLinkCorrect(res, longArrayOf(10L * 60 * 1000 + 12L * 1000, 2L * 60 * 1000 + 12L * 1000), timeStrings)
@@ -192,8 +192,8 @@ class ShownotesCleanerTest {
                 assertTrue(href.endsWith(timecodes[countedLinks].toString()))
                 assertEquals(timecodeStr[countedLinks], text)
                 countedLinks++
-                assertTrue("Contains too many links: " + countedLinks + " > "
-                        + timecodes.size, countedLinks <= timecodes.size)
+                assertTrue("Contains too many links: " + countedLinks + " > " +
+                        timecodes.size, countedLinks <= timecodes.size)
             }
         }
         assertEquals(timecodes.size.toLong(), countedLinks.toLong())
@@ -219,16 +219,16 @@ class ShownotesCleanerTest {
 
     @Test
     fun testCleanupColors() {
-        val input = "/* /* */ .foo { text-decoration: underline;color:#f00;font-weight:bold;}"
-                + "#bar { text-decoration: underline;color:#f00;font-weight:bold; }"
-                + "div {text-decoration: underline; color /* */ : /* */ #f00 /* */; font-weight:bold; }"
-                + "#foobar { /* color: */ text-decoration: underline; /* color: */font-weight:bold /* ; */; }"
-                + "baz { background-color:#f00;border: solid 2px;border-color:#0f0;text-decoration: underline; }"
-        val expected = " .foo { text-decoration: underline;font-weight:bold;}"
-                + "#bar { text-decoration: underline;font-weight:bold; }"
-                + "div {text-decoration: underline;  font-weight:bold; }"
-                + "#foobar {  text-decoration: underline; font-weight:bold ; }"
-                + "baz { background-color:#f00;border: solid 2px;border-color:#0f0;text-decoration: underline; }"
+        val input = "/* /* */ .foo { text-decoration: underline;color:#f00;font-weight:bold;}" +
+                "#bar { text-decoration: underline;color:#f00;font-weight:bold; }" +
+                "div {text-decoration: underline; color /* */ : /* */ #f00 /* */; font-weight:bold; }" +
+                "#foobar { /* color: */ text-decoration: underline; /* color: */font-weight:bold /* ; */; }" +
+                "baz { background-color:#f00;border: solid 2px;border-color:#0f0;text-decoration: underline; }"
+        val expected = " .foo { text-decoration: underline;font-weight:bold;}" +
+                "#bar { text-decoration: underline;font-weight:bold; }" +
+                "div {text-decoration: underline;  font-weight:bold; }" +
+                "#foobar {  text-decoration: underline; font-weight:bold ; }" +
+                "baz { background-color:#f00;border: solid 2px;border-color:#0f0;text-decoration: underline; }"
         assertEquals(expected, ShownotesCleaner.cleanStyleTag(input))
     }
 }

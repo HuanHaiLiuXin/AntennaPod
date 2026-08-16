@@ -3,7 +3,6 @@ package de.danoeh.antennapod.ui.cleaner
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
-import de.danoeh.antennapod.ui.cleaner.PlainTextLinksConverter.NOT_ALLOWED_END_CHARS
 import org.junit.Test
 
 class PlainTextLinksConverterTest {
@@ -83,7 +82,7 @@ class PlainTextLinksConverterTest {
         assertEquals(validLinkIgnored, PlainTextLinksConverter.convertLinksToHtml(validLinkIgnored))
 
         val link = "https://example.com/abc"
-        NOT_ALLOWED_END_CHARS.forEach { end ->
+        PlainTextLinksConverter.NOT_ALLOWED_END_CHARS.forEach { end ->
             assertEquals(link + end, PlainTextLinksConverter.convertLinksToHtml(link + end))
         }
 
@@ -124,7 +123,7 @@ class PlainTextLinksConverterTest {
 
     @Test
     fun testConvertToHtmlWhenNoLinksAreDetected() {
-        assertNull(PlainTextLinksConverter.convertLinksToHtml(null))
+        assertNull(PlainTextLinksConverter.convertLinksToHtml(null as String?))
         assertEquals("", PlainTextLinksConverter.convertLinksToHtml(""))
 
         val text = "plain text"
