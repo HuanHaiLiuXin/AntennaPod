@@ -68,7 +68,7 @@ class MediaDownloadedHandler : Runnable {
             if (item != null && item.getTranscriptUrl() != null) {
                 val transcript = TranscriptUtils.loadTranscriptFromUrl(item.getTranscriptUrl()!!, true)
                 if (!StringUtils.isEmpty(transcript)) {
-                    TranscriptUtils.storeTranscript(media, transcript)
+                    TranscriptUtils.storeTranscript(media, transcript!!)
                 }
             }
         } catch (ignore: InterruptedIOException) {

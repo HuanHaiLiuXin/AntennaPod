@@ -56,7 +56,7 @@ class FeedStatisticsFragment : Fragment() {
 
         if (getArguments()!!.getBoolean(EXTRA_DETAILED)) {
             viewBinding!!.secondRowContainer.setVisibility(View.VISIBLE)
-            val color = ThemeUtils.getColorFromAttr(getContext(), R.attr.colorSurfaceContainerHighest)
+            val color = ThemeUtils.getColorFromAttr(getContext()!!, R.attr.colorSurfaceContainerHighest)
             viewBinding!!.playbackTime.getRoot().setBackgroundColor(color)
             viewBinding!!.episodesStarted.getRoot().setBackgroundColor(color)
             viewBinding!!.spaceDownloaded.getRoot().setBackgroundColor(color)
@@ -155,10 +155,10 @@ class FeedStatisticsFragment : Fragment() {
         viewBinding!!.episodesTotal.subtitleLabel.setText(getResources()
                 .getQuantityString(R.plurals.statistics_episodes_total, s.episodes.toInt()))
 
-        viewBinding!!.playbackTime.mainLabel.setText(Converter.shortLocalizedDuration(getContext(), s.timePlayed))
+        viewBinding!!.playbackTime.mainLabel.setText(Converter.shortLocalizedDuration(getContext()!!, s.timePlayed))
         viewBinding!!.playbackTime.subtitleLabel.setText(R.string.statistics_time_played)
 
-        viewBinding!!.durationTotal.mainLabel.setText(Converter.shortLocalizedDuration(getContext(), s.time))
+        viewBinding!!.durationTotal.mainLabel.setText(Converter.shortLocalizedDuration(getContext()!!, s.time))
         viewBinding!!.durationTotal.subtitleLabel.setText(R.string.statistics_time_total)
 
         viewBinding!!.episodesDownloaded.mainLabel.setText(getResources()
@@ -189,7 +189,7 @@ class FeedStatisticsFragment : Fragment() {
                         else R.string.statistics_expected_next_episode_any_day)
             } else {
                 viewBinding!!.expectedNextEpisode.mainLabel.setText(
-                        DateFormatter.formatAbbrev(getContext(), guess.nextExpectedDate))
+                        DateFormatter.formatAbbrev(getContext()!!, guess.nextExpectedDate))
             }
             if (guess.schedule == ReleaseScheduleGuesser.Schedule.UNKNOWN) {
                 viewBinding!!.episodeSchedule.mainLabel.setText(R.string.statistics_expected_next_episode_unknown)

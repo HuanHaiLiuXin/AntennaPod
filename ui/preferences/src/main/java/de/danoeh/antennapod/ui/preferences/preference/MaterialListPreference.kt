@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import androidx.preference.ListPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class MaterialListPreference @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ListPreference(context, attrs) {
+open class MaterialListPreference @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ListPreference(context, attrs) {
 
     override fun onClick() {
         if (getOnPreferenceClickListener() != null && getOnPreferenceClickListener()!!.onPreferenceClick(this)) {

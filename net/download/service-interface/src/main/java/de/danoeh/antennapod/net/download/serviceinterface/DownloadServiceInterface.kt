@@ -45,17 +45,17 @@ abstract class DownloadServiceInterface {
 
     abstract fun cancelAll(context: Context)
 
-    fun isDownloadingEpisode(url: String): Boolean {
+    fun isDownloadingEpisode(url: String?): Boolean {
         return currentDownloads.containsKey(url)
                 && currentDownloads[url]!!.getState() != DownloadStatus.STATE_COMPLETED
     }
 
-    fun isEpisodeQueued(url: String): Boolean {
+    fun isEpisodeQueued(url: String?): Boolean {
         return currentDownloads.containsKey(url)
                 && currentDownloads[url]!!.getState() == DownloadStatus.STATE_QUEUED
     }
 
-    fun getProgress(url: String): Int {
+    fun getProgress(url: String?): Int {
         return if (isDownloadingEpisode(url)) currentDownloads[url]!!.getProgress() else -1
     }
 

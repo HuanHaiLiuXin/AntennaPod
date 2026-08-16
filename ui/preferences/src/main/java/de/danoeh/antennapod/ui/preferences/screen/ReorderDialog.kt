@@ -14,7 +14,7 @@ import de.danoeh.antennapod.ui.preferences.databinding.ReorderDialogBinding
 import java.util.ArrayList
 import java.util.Collections
 
-abstract class ReorderDialog(protected val context: Context) {
+abstract class ReorderDialog(@JvmField protected val context: Context) {
     protected val dialogItems: List<ReorderDialogItem>
     private val adapter: ReorderDialogAdapter
 

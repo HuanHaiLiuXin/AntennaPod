@@ -103,7 +103,7 @@ class OnlineSearchFragment : Fragment() {
         gridView!!.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    Keyboard.hide(getActivity())
+                    Keyboard.hide(getActivity()!!)
                 }
             }
 
@@ -141,7 +141,7 @@ class OnlineSearchFragment : Fragment() {
         })
         sv.setOnQueryTextFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
-                Keyboard.show(getContext(), view.findFocus())
+                Keyboard.show(getContext()!!, view.findFocus())
             }
         }
         searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {

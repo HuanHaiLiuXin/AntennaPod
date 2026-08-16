@@ -74,14 +74,14 @@ class StatisticsFragment : PagedToolbarFragment() {
             displayUpArrow = savedInstanceState.getBoolean(KEY_UP_ARROW)
         }
         if (getActivity() is NavigationToolbarActivity) {
-            (getActivity() as NavigationToolbarActivity).setupToolbarToggle(toolbar, displayUpArrow)
+            (getActivity() as NavigationToolbarActivity).setupToolbarToggle(toolbar!!, displayUpArrow)
         } else {
             toolbar!!.setNavigationOnClickListener { getParentFragmentManager().popBackStack() }
         }
         viewPager!!.setAdapter(StatisticsPagerAdapter(this))
         // Give the TabLayout the ViewPager
         tabLayout = rootView.findViewById(R.id.sliding_tabs)
-        super.setupPagedToolbar(toolbar, viewPager)
+        super.setupPagedToolbar(toolbar!!, viewPager!!)
         TabLayoutMediator(tabLayout!!, viewPager!!) { tab, position ->
             when (position) {
                 POS_SUBSCRIPTIONS -> tab.setText(R.string.subscriptions_label)
@@ -110,7 +110,7 @@ class StatisticsFragment : PagedToolbarFragment() {
 
     private fun confirmResetStatistics() {
         val conDialog = object : ConfirmationDialog(
-                getActivity(),
+                getActivity()!!,
                 R.string.statistics_reset_data,
                 R.string.statistics_reset_data_msg) {
 
